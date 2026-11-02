@@ -2,6 +2,7 @@
 //   npm run art → public/game/field.png, night.png (F6), runner.png + runner.json, crew.png + crew.json, icons.png, title.svg
 //                 and the placeholder cover public/assets/sensor-lab/cover.webp (scripts/art/sensor-lab-cover.js)
 // Every colour comes from src/palette.js. Edit the files in scripts/art/ and run again.
+// v4: the hand-drawn grids of art/sprites/*.txt are written by scripts/art/grid.js (runs after this file, same command).
 import { mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { field, night } from './art/field.js';

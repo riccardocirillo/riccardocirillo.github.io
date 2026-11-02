@@ -110,3 +110,88 @@ test('title.svg uses only palette colours', async () => {
   expect(fills.length).toBeGreaterThan(0);
   expect(fills.filter((c) => !allowed.has(c))).toEqual([]);
 });
+
+// --- v4: hand-drawn grids (docs/ART_BIBLE.md § 1) -----------------------------------------------------------------
+// Every sheet of art/sprites/*.txt is checked on the grid itself (isolated pixels, jitter) and on its PNG (palette, weight).
+import { existsSync } from 'node:fs';
+import { loadSheet, sheetNames } from '../scripts/art/grid.js';
+import { parseSheet, variantRows } from '../scripts/art/grid-parse.js';
+
+const names = await sheetNames();
+const neighbours = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+
+// A pixel with no neighbour (8 around it) of the same colour, unless its character is marked `!` in the legend.
+function isolated(sheet, rows) {
+  const out = [];
+  rows.forEach((row, y) => [...row].forEach((ch, x) => {
+    if (ch === '.' || sheet.alone.has(ch)) return;
+    const colour = sheet.legend[ch];
+    if (!neighbours.some(([dx, dy]) => sheet.legend[rows[y + dy]?.[x + dx]] === colour)) out.push(`${x},${y}`);
+  }));
+  return out;
+}
+const changed = (a, b) => a.reduce((sum, row, y) => sum + [...row].filter((ch, x) => ch !== b[y][x]).length, 0);
+
+test('v4 grids: the palette has no pure black (outlines are never #000)', () => {
+  expect(allowed.has('#000000')).toBe(false);
+});
+
+test('v4 grids: the reader stops with file:line on mistakes', () => {
+  const head = 'size: 2x2\npalette:\n  1 navy\ntags:\n  a 0-0\n';
+  expect(() => parseSheet(`${head}--- a 0 100\n11\n1\n`, 'x.txt')).toThrow('x.txt:8: row has 1 characters, expected 2');
+  expect(() => parseSheet(`${head}--- a 0 100\n11\n1Z\n`, 'x.txt')).toThrow('x.txt:8: character "Z" is not in the palette legend');
+  expect(() => parseSheet(`${head}--- a 0\n11\n11\n`, 'x.txt')).toThrow('x.txt:6: frame a 0 has no duration (ms)');
+  expect(() => parseSheet(head.replace('a 0-0', 'a 0-1') + '--- a 0 100\n11\n11\n', 'x.txt')).toThrow('x.txt:5: tag a needs frame 1 (column 1): missing');
+  expect(() => parseSheet('size: 1x1\npalette:\n  1 navyy\n', 'x.txt')).toThrow('x.txt:3: colour "navyy" is not in src/palette.js');
+});
+
+test('v4 grids: proof of the method (the art bible target, converted 1:1) reads as one 48×48 frame with a duration', async () => {
+  const proof = await loadSheet('art/proof/batter_idle0.txt');
+  expect(proof.size).toEqual({ w: 48, h: 48 });
+  expect(proof.frames).toHaveLength(1);
+  expect(proof.frames[0].ms).toBeGreaterThan(0);
+});
+
+for (const name of names) {
+  test(`v4 grid ${name}: PNG + JSON match the grid, only palette colours, every frame has a duration`, async () => {
+    const sheet = await loadSheet(name);
+    const json = JSON.parse(await readFile(`public/game/${name}.json`, 'utf8'));
+    const { found, info } = await colours(`public/game/${name}.png`);
+    expect([info.width, info.height]).toEqual([sheet.size.w * sheet.frames.length, sheet.size.h * sheet.variants.length]);
+    expect(json.meta.size).toEqual({ w: info.width, h: info.height });
+    expect([...found].filter((c) => !allowed.has(c))).toEqual([]);
+    expect(json.frames).toHaveLength(sheet.frames.length);
+    for (const f of json.frames) expect(f.duration, f.filename).toBeGreaterThan(0);
+  });
+
+  test(`v4 grid ${name}: no isolated pixels (except the characters marked ! for eyes and glints)`, async () => {
+    const sheet = await loadSheet(name);
+    for (const variant of sheet.variants) for (const frame of sheet.frames) {
+      expect(isolated(sheet, variantRows(sheet, frame, variant)), `${variant.name} ${frame.tag} ${frame.n}`).toEqual([]);
+    }
+  });
+
+  test(`v4 grid ${name}: no jitter (pixels changed between frames of a tag stay under the tag's limit)`, async () => {
+    const sheet = await loadSheet(name);
+    for (const tag of sheet.tags) {
+      if (tag.to === tag.from) continue;
+      expect(tag.jitter, `${tag.name} needs jitter=`).not.toBeNull();
+      for (let i = tag.from + 1; i <= tag.to; i++) {
+        expect(changed(sheet.frames[i - 1].rows, sheet.frames[i].rows), `${tag.name} ${i - tag.from - 1}→${i - tag.from}`).toBeLessThanOrEqual(tag.jitter);
+      }
+    }
+  });
+}
+
+test('v4: every picture of the game stays under 400 KB (§ 13)', async () => {
+  const { readdir } = await import('node:fs/promises');
+  for (const file of (await readdir('public/game')).filter((f) => f.endsWith('.png'))) {
+    expect((await readFile(`public/game/${file}`)).length, file).toBeLessThan(400_000);
+  }
+});
+
+test('v4: /art-lab/ and the archive of old sprites are not in the build', () => {
+  expect(existsSync('dist/index.html')).toBe(true);
+  expect(existsSync('dist/art-lab')).toBe(false);
+  expect(existsSync('dist/_archive')).toBe(false);
+});

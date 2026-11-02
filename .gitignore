@@ -34,3 +34,6 @@ PORTFOLIO_progetto_claude/
 # Local skills installed for Claude
 .claude/skills/
 skills-lock.json
+
+# Playwright MCP logs and snapshots (local only)
+.playwright-mcp/

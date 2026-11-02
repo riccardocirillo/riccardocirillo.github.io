@@ -99,3 +99,8 @@
 - 2026-10-29 — F6: lobby.png e scripts/art/lobby.js tolti (la lobby non esiste più dopo F4). (auto)
 - 2026-10-29 — Pubblicazione: 404.html generata da scripts/pages.js ("Lost ball", tema night, lo stadio di notte dietro, link a Title screen, Story mode e Multiplayer), solo in inglese (GitHub Pages usa una sola 404), noindex. (auto)
 - 2026-10-29 — Pubblicazione: v3 unito in main (fast-forward) su richiesta di Riccardo, prima di F7; Sensor lab resta il segnaposto.
+- 2026-11-02 — v4 A: griglie di testo in art/sprites/*.txt (formato in scripts/art/grid-parse.js: `--- tag n ms`, `from=`, righe `NN:`, `=== part`, `@part x,y [flip]`, `variants:` con scambi a>b e acc=<parte>, legenda con `!` per i pixel che possono stare soli). `npm run art` = vecchi script + scripts/art/grid.js. (auto)
+- 2026-11-02 — v4 A: il lettore delle griglie è separato (grid-parse.js, senza Node) così /art-lab/ disegna le griglie direttamente nel browser e si aggiorna a ogni salvataggio, senza npm run art. (auto)
+- 2026-11-02 — v4 A: /art-lab/ = art-lab/index.html servita solo da Vite dev (non in PAGES); public/_archive/ tolta da dist con un plugin di vite.config.js; un test controlla che nessuna delle due sia in dist. (auto)
+- 2026-11-02 — v4 A: il bersaglio batter_idle0 convertito sta in art/proof/ (0 pixel diversi dal PNG dell'art bible). Non è un foglio del sito: ha 13 pixel isolati che la Fase B corregge. (auto)
+- 2026-11-02 — v4 A: "pixel isolato" = nessuno degli 8 vicini ha lo stesso colore; il controllo gira sulle griglie (dopo lo scambio di divisa), non sui PNG, perché solo la griglia sa quali caratteri sono occhi o riflessi. Tremolio: ogni tag con più frame dichiara `jitter=N` (pixel cambiati al massimo tra due frame). (auto)
