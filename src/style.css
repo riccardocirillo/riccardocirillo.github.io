@@ -580,7 +580,11 @@ th { background: var(--ink); color: var(--bg); }
 }
 /* The ballpark at the bottom, dark (F6: the night picture; before it, the day field dimmed). Whole-number scale, decoration. */
 /* 480×270 at 3×, only its lower two thirds (the infield): the sky above stays the night of the page. */
-.title-stadium { position: absolute; left: 50%; bottom: 0; z-index: 0; width: 1408px; max-width: none; height: 848px; transform: translateX(-50%); image-rendering: pixelated; pointer-events: none; filter: brightness(.42); } /* v4: the night stadium at 2×, darkened behind the text */
+/* v4: the night stadium (704×424), darkened behind the text, at the smallest whole scale that covers the whole title screen
+   (like the game): 2× up to 1408 px wide, then 3×, then 4×. Never narrower than the screen, never blurry. */
+.title-stadium { --ts: 2; position: absolute; left: 50%; bottom: 0; z-index: 0; width: calc(704px * var(--ts)); max-width: none; height: calc(424px * var(--ts)); transform: translateX(-50%); image-rendering: pixelated; pointer-events: none; filter: brightness(.42); }
+@media (min-width: 1409px), (min-height: 917px) { .title-stadium { --ts: 3; } }
+@media (min-width: 2113px), (min-height: 1341px) { .title-stadium { --ts: 4; } }
 @media (max-width: 699px) { .title-stadium { display: none; } } /* phones: the menu and the projects need the room */
 .title-grid { position: relative; z-index: 1; display: grid; gap: 3rem; max-width: 72rem; }
 @media (min-width: 1000px) {
