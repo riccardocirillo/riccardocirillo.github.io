@@ -171,39 +171,44 @@ h3 { font-size: 1.25rem; }
 .button.ghost:hover { background: var(--ink); color: var(--bg); }
 
 
-/* --- Ballpark (home). The field is a 480×270 pixel picture shown at a whole-number scale --fs (sharp pixels):
-   2× (960×540) from 1000 px wide, 1× (480×270) below. Positions come from src/field-map.js as --x / --y percentages.
-   On a phone the stage is as wide as the screen and the 480 px picture is centred and cropped (about 64 px off each side):
-   everything a visitor can click lives between x = 64 and x = 416 (tests/field.spec.js checks it). --- */
+/* --- Ballpark (v4, docs/ART_BIBLE.md § 7 + § 11). The world is 704×424 world pixels (src/field-map.js WORLD): the night
+   stadium in layers, every one at the same whole-number scale --fs (sharp pixels). Positions are --x / --y in % of the world.
+   Without JS: the world at 1× (2× from 1000 px wide), centred in the stage and cropped at the sides.
+   With JS (src/game.js, html.is-game): the game fills the screen, --fs = the smallest whole scale that covers it, and a
+   camera moves the world with transform: translate() in whole screen pixels (--cx, --cy). --- */
 .field { --fs: 1; padding-block: 0 1.5rem; }
 @media (min-width: 1000px) {
   .field { --fs: 2; }
 }
-/* The stage and the card that opens over it. */
-.ballpark { position: relative; width: calc(480px * var(--fs) + 4px); max-width: calc(100% - 2rem); margin-inline: auto; }
-.stage {
-  position: relative;
-  box-sizing: content-box;
-  width: calc(480px * var(--fs));
-  max-width: calc(100% - 4px);
-  height: calc(270px * var(--fs));
-  margin-inline: auto;
-  border: 2px solid var(--ink);
-
-  overflow: hidden;
-  background: var(--navy); /* shows as a frame where the camera has slid the picture away (under the open card) */
-}
-/* The picture's own box: centred in the stage, so it can be wider than the stage (the crop on phones). */
-.field-box {
-  transform: translateX(var(--cam, 0px));
-  transition: transform .3s ease;
+.ballpark { position: relative; }
+.stage { position: relative; height: calc(424px * var(--fs)); overflow: hidden; background: var(--night, #0b0f1e); }
+.world {
   position: absolute;
   top: 0;
-  left: calc((100% - 480px * var(--fs)) / 2);
-  width: calc(480px * var(--fs));
-  height: calc(270px * var(--fs));
+  left: calc(50% - 352px * var(--fs));
+  width: calc(704px * var(--fs));
+  height: calc(424px * var(--fs));
 }
-.field-img { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.layer, .halo { position: absolute; left: 0; top: 0; max-width: none; image-rendering: pixelated; pointer-events: none; }
+.layer-sky { width: 100%; height: calc(178px * var(--fs)); transform: translate(var(--px0, 0px), var(--py0, 0px)); }
+.layer-stands { width: 100%; height: calc(164px * var(--fs)); transform: translate(var(--px1, 0px), var(--py1, 0px)); }
+.layer-field { width: 100%; height: 100%; }
+.layer-roof { left: var(--x); top: var(--y); z-index: 4; width: calc(144px * var(--fs)); height: calc(12px * var(--fs)); }
+/* The four halos of the towers: lit one after the other when the game starts (src/game.js adds .lights-on). */
+.halo { left: var(--x); top: var(--y); width: calc(136px * var(--fs)); height: calc(112px * var(--fs)); transform: translate(var(--px1, 0px), var(--py1, 0px)); }
+.is-game .stage:not(.lights-on) .halo { visibility: hidden; }
+.stage.lights-on .halo { animation: lamp-on 1ms calc(var(--i) * 260ms) both; }
+@keyframes lamp-on { from { visibility: hidden; } to { visibility: visible; } }
+/* The crowd: a <canvas> over the stands (src/crowd.js, 8 fps); the stands picture already has the same crowd, still. */
+.crowd { position: absolute; left: 0; top: calc(112px * var(--fs)); width: 100%; height: calc(52px * var(--fs)); image-rendering: pixelated; pointer-events: none; transform: translate(var(--px1, 0px), var(--py1, 0px)); }
+/* The live scoreboard: the bases visited and HOME RUN (src/game.js). */
+.scoreboard { position: absolute; left: var(--x); top: var(--y); width: calc(100px * var(--fs)); height: calc(40px * var(--fs)); display: grid; place-items: center; transform: translate(var(--px1, 0px), var(--py1, 0px)); pointer-events: none; }
+.sb-bases { display: flex; gap: calc(6px * var(--fs)); }
+.sb-bases i { width: calc(6px * var(--fs)); height: calc(6px * var(--fs)); background: var(--navy); }
+.sb-bases i.is-on { background: var(--yellow); }
+.sb-text { display: none; font-family: var(--font-display); font-size: calc(12px * var(--fs)); line-height: 1; color: var(--yellow); }
+.scoreboard.is-home-run .sb-bases { display: none; }
+.scoreboard.is-home-run .sb-text { display: block; }
 .bases { list-style: none; margin: 0; padding: 0; transition: visibility 0s .5s; }
 .base {
   --gap: 10px; /* space between a label and the sprite on its base */
@@ -272,12 +277,7 @@ h3 { font-size: 1.25rem; }
   .stadium-map { display: none; }
 }
 
-/* World = everything drawn on the field (image + people + ball). The tour zooms it 2× (integer = sharp);
-   the base links stay outside, so they never scale. --tx / --ty come from src/tour.js. */
-.world { position: absolute; inset: 0; transform-origin: 0 0; transition: transform .5s ease; }
-.stage.is-zoomed .world { transform: translate(var(--tx, 0), var(--ty, 0)) scale(2); }
-.stage.is-zoomed .bases { visibility: hidden; transition: none; }
-
+/* The tour's "moments" no longer zoom (v4): the camera follows the runner instead. */
 /* Sprites: square cells of --cell px at --s×, feet on (--x, --y). A sheet is --frames cells wide and --rows cells high.
    v4: hand-drawn sheets from art/sprites/*.txt. Runner = public/game/runner.png (36 frames × 3 uniforms, runner.json);
    crew = coach.png (12 × 2: first, third), pitcher.png (6 × 1), mates.png (5 × 3). The scouting portrait uses the runner too.
@@ -295,7 +295,7 @@ h3 { font-size: 1.25rem; }
 .crew-sprite[data-who="mates"] { --frames: 5; --rows: 3; background-image: url("/game/mates.png"); }
 .sprite {
   --s: var(--fs);
-  --foot: 4; /* px of the cell between the soles and the bottom edge of the cell, minus the shadow on the base */
+  --foot: 2; /* px of the cell under the soles (v4 sprites: feet on row 46 of 48) */
   position: absolute;
   left: var(--x);
   top: var(--y);
@@ -304,6 +304,19 @@ h3 { font-size: 1.25rem; }
   pointer-events: none;
 }
 .sprite.is-flipped { transform: translate(-50%, calc(-100% + var(--foot) * var(--s) * 1px)) scaleX(-1); }
+/* Short shadows in two directions (four lights): public/game/shadow.png under the feet. */
+.sprite::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: calc((var(--foot) - 3) * var(--s) * 1px);
+  width: calc(28px * var(--s));
+  height: calc(6px * var(--s));
+  transform: translateX(-50%);
+  background: url("/game/shadow.png") 0 0 / 100% 100%;
+  image-rendering: pixelated;
+  z-index: -1;
+}
 .runner, .batter {
   background-image: url("/game/runner.png");
   background-position: 0 calc(var(--uniform-row, 0) * var(--step));
@@ -572,9 +585,7 @@ th { background: var(--ink); color: var(--bg); }
 }
 /* The ballpark at the bottom, dark (F6: the night picture; before it, the day field dimmed). Whole-number scale, decoration. */
 /* 480×270 at 3×, only its lower two thirds (the infield): the sky above stays the night of the page. */
-.title-stadium { position: absolute; left: 50%; bottom: 0; z-index: 0; width: 1440px; max-width: none; height: 540px; object-fit: cover; object-position: bottom; transform: translateX(-50%); image-rendering: pixelated; pointer-events: none; }
-.title-stadium[src$="field.png"] { filter: brightness(.25) saturate(.7); }
-.title-stadium[src$="night.png"] { height: 405px; filter: brightness(.5); } /* the night picture (F6): only the infield, darker behind the text */
+.title-stadium { position: absolute; left: 50%; bottom: 0; z-index: 0; width: 1408px; max-width: none; height: 848px; transform: translateX(-50%); image-rendering: pixelated; pointer-events: none; filter: brightness(.42); } /* v4: the night stadium at 2×, darkened behind the text */
 @media (max-width: 699px) { .title-stadium { display: none; } } /* phones: the menu and the projects need the room */
 .title-grid { position: relative; z-index: 1; display: grid; gap: 3rem; max-width: 72rem; }
 @media (min-width: 1000px) {
@@ -796,3 +807,26 @@ dialog.pause h2 { margin: 0 0 1.25rem; font-size: calc(var(--j) * 3); text-align
 .lost .logo { font-size: calc(var(--j) * 4); }
 @media (min-width: 700px) { .lost .logo { font-size: calc(var(--j) * 6); } }
 .lost-links { list-style: none; max-width: 36rem; margin: 2rem 0 0; padding: 0; display: grid; gap: .75rem; }
+
+/* ===================================================================================================
+   v4 · the game fills the screen (docs/ART_BIBLE.md § 7). src/game.js adds html.is-game and sets --fs, --cx, --cy.
+   No page scroll, no frame around the field: the HUD sits on the stadium, the card over its right side (phones: at the bottom).
+   =================================================================================================== */
+.is-game, .is-game body { height: 100%; overflow: hidden; }
+.is-game .field { position: fixed; inset: 0; padding: 0; }
+.is-game .hud { position: fixed; top: 0; left: 0; right: 0; z-index: 9; margin: 0; }
+.is-game .stage { position: fixed; inset: 0; z-index: 0; height: auto; }
+.is-game .world { left: 0; transform: translate(var(--cx, 0px), var(--cy, 0px)); will-change: transform; }
+.is-game .game-bar { position: fixed; left: 50%; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 8; width: max-content; max-width: calc(100vw - 24px); margin: 0; transform: translateX(-50%); }
+.is-game .swing-box { position: fixed; left: 16px; top: 76px; bottom: auto; transform: none; } /* under the HUD, over the stands: covers no base, whatever the camera shows */
+.is-game .stadium-map { display: none; }
+.is-game .field.is-live .panel { position: fixed; z-index: 8; margin: 0; overflow: auto; overscroll-behavior: contain; }
+@media (min-width: 700px) {
+  .is-game .field.is-live .panel { top: 76px; right: 16px; width: min(380px, 44vw); max-height: calc(100dvh - 92px); }
+}
+@media (max-width: 699px) {
+  .is-game .field.is-live .panel { left: 0; right: 0; bottom: 0; max-height: 42dvh; }
+  .is-game .stage-col { position: static; padding: 0; background: none; }
+}
+/* Base labels never grow past 2× (the icons on a 3× phone stay readable, not huge). */
+.is-game .base-icon { width: calc(24px * min(var(--fs), 2)); height: calc(24px * min(var(--fs), 2)); background-position: calc(var(--icon) * -24px * min(var(--fs), 2)) 0; background-size: auto calc(24px * min(var(--fs), 2)); }

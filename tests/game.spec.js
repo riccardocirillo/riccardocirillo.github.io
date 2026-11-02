@@ -97,7 +97,7 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
 
     await page.goto('/play/');
     await page.getByRole('button', { name: /^Skip/ }).click();
-    await page.locator('.stage').click({ position: { x: 300, y: 30 } }); // the stands: no base there
+    await page.locator('.stage').click({ position: { x: 300, y: 200 } }); // the stands: no base there (the HUD covers the top)
     await expect(count(page)).toHaveText('1st base · Nipotyno');
   });
 
@@ -187,23 +187,10 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
 test.describe('game @ 1280 px with motion', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test('high five on 1st base with a zoom; base labels stay hidden until the zoom is closed; Next works during it; nothing moves on by itself', async ({ page }) => {
+  // v4: the moments no longer zoom (the camera follows the runner); the class still marks the moment.
+  test('high five on 1st base (the moment); Next works during it; nothing moves on by itself', async ({ page }) => {
     test.setTimeout(75_000);
     await page.goto('/play/');
-    // Record what `.bases` looks like at the exact moment the zoom class goes away, and 0.8 s later.
-    await page.evaluate(() => {
-      const stage = document.querySelector('.stage');
-      const bases = document.querySelector('.bases');
-      let seen = false;
-      window.__zoomOut = null;
-      new MutationObserver(() => {
-        if (stage.classList.contains('is-zoomed')) { seen = true; return; }
-        if (!seen || window.__zoomOut) return;
-        window.__zoomOut = { atExit: getComputedStyle(bases).visibility };
-        setTimeout(() => { window.__zoomOut.after = getComputedStyle(bases).visibility; }, 800);
-      }).observe(stage, { attributes: true, attributeFilter: ['class'] });
-    });
-
     await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
 
     await page.getByRole('button', { name: 'Swing!' }).click();
@@ -213,11 +200,6 @@ test.describe('game @ 1280 px with motion', () => {
     await expect(page.locator('.runner')).toHaveClass(/is-highfive/);
     await expect(page.locator('[data-crew="coach1"]')).toHaveClass(/is-highfive/);
     await page.screenshot({ path: 'tests/screenshots/tour-highfive-1280.png' });
-
-    // 0.1: while the world scales back (0.5 s) the labels are still hidden; afterwards they are visible
-    await page.waitForFunction(() => window.__zoomOut?.after, null, { timeout: 8_000 });
-    const zoomOut = await page.evaluate(() => window.__zoomOut);
-    expect(zoomOut).toEqual({ atExit: 'hidden', after: 'visible' });
 
     // no change of base without a click: wait 15 s on the card
     await page.waitForTimeout(15_000);

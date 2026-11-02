@@ -10,7 +10,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Marked } from 'marked';
 import sharp from 'sharp';
-import { FIELD, STOPS, SPOTS, CREW, DUGOUT } from '../src/field-map.js';
+import { FIELD, STOPS, SPOTS, CREW, DUGOUT, TOWERS, SCOREBOARD } from '../src/field-map.js';
 import { UNIFORMS } from '../src/uniforms.js';
 import { PALETTE } from '../src/palette.js';
 import { pixelText } from './art/title.js';
@@ -536,13 +536,17 @@ async function ballpark(L, cases) {
         <div class="ballpark">
           <div class="stage-col">
             <div class="stage">
-              <div class="field-box">
-                <div class="world">
-                  <img class="field-img" src="/game/field.png" alt="${escape(t.fieldAlt)}" width="${FIELD.width}" height="${FIELD.height}">
+              <div class="world">
+                <img class="layer layer-sky" src="/game/stadium-sky.png" alt="" width="${FIELD.width}" height="178">
+                <img class="layer layer-stands" src="/game/stadium-stands.png" alt="" width="${FIELD.width}" height="164">
+${TOWERS.map((tw, i) => `                <img class="halo" src="/game/stadium-halo.png" alt="" width="136" height="112" style="--x: ${pct(tw.x - 60, FIELD.width)}; --y: ${pct(tw.y - 4, FIELD.height)}; --i: ${i}">`).join('\n')}
+                <canvas class="crowd" width="${FIELD.width}" height="52" aria-hidden="true"></canvas>
+                <div class="scoreboard" aria-hidden="true" style="--x: ${pct(SCOREBOARD.x, FIELD.width)}; --y: ${pct(SCOREBOARD.y, FIELD.height)}"><span class="sb-bases"><i></i><i></i><i></i></span><span class="sb-text">${escape(t.homeRun)}</span></div>
+                <img class="layer layer-field" src="/game/stadium-field.png" alt="${escape(t.fieldAlt)}" width="${FIELD.width}" height="${FIELD.height}">
 ${crew.join('\n')}
-                  <div class="sprite runner" style="--x: ${pct(DUGOUT.x, FIELD.width)}; --y: ${pct(DUGOUT.y, FIELD.height)}"></div>
-                  <div class="ball" hidden></div>
-                </div>
+                <div class="sprite runner" style="--x: ${pct(DUGOUT.x, FIELD.width)}; --y: ${pct(DUGOUT.y, FIELD.height)}"></div>
+                <div class="ball" hidden></div>
+                <img class="layer layer-roof" src="/game/stadium-roof.png" alt="" width="144" height="12" style="--x: ${pct(DUGOUT.x - 72, FIELD.width)}; --y: ${pct(DUGOUT.y - 40, FIELD.height)}">
                 <ul class="bases" aria-label="${escape(t.stadium)}">
 ${points.join('\n')}
                 </ul>
@@ -643,7 +647,7 @@ ${picks.join('\n')}
       </div>`;
 }
 // The picture behind the title screen: the night stadium when F6 has drawn it, the day field until then.
-const NIGHT = existsSync(root('public/game/night.png')) ? '/game/night.png' : '/game/field.png';
+const NIGHT = '/game/stadium.png'; // v4: the night stadium, flattened (scripts/art/stadium.js)
 
 // --- Story mode, chapter 0 (F4) ------------------------------------------------------
 // Who I am (the bio of content/about.md), the motto, How I design in three short points, then Chapter 1.
@@ -773,7 +777,7 @@ export async function generate() {
       // The sprites are CSS backgrounds (found late by the browser): preload them so the batter and the field show at once.
       scripts: [
         '<link rel="preload" as="image" href="/game/runner.png">',
-        '<link rel="preload" as="image" href="/game/coach.png">',
+        '<link rel="preload" as="image" href="/game/stadium-field.png">',
         '<script type="module" src="/src/game.js"></script>',
       ].join('\n    '),
     }));

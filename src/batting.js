@@ -4,16 +4,17 @@
 // With reduced motion there is no pitch: a swing shows "Home run!" straight away.
 import { FIELD } from './field-map.js';
 import { sound } from './sound.js';
+import { every } from './loop.js';
 
-// Field pixels (480×270), like src/field-map.js.
-const RELEASE = { x: 225, y: 150 }; // the pitcher's hand
-const PLATE = { x: 252, y: 218 }; // where the bat meets the ball
-const CATCHER = { x: 258, y: 264 };
-const OUT = { x: 354, y: -18 }; // over the stands
+// World pixels (704×424), like src/field-map.js (v4).
+const RELEASE = { x: 344, y: 262 }; // the pitcher's hand
+const PLATE = { x: 362, y: 346 }; // where the bat meets the ball
+const CATCHER = { x: 356, y: 392 };
+const OUT = { x: 520, y: 40 }; // over the stands
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion }) {
+export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion, onHomeRun = () => {} }) {
   let pitching = null; // { cancelled } while the pitch loop runs
   let swing = null; // { promise, resolve } once the visitor has swung
 
@@ -25,14 +26,12 @@ export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion }) {
   // Move the ball from `a` to `b` in `ms`, `arc` field pixels high. Resolves false if cancelled.
   const fly = (a, b, ms, arc, run) => new Promise((resolve) => {
     const t0 = performance.now();
-    const tick = (now) => {
-      if (run.cancelled) return resolve(false);
+    const stop = every((now) => {
+      if (run.cancelled) { stop(); return resolve(false); }
       const p = Math.min((now - t0) / ms, 1);
       put({ x: a.x + (b.x - a.x) * p, y: a.y + (b.y - a.y) * p - arc * Math.sin(Math.PI * p) });
-      if (p < 1) requestAnimationFrame(tick);
-      else resolve(true);
-    };
-    requestAnimationFrame(tick);
+      if (p >= 1) { stop(); resolve(true); }
+    });
   });
 
   async function homeRun(run) {
@@ -41,6 +40,7 @@ export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion }) {
     if (!(await fly(PLATE, OUT, 900, 60, run))) return;
     ball.hidden = true;
     banner.hidden = false;
+    onHomeRun();
     sound.play('crowd');
     await sleep(1300);
     if (run.cancelled) return;
@@ -103,6 +103,7 @@ export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion }) {
         sound.play('crack');
         sound.play('crowd');
         banner.hidden = false;
+        onHomeRun();
         sleep(600).then(() => { if (pitching) finish(); });
       }
       return swing.promise;

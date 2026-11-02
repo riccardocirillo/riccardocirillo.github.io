@@ -4,7 +4,7 @@ Diario dell'esecuzione autonoma di `docs/PROMPT_V4.md` sul ramo `v4` (dal 02/11/
 Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi continua dalla prima cosa non fatta.
 
 ## Stato
-- Fase attuale: **D · stadio di notte e schermo intero**
+- Fase attuale: **E · percorso (HUD, anteprima, lettore, finale, foto, teaser)**
 - Fatto: Fase 0 (commit `v4 0: art bible e prompt`, base di partenza 339/339 test verdi, build ok, node 22.19, sharp 0.35.5)
 
 ## Piano (per me, non serve approvazione)
@@ -28,8 +28,11 @@ Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi contin
 
 - C · Animazioni complete — runner.txt 36 frame (§ 5, durate nel JSON), coach 12×2, pitcher 6, mates 5×3, fans 8×2. 0 pixel isolati in tutte le varianti (pulizia automatica + punti di aggancio cercati). runner/crew v3 in archivio, CSS/OG/test aggiornati. 361/361 verdi.
 
+- D · Stadio e schermo intero — scripts/art/stadium.js (strati), field-map v4 (704×424), /play/ a tutto schermo con scala intera, camera, parallasse, aloni che si accendono, tabellone vivo, pubblico su canvas; titolo e 404 con stadium.png. 354/354 verdi. Screenshot in runs/D.
+
 ### Metodo di lavoro (per ripartire)
 - Le griglie si costruiscono nella cartella scratchpad della sessione con: build.mjs (righe da segmenti "y: x:PIXEL"), edit.mjs (modifiche [x,y,"pixel"]), sheet.mjs (monta art/sprites/batter.txt da head.part, *.grid, poses.json, legend.txt e applica il contorno selettivo), anim.mjs + batter.json/coach.json/pitcher.json/mates.json (montaggio con from=, contorno selettivo e pulizia), anchor2.mjs (punti di aggancio), iso.mjs (pixel isolati). Se la sessione è nuova e lo scratchpad è vuoto: si lavora direttamente su art/sprites/*.txt (sono la fonte vera, complete).
+- Screenshot con Playwright vero (il browser MCP ha zoom 50%): SHOTS="nome|url|w|h|ms" OUT=cartella node --input-type=module < scratchpad/shots.mjs (dev server su 5173).
 - Anteprima: node scripts/art/preview.js <foglio> <out.png> [scala] [sfondo].
 
 ## [CHECK] da guardare

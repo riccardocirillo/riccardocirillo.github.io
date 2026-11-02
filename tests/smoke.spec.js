@@ -89,17 +89,18 @@ test.describe('phone (390 px): simplified touch field on /play/', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
   const panel = (page) => page.locator('#field-panel [data-panel]:visible');
 
-  test('field at 1× (480×270, sharp pixels, cropped by the stage), touch bases at least 24 px high', async ({ page }) => {
+  test('world at 3× (704×424 world pixels, sharp, cropped by the screen), touch bases at least 24 px high', async ({ page }) => {
     await page.goto('/play/');
-    const box = await page.locator('.field-img').boundingBox();
-    expect([box.width, box.height]).toEqual([480, 270]);
+    const box = await page.locator('.layer-field').boundingBox();
+    expect([box.width, box.height]).toEqual([704 * 3, 424 * 3]);
     for (const base of await page.locator('.base').all()) {
       expect((await base.boundingBox()).height).toBeGreaterThanOrEqual(24);
     }
   });
 
-  test('tapping a base opens its panel', async ({ page }) => {
-    await page.goto('/play/');
+  test('tapping a base on screen opens its panel (the camera shows the part of the field around the runner)', async ({ page }) => {
+    await page.goto('/play/#sensor-lab');
+    await page.locator('#field-panel [data-action="close"]').tap();
     await page.locator('.base[data-stop="sensor-lab"]').tap();
     await expect(page).toHaveURL(/#sensor-lab$/);
     await expect(panel(page)).toHaveAttribute('data-panel', 'sensor-lab');
@@ -184,10 +185,10 @@ test.describe('desktop (1280 px): the ballpark on /play/', () => {
     await expect(page.locator('#field-panel')).toBeHidden();
   });
 
-  test('field art is pixel-perfect: 480×270 shown at an integer scale', async ({ page }) => {
+  test('field art is pixel-perfect: the 704×424 world shown at an integer scale', async ({ page }) => {
     await page.goto('/play/');
-    const box = await page.locator('.field-img').boundingBox();
-    expect(box.width / 480).toBe(Math.round(box.width / 480));
-    expect(box.height / 270).toBe(box.width / 480);
+    const box = await page.locator('.layer-field').boundingBox();
+    expect(box.width / 704).toBe(Math.round(box.width / 704));
+    expect(box.height / 424).toBe(box.width / 704);
   });
 });

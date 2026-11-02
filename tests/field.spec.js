@@ -1,54 +1,41 @@
 import { test, expect } from '@playwright/test';
-import { STOPS, SAFE, FIELD } from '../src/field-map.js';
+import { STOPS, FIELD, WORLD } from '../src/field-map.js';
 
-// Fase 1: the 480×270 field is always shown at a whole-number scale; on a phone it is cropped around the middle,
-// so everything a visitor can click has to stay inside the part that remains visible (x = 64 … 416).
-const sizes = [
-  { width: 1280, height: 800, scale: 2 },
-  { width: 1440, height: 900, scale: 2 },
-  { width: 1536, height: 730, scale: 2 },
-  { width: 1000, height: 800, scale: 2 },
-  { width: 999, height: 800, scale: 1 },
-  { width: 800, height: 700, scale: 1 },
-  { width: 520, height: 800, scale: 1 },
-  { width: 390, height: 844, scale: 1 },
-  { width: 320, height: 640, scale: 1 },
-];
+// v4 (docs/ART_BIBLE.md § 7): with JS the game fills the screen. The world (704×424) is drawn at the smallest whole-number
+// scale that covers the screen (phones held upright: at least 3×), then cropped; a camera picks the part on screen.
+const scaleFor = (w, h) => { const s = Math.max(Math.ceil(w / WORLD.width), Math.ceil(h / WORLD.height)); return h > w * 1.2 ? Math.max(s, 3) : s; };
+const sizes = [[1280, 800], [1440, 900], [1536, 730], [1000, 800], [999, 800], [800, 700], [520, 800], [390, 844], [320, 640], [844, 390], [1024, 768]];
 
-for (const { width, height, scale } of sizes) {
-  test.describe(`field @ ${width}×${height}`, () => {
+for (const [width, height] of sizes) {
+  const scale = scaleFor(width, height);
+  test.describe(`world @ ${width}×${height}`, () => {
     test.use({ viewport: { width, height } });
 
-    test(`is shown at ${scale}× (the picture is ${FIELD.width * scale} px wide) and the sprites follow`, async ({ page }) => {
+    test(`is drawn at ${scale}× (${WORLD.width * scale} px wide), covers the whole screen, no page scroll`, async ({ page }) => {
       await page.goto('/play/');
-      const img = await page.locator('.field-img').boundingBox();
-      expect(img.width).toBe(FIELD.width * scale);
-      expect(img.height).toBe(FIELD.height * scale);
+      await expect(page.locator('.field')).toHaveCSS('--fs', String(scale));
+      const field = await page.locator('.layer-field').boundingBox();
+      expect([field.width, field.height]).toEqual([WORLD.width * scale, WORLD.height * scale]);
+      expect(field.x).toBeLessThanOrEqual(0);
+      expect(field.y).toBeLessThanOrEqual(0);
+      expect(field.x + field.width).toBeGreaterThanOrEqual(width);
+      expect(field.y + field.height).toBeGreaterThanOrEqual(height);
+      expect(Number.isInteger(field.x) && Number.isInteger(field.y)).toBe(true); // the camera moves by whole pixels
       const runner = await page.locator('.runner').boundingBox();
       expect([runner.width, runner.height]).toEqual([48 * scale, 48 * scale]); // 48 px cells at the same scale
-      expect(await page.locator('.field').evaluate((el) => getComputedStyle(el).getPropertyValue('--fs').trim())).toBe(String(scale));
-    });
-
-    test('the stage fits the screen, is centred, and the picture is centred in it (cropped on phones)', async ({ page }) => {
-      await page.goto('/play/');
       const stage = await page.locator('.stage').boundingBox();
-      const img = await page.locator('.field-img').boundingBox();
-      expect(stage.x).toBeGreaterThanOrEqual(0);
-      expect(stage.x + stage.width).toBeLessThanOrEqual(width);
-      // the picture sits in the middle of the stage: what is cut off on the left equals what is cut off on the right
-      const cutLeft = stage.x - img.x;
-      const cutRight = img.x + img.width - (stage.x + stage.width);
-      expect(Math.abs(cutLeft - cutRight)).toBeLessThanOrEqual(1);
-      if (img.width <= stage.width) expect(cutLeft).toBeLessThanOrEqual(0); // nothing cropped
-      expect(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth)).toBe(false);
+      expect([stage.x, stage.y, stage.width, stage.height]).toEqual([0, 0, width, height]);
+      expect(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight && document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     });
   });
 }
 
-test('every stop a visitor can click is inside the phone crop (x between 64 and 416)', () => {
+test('every stop is inside the 640×360 picture (the 32 px margin is only there for the camera)', () => {
   for (const stop of STOPS) {
-    expect(stop.x, stop.id).toBeGreaterThanOrEqual(SAFE.left);
-    expect(stop.x, stop.id).toBeLessThanOrEqual(SAFE.right);
+    expect(stop.x, stop.id).toBeGreaterThanOrEqual(WORLD.margin + 24);
+    expect(stop.x, stop.id).toBeLessThanOrEqual(FIELD.width - WORLD.margin - 24);
+    expect(stop.y, stop.id).toBeGreaterThanOrEqual(WORLD.margin + 24);
+    expect(stop.y, stop.id).toBeLessThanOrEqual(FIELD.height - WORLD.margin - 24);
   }
 });
 
@@ -57,9 +44,10 @@ for (const { width, height } of [{ width: 390, height: 844 }, { width: 320, heig
     test.use({ viewport: { width, height } });
 
     // In every language (Fase 3): the Spanish and Italian labels are longer.
-    for (const home of ['/', '/es/', '/it/']) test(`${home}play/: every base label is completely inside the visible field, and no two labels overlap`, async ({ page }) => {
+    // v4: the camera shows part of the world, so the labels must be inside the world (not always on screen).
+    for (const home of ['/', '/es/', '/it/']) test(`${home}play/: every base label is completely inside the world, and no two labels overlap`, async ({ page }) => {
       await page.goto(`${home}play/`);
-      const stage = await page.locator('.stage').boundingBox();
+      const stage = await page.locator('.layer-field').boundingBox();
       const boxes = [];
       for (const base of await page.locator('.base').all()) {
         const box = await base.boundingBox();

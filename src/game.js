@@ -9,7 +9,9 @@
 // Every base opens its card over the stadium (a drawer on desktop, under the stage on phones); ✕ Close closes it.
 // The address shows the base (/play/#nipotyno) and is only REPLACED, never added to: one Back press leaves the page.
 // Deep links skip the uniform and the at-bat. With reduced motion: no pitch and no zoom (the tour is the same, still).
-import { FIELD, STOPS, RING, CREW, DUGOUT } from './field-map.js';
+import { FIELD, WORLD, STOPS, RING, CREW, DUGOUT } from './field-map.js';
+import { every } from './loop.js';
+import { createCrowd } from './crowd.js';
 import { UNIFORMS } from './uniforms.js';
 import { atBat } from './batting.js';
 import { sound } from './sound.js';
@@ -29,7 +31,7 @@ function start() {
   const panel = document.querySelector('#field-panel');
   const links = [...stage.querySelectorAll('.base[data-stop]')];
   const byId = Object.fromEntries(STOPS.map((s) => [s.id, s]));
-  const fieldBox = stage.querySelector('.field-box');
+  const world = stage.querySelector('.world');
   const swingBox = stage.querySelector('.swing-box');
   const pick = field.querySelector('.uniform-pick');
   const wide = matchMedia('(min-width: 1000px)'); // the card is a drawer over the stage from here up
@@ -53,6 +55,12 @@ function start() {
   const status = bar.querySelector('[role="status"]');
   const batting = atBat({
     stage, runner, pitcher: crew.pitcher, ball: stage.querySelector('.ball'), banner: stage.querySelector('.banner'), reduceMotion,
+    // HOME RUN on the scoreboard (3 s) and the ola in the stands
+    onHomeRun() {
+      scoreboard.classList.add('is-home-run');
+      setTimeout(() => scoreboard.classList.remove('is-home-run'), 3000);
+      crowd.cheer();
+    },
   });
 
   let mode = 'free';
@@ -61,6 +69,9 @@ function start() {
   let running = null;
   let opener = null; // the link that opened the card: the focus goes back to it on close
   let looking = null; // the point the card is about (for the camera)
+  const scoreboard = stage.querySelector('.scoreboard');
+  const scoreLights = [...scoreboard.querySelectorAll('.sb-bases i')];
+  const crowd = createCrowd(stage.querySelector('.crowd'), { reduceMotion });
   const visited = new Set();
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -75,11 +86,55 @@ function start() {
     runner.style.setProperty('--y', `${(Math.round(y) / FIELD.height) * 100}%`);
   };
 
+  // --- Full screen (v4, ART_BIBLE § 7): whole-number scale that covers the screen, a camera that follows the runner ---
+  // Scale: the smallest whole number that covers the screen with the world; phones held upright get 3× (about 130×260
+  // world pixels around the runner). Camera: translate() of whole screen pixels, a small delay (lerp), stops at the
+  // edges of the world, and keeps the runner clear of the card (left half on wide screens, top part on phones).
+  const cam = { x: 0, y: 0, tx: 0, ty: 0, s: 1, w: 0, h: 0 };
+  function fit() {
+    cam.w = innerWidth; cam.h = innerHeight;
+    let s = Math.max(Math.ceil(cam.w / WORLD.width), Math.ceil(cam.h / WORLD.height));
+    if (cam.h > cam.w * 1.2) s = Math.max(s, 3);
+    cam.s = s;
+    field.style.setProperty('--fs', s);
+    aim(true);
+  }
+  function aim(snap = false) {
+    const point = looking ?? pos;
+    const cardOpen = !panel.hidden;
+    const ax = cardOpen && cam.w >= 700 ? cam.w * 0.3 : cam.w * 0.5;
+    const ay = cardOpen && cam.w < 700 ? cam.h * 0.3 : cam.h * 0.55;
+    const clamp = (v, min) => Math.min(0, Math.max(min, v));
+    cam.tx = clamp(ax - point.x * cam.s, cam.w - WORLD.width * cam.s);
+    cam.ty = clamp(ay - (point.y - 20) * cam.s, cam.h - WORLD.height * cam.s);
+    if (snap || reduceMotion.matches) { cam.x = cam.tx; cam.y = cam.ty; }
+    paint();
+  }
+  // Parallax: the far layers move a little less than the field (none with reduced motion).
+  function paint() {
+    const x = Math.round(cam.x), y = Math.round(cam.y);
+    world.style.setProperty('--cx', `${x}px`);
+    world.style.setProperty('--cy', `${y}px`);
+    const restX = (cam.w - WORLD.width * cam.s) / 2;
+    for (const [i, k] of [[0, 0.2], [1, 0.08]]) {
+      world.style.setProperty(`--px${i}`, reduceMotion.matches ? '0px' : `${Math.round((restX - x) * k)}px`);
+      world.style.setProperty(`--py${i}`, reduceMotion.matches ? '0px' : `${Math.round(-y * k)}px`);
+    }
+  }
+  every(() => {
+    if (Math.abs(cam.tx - cam.x) < 0.5 && Math.abs(cam.ty - cam.y) < 0.5) return;
+    cam.x += (cam.tx - cam.x) * 0.12;
+    cam.y += (cam.ty - cam.y) * 0.12;
+    paint();
+  });
+  addEventListener('resize', fit);
+
   // --- HUD: the base and the bases visited ------------------------------------------------
 
   const showBase = (text) => { hudBase.textContent = text; };
   function arrive(id) {
     if (isProject(id)) visited.add(id);
+    scoreLights.forEach((el, i) => el.classList.toggle('is-on', visited.has(RING[i + 1])));
     for (const el of diamonds) {
       const stop = RING[['first', 'second', 'third'].indexOf(el.dataset.corner) + 1];
       el.classList.toggle('is-visited', visited.has(stop));
@@ -104,18 +159,11 @@ function start() {
     return ringPath(from, to);
   }
 
-  // The camera: on desktop the card covers the right of the stage, so the picture slides left until the point is clear.
+  // The camera looks at a point (a base with its card) or, without one, follows the runner.
   function camera(point) {
     looking = point;
-    let shift = 0;
-    if (point && wide.matches && !panel.hidden) {
-      const scale = fieldBox.clientWidth / FIELD.width;
-      const covered = stage.getBoundingClientRect().right - panel.getBoundingClientRect().left;
-      shift = Math.max(0, point.x * scale - (stage.clientWidth - covered - 110)); // 110 px: room for the point's label too
-    }
-    fieldBox.style.setProperty('--cam', `${-Math.round(shift)}px`);
+    aim();
   }
-  addEventListener('resize', () => camera(looking));
 
   function showPanel(id) {
     panel.hidden = false;
@@ -140,7 +188,7 @@ function start() {
 
   // Move the runner to `id`, then show `panelId` (the stop's own panel by default; null = no card). Resolves on arrival.
   function runTo(id, { animate = true, panelId = id } = {}) {
-    if (running) cancelAnimationFrame(running.frame);
+    if (running) running.stop();
     const stops = route(current, id).map((s) => byId[s]);
     current = id;
     mark(id);
@@ -155,10 +203,8 @@ function start() {
     }
     stage.classList.add('is-running');
     return new Promise((resolve) => {
-      let last = performance.now();
-      const tick = (now) => {
-        let budget = (SPEED * (now - last)) / 1000;
-        last = now;
+      const tick = (now, dt) => {
+        let budget = (SPEED * dt) / 1000;
         while (budget > 0 && stops.length) {
           const target = stops[0];
           const dx = target.x - pos.x, dy = target.y - pos.y;
@@ -168,10 +214,10 @@ function start() {
           if (dx) runner.classList.toggle('is-flipped', dx < 0);
         }
         place(pos);
-        if (stops.length) running.frame = requestAnimationFrame(tick);
-        else { running = null; stage.classList.remove('is-running'); arrived(); resolve(); }
+        if (!looking) aim();
+        if (!stops.length) { running.stop(); running = null; stage.classList.remove('is-running'); arrived(); resolve(); }
       };
-      running = { frame: requestAnimationFrame(tick) };
+      running = { stop: every(tick) };
     });
   }
 
@@ -411,6 +457,8 @@ function start() {
   } else {
     choose();
   }
+  fit();
   stage.classList.add('is-ready');
+  stage.classList.add('lights-on'); // the four towers light up one after the other
   field.classList.add('is-live'); // CSS: the card goes over the stadium (desktop) only with the game running
 }
