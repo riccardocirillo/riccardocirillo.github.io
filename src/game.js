@@ -59,10 +59,17 @@ function start() {
   const status = bar.querySelector('[role="status"]');
   const batting = atBat({
     stage, runner, pitcher: crew.pitcher, ball: stage.querySelector('.ball'), banner: stage.querySelector('.banner'), reduceMotion,
-    // HOME RUN on the scoreboard (3 s) and the ola in the stands
+    // the contact: a white flash (2 frames) and the screen shakes 2 px three times (none with reduced motion)
+    onContact() {
+      if (reduceMotion.matches) return;
+      stage.classList.add('is-flash', 'is-shake');
+      setTimeout(() => stage.classList.remove('is-flash', 'is-shake'), 300);
+    },
+    // over the stands: HOME RUN on the scoreboard (3 s), fireworks (3 bursts), the ola in the stands
     onHomeRun() {
       scoreboard.classList.add('is-home-run');
-      setTimeout(() => scoreboard.classList.remove('is-home-run'), 3000);
+      if (!reduceMotion.matches) stage.classList.add('is-homerun');
+      setTimeout(() => { scoreboard.classList.remove('is-home-run'); stage.classList.remove('is-homerun'); }, 3000);
       crowd.cheer();
     },
   });
@@ -144,14 +151,19 @@ function start() {
   function arrive(id) {
     if (isProject(id)) visited.add(id);
     saveSession({ visited: [...visited], uniform: load('uniform') });
+    paintVisited(id);
+    hud.querySelector('.hud-diamonds').title = fill(T.visited, { n: visited.size });
+    showBase(id === 'home' && mode === 'bat' ? `${textOf('home', 'label')} · ${T.atBatBase}` : `${textOf(id, 'label')} · ${nameOf(id)}`);
+  }
+
+  // The bases visited, on the HUD diamonds and on the scoreboard (also right after a reload: sessionStorage).
+  function paintVisited(here = null) {
     scoreLights.forEach((el, i) => el.classList.toggle('is-on', visited.has(RING[i + 1])));
     for (const el of diamonds) {
       const stop = RING[['first', 'second', 'third'].indexOf(el.dataset.corner) + 1];
       el.classList.toggle('is-visited', visited.has(stop));
-      el.classList.toggle('is-current', stop === id);
+      el.classList.toggle('is-current', stop === here);
     }
-    hud.querySelector('.hud-diamonds').title = fill(T.visited, { n: visited.size });
-    showBase(id === 'home' && mode === 'bat' ? `${textOf('home', 'label')} · ${T.atBatBase}` : `${textOf(id, 'label')} · ${nameOf(id)}`);
   }
 
   // Waypoints from one stop to another: along the base path (shortest way round), out of the dugout via home.
@@ -330,6 +342,7 @@ function start() {
     setMode('bat');
     say(T.atBat);
     runTo('home', { panelId: null }).then(() => {
+      runner.classList.remove('is-walking');
       if (mode !== 'bat') return;
       runner.classList.remove('is-flipped');
       batting.start();
@@ -342,6 +355,7 @@ function start() {
     current = 'dugout'; // not a stop (no link, no card): only where the runner comes from
     pos = { ...DUGOUT };
     place(pos);
+    runner.classList.add('is-walking'); // out of the dugout: the walk with the bat on the shoulder
     batUp();
   }
 
@@ -453,7 +467,7 @@ function start() {
       reader.show(link, { label: fill(T.backTo, { base: textOf(id, 'label') }), name: nameOf(id), i: RING.indexOf(id), n: RING.length - 1 });
     }
     else if (action === 'sound') { sound.set(!sound.on); showToggles(); }
-    else if (action === 'motion') { motionOff = !motionOff; save('motion', motionOff ? 'reduced' : 'full'); showToggles(); }
+    else if (action === 'motion') { motionOff = !motionOff; save('motion', motionOff ? 'reduced' : 'full'); showToggles(); if (motionOff) crowd.still(); else crowd.resume(); aim(true); }
     else if (action === 'close') {
       if (mode === 'tour') { setMode('free'); say(T.tourEnded); }
       closePanel();
@@ -525,6 +539,7 @@ function start() {
     choose();
   }
   fit();
+  paintVisited(isProject(current) ? current : null);
   stage.classList.add('is-ready');
   stage.classList.add('lights-on'); // the four towers light up one after the other
   field.classList.add('is-live'); // CSS: the card goes over the stadium (desktop) only with the game running

@@ -333,8 +333,6 @@ h3 { font-size: 1.25rem; }
 /* Runner frames (v4, runner.json): walk 0–5 · idle 6–9 · blink 10 · swing 11–16 · run 17–24 · high five 25–28 · cheer 29–31 · jump 32–35 */
 .is-running .runner { animation: run .56s steps(8, jump-none) infinite; }
 .runner.is-batting { animation: idle 1.44s steps(1, end) infinite; }
-.runner.is-swinging { animation: swing .7s steps(6, jump-none) 1 forwards; }
-.runner.is-highfive { animation: none; background-position-x: calc(var(--step) * 27); }
 .runner.is-cheer { animation: cheer .33s steps(3, jump-none) infinite; }
 .runner.is-wave { animation: jump .4s steps(4, jump-none) infinite; }
 /* Idle: the breath (frames 6 7 8 9) twice, the second time with a blink on the last frame (10). */
@@ -346,7 +344,6 @@ h3 { font-size: 1.25rem; }
   87.5%, 100% { background-position-x: calc(var(--step) * 10); }
 }
 @keyframes run { from { background-position-x: calc(var(--step) * 17); } to { background-position-x: calc(var(--step) * 24); } }
-@keyframes swing { from { background-position-x: calc(var(--step) * 11); } to { background-position-x: calc(var(--step) * 16); } }
 @keyframes cheer { from { background-position-x: calc(var(--step) * 29); } to { background-position-x: calc(var(--step) * 31); } }
 @keyframes jump { from { background-position-x: calc(var(--step) * 32); } to { background-position-x: calc(var(--step) * 35); } }
 /* Crew (v4): coach idle 0–3 · high five 4–6 · clap 7–8 · gesture 9–11 | pitcher pitch 0–4 · look 5 | mates idle 0 · jump 1–4 */
@@ -441,7 +438,6 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
    the start-screen batter swings when the uniform changes (src/uniform.js). */
 .panel-card { animation: slide-in .25s ease-out; }
 @keyframes slide-in { from { transform: translateY(6px); } to { transform: none; } }
-.batter.is-swinging { animation: swing .7s steps(6, jump-none) 1; }
 .panel-cover { width: 100%; max-height: 7rem; object-fit: cover; object-position: top; margin-bottom: .75rem; border: 1px solid var(--line); }
 
 .panel { padding: 1rem 1.25rem; background: var(--card); border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--shadow); }
@@ -922,3 +918,56 @@ dialog.reader::backdrop { background: #0b0f1e; }
   .preview:not([hidden]), .finale .player-card { animation: none; }
 }
 .reduce-motion .preview:not([hidden]), .reduce-motion .finale .player-card { animation: none; }
+
+/* --- v4 moments (docs/ART_BIBLE.md § 5): the exact durations of runner.json, the effects of the home run. All off with
+   reduced motion (the system setting or the switch in the pause menu): no shake, no parallax, no fireworks, no flash. --- */
+/* swing: load 120 · step 80 · smear 40 · contact 60 · follow-through 100 · finish 300 (the game adds the 120 ms impact pause) */
+.runner.is-swinging { animation: swing .7s steps(1, end) 1 forwards; }
+.batter.is-swinging { animation: swing .7s steps(1, end) 1; }
+@keyframes swing {
+  0% { background-position-x: calc(var(--step) * 11); }
+  17.14% { background-position-x: calc(var(--step) * 12); }
+  28.57% { background-position-x: calc(var(--step) * 13); }
+  34.29% { background-position-x: calc(var(--step) * 14); }
+  42.86% { background-position-x: calc(var(--step) * 15); }
+  57.14%, 100% { background-position-x: calc(var(--step) * 16); }
+}
+.stage.is-impact .runner { animation-play-state: paused; }
+/* high five: approach 100 · arm up 100 · contact 140 · release 120, with a spark of 2 frames on the contact */
+.runner.is-highfive { animation: highfive .46s steps(1, end) 1 forwards; }
+@keyframes highfive {
+  0% { background-position-x: calc(var(--step) * 25); }
+  21.74% { background-position-x: calc(var(--step) * 26); }
+  43.48% { background-position-x: calc(var(--step) * 27); }
+  73.91%, 100% { background-position-x: calc(var(--step) * 28); }
+}
+.runner.is-highfive::after { content: ""; position: absolute; right: 4%; top: 6%; width: calc(12px * var(--s)); height: calc(12px * var(--s)); background: url("/game/spark.png") 0 0 / calc(24px * var(--s)) 100%; image-rendering: pixelated; animation: spark .28s steps(1, end) .2s 1 both; }
+@keyframes spark { 0%, 100% { visibility: visible; } 0% { background-position-x: 0; } 50% { background-position-x: calc(-12px * var(--s)); } 100% { visibility: hidden; } }
+.crew-sprite[data-who="coach"].is-highfive { animation: coach-hf .36s steps(3, jump-none) 1 forwards; }
+.crew-sprite[data-who="coach"].is-gesture { animation: coach-go .36s steps(3, jump-none) 1 forwards; }
+@keyframes coach-hf { from { background-position-x: calc(var(--step) * 4); } to { background-position-x: calc(var(--step) * 6); } }
+@keyframes coach-go { from { background-position-x: calc(var(--step) * 9); } to { background-position-x: calc(var(--step) * 11); } }
+/* out of the dugout: the walk with the bat on the shoulder (6 × 100); running: dust at the feet (3 frames) */
+.is-running .runner.is-walking { animation: walk .6s steps(6, jump-none) infinite; }
+@keyframes walk { from { background-position-x: 0; } to { background-position-x: calc(var(--step) * 5); } }
+.is-running .runner:not(.is-walking)::after { content: ""; position: absolute; left: 18%; bottom: calc(1px * var(--s)); width: calc(12px * var(--s)); height: calc(8px * var(--s)); background: url("/game/dust.png") 0 0 / calc(36px * var(--s)) 100%; image-rendering: pixelated; animation: dust .21s steps(3, jump-none) infinite; }
+@keyframes dust { from { background-position-x: 0; } to { background-position-x: calc(-24px * var(--s)); } }
+/* the ball's trail, 6 positions behind it */
+.trail i { position: absolute; left: var(--x); top: var(--y); width: calc(2px * var(--fs)); height: calc(2px * var(--fs)); background: #c7ecff; z-index: 5; }
+.trail i:nth-child(n + 4) { background: #8fb0d8; }
+/* fireworks: 3 bursts of 8 frames (100 ms each) over the stands */
+.fireworks i { position: absolute; left: var(--x); top: var(--y); width: calc(32px * var(--fs)); height: calc(32px * var(--fs)); background: url("/game/fireworks.png") 0 0 / calc(256px * var(--fs)) 100%; image-rendering: pixelated; visibility: hidden; }
+.stage.is-homerun .fireworks i { animation: firework .8s steps(8, jump-none) var(--d) 1 both; }
+@keyframes firework { 0% { visibility: visible; background-position-x: 0; } 99% { visibility: visible; background-position-x: calc(-224px * var(--fs)); } 100% { visibility: hidden; } }
+/* the contact: a white flash of 2 frames and a 2 px shake, 3 times */
+.flash { position: absolute; inset: 0; z-index: 7; background: #fff; opacity: 0; pointer-events: none; }
+.stage.is-flash .flash { animation: flash .16s steps(1, end) 1; }
+@keyframes flash { 0% { opacity: .5; } 50% { opacity: .2; } 100% { opacity: 0; } }
+.stage.is-shake .world { animation: shake .24s steps(1, end) 1; }
+@keyframes shake { 0% { translate: 2px 0; } 33% { translate: -2px 2px; } 66% { translate: 0 -2px; } 100% { translate: 0 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .fireworks, .flash, .trail, .runner::after { display: none !important; }
+  .stage .world, .stage .halo { animation: none !important; }
+}
+.reduce-motion .fireworks, .reduce-motion .flash, .reduce-motion .trail, .reduce-motion .runner::after { display: none !important; }
+.reduce-motion .stage .world, .reduce-motion .stage .halo { animation: none !important; }

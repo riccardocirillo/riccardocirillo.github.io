@@ -153,14 +153,15 @@ const ogName = (L, name) => (L.lang === 'en' ? name : `${L.lang}-${name}`);
 
 // Home: the pixel ballpark at 4× (with Riccardo at bat on home plate) under a navy band with the pixel name and role.
 async function ogHome(L) {
-  // The 480×270 field at 3× (1440×810, a whole-number scale) cropped to 1200×630, Riccardo (48 px sprite at 3×) at bat.
-  const SCALE = 3, CROP = { left: 120, top: 180 };
+  // v4: the night stadium (704×424) at 2× (1408×848, a whole-number scale) cropped to 1200×630 around the diamond,
+  // Riccardo (48 px sprite at 2×) at bat on home plate.
+  const SCALE = 2, CROP = { left: 104, top: 160 };
   const home = STOPS.find((s) => s.id === 'home');
   const batter = await sharp(root('public/game/runner.png'))
     .extract({ left: 6 * 48, top: 0, width: 48, height: 48 }) // at the plate: idle 0, Researcher uniform (v4 sheet, runner.json)
     .resize(48 * SCALE, 48 * SCALE, { kernel: 'nearest' })
     .toBuffer();
-  const field = await sharp(root('public/game/field.png'))
+  const field = await sharp(root('public/game/stadium.png'))
     .resize(FIELD.width * SCALE, FIELD.height * SCALE, { kernel: 'nearest' })
     .extract({ ...CROP, width: OG.width, height: OG.height })
     .toBuffer();
@@ -551,15 +552,18 @@ async function ballpark(L, cases, about, aboutParts) {
 ${TOWERS.map((tw, i) => `                <img class="halo" src="/game/stadium-halo.png" alt="" width="136" height="112" style="--x: ${pct(tw.x - 60, FIELD.width)}; --y: ${pct(tw.y - 4, FIELD.height)}; --i: ${i}">`).join('\n')}
                 <canvas class="crowd" width="${FIELD.width}" height="52" aria-hidden="true"></canvas>
                 <div class="scoreboard" aria-hidden="true" style="--x: ${pct(SCOREBOARD.x, FIELD.width)}; --y: ${pct(SCOREBOARD.y, FIELD.height)}"><span class="sb-bases"><i></i><i></i><i></i></span><span class="sb-text">${escape(t.homeRun)}</span></div>
+                <div class="fireworks" aria-hidden="true"><i style="--x: 25%; --y: 6%; --d: 0s"></i><i style="--x: 47%; --y: 3%; --d: .35s"></i><i style="--x: 70%; --y: 8%; --d: .7s"></i></div>
                 <img class="layer layer-field" src="/game/stadium-field.png" alt="${escape(t.fieldAlt)}" width="${FIELD.width}" height="${FIELD.height}">
 ${crew.join('\n')}
                 <div class="sprite runner" style="--x: ${pct(DUGOUT.x, FIELD.width)}; --y: ${pct(DUGOUT.y, FIELD.height)}"></div>
                 <div class="ball" hidden></div>
+                <div class="trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
                 <img class="layer layer-roof" src="/game/stadium-roof.png" alt="" width="144" height="12" style="--x: ${pct(DUGOUT.x - 72, FIELD.width)}; --y: ${pct(DUGOUT.y - 40, FIELD.height)}">
                 <ul class="bases" aria-label="${escape(t.stadium)}">
 ${points.join('\n')}
                 </ul>
               </div>
+              <div class="flash" aria-hidden="true"></div>
               <div class="swing-box" hidden><button class="button swing" type="button" data-action="swing"><span aria-hidden="true">⚾</span> ${escape(t.swing)}</button></div>
               <p class="banner" aria-hidden="true" hidden>${escape(t.homeRun)}</p>
             </div>
@@ -636,7 +640,7 @@ ${pauseItem('a', `href="${prefix}/"`, t.titleScreen)}
 // --- The title screen (F4) ----------------------------------------------------------
 // `/` opens like a video game, but nothing is locked: name, role, dates, CV and the three projects are all on it.
 // The menu is three real links (Story mode, Gameplay, Multiplayer). src/title.js only adds ↑ ↓ inside the menu.
-// Background: the night sky and the darkened ballpark (public/game/night.png from F6, field.png before), decoration only.
+// Background: the night stadium of v4 (public/game/stadium.png), darkened, decoration only.
 function titlePage(L, cases) {
   const { t, p } = L;
   const [role, when] = t.titleRole;

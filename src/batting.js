@@ -14,30 +14,49 @@ const OUT = { x: 520, y: 40 }; // over the stands
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion, onHomeRun = () => {} }) {
+export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion, onHomeRun = () => {}, onContact = () => {} }) {
+  const trail = [...stage.querySelectorAll('.trail i')];
+  const history = [];
   let pitching = null; // { cancelled } while the pitch loop runs
   let swing = null; // { promise, resolve } once the visitor has swung
 
-  const put = ({ x, y }) => {
+  const put = ({ x, y }, withTrail = false) => {
     ball.style.setProperty('--x', `${(x / FIELD.width) * 100}%`);
     ball.style.setProperty('--y', `${(y / FIELD.height) * 100}%`);
+    // the trail: the last 6 positions of the ball in flight (only after the hit)
+    history.unshift({ x, y });
+    history.length = Math.min(history.length, 6);
+    trail.forEach((el, i) => {
+      const p = withTrail && history[i + 1];
+      el.hidden = !p;
+      if (p) { el.style.setProperty('--x', `${(p.x / FIELD.width) * 100}%`); el.style.setProperty('--y', `${(p.y / FIELD.height) * 100}%`); }
+    });
   };
 
   // Move the ball from `a` to `b` in `ms`, `arc` field pixels high. Resolves false if cancelled.
-  const fly = (a, b, ms, arc, run) => new Promise((resolve) => {
+  const fly = (a, b, ms, arc, run, withTrail = false) => new Promise((resolve) => {
     const t0 = performance.now();
     const stop = every((now) => {
       if (run.cancelled) { stop(); return resolve(false); }
       const p = Math.min((now - t0) / ms, 1);
-      put({ x: a.x + (b.x - a.x) * p, y: a.y + (b.y - a.y) * p - arc * Math.sin(Math.PI * p) });
+      put({ x: a.x + (b.x - a.x) * p, y: a.y + (b.y - a.y) * p - arc * Math.sin(Math.PI * p) }, withTrail);
       if (p >= 1) { stop(); resolve(true); }
     });
   });
 
   async function homeRun(run) {
     runner.classList.replace('is-batting', 'is-swinging');
+    // load, step and smear (240 ms), then the contact and the impact pause (120 ms): the hit is felt
+    await sleep(240);
+    if (run.cancelled) return;
+    stage.classList.add('is-impact');
     sound.play('crack');
-    if (!(await fly(PLATE, OUT, 900, 60, run))) return;
+    onContact();
+    await sleep(120);
+    stage.classList.remove('is-impact');
+    if (run.cancelled) return;
+    if (!(await fly(PLATE, OUT, 900, 60, run, true))) return;
+    for (const el of trail) el.hidden = true;
     ball.hidden = true;
     banner.hidden = false;
     onHomeRun();

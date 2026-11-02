@@ -10,6 +10,7 @@ export function createReader({ dialog, onClose, onNext }) {
   const cache = new Map();
   let current = null; // { slug, href }
   let opener = null;
+  let then = null; // what to do once the reader is really closed (after Back has put the address back)
 
   async function load(href) {
     if (!cache.has(href)) {
@@ -27,7 +28,10 @@ export function createReader({ dialog, onClose, onNext }) {
     const was = current;
     current = null;
     onClose?.(was);
-    (opener?.isConnected ? opener : null)?.focus({ preventScroll: true });
+    const after = then;
+    then = null;
+    if (after) after(was);
+    else (opener?.isConnected ? opener : null)?.focus({ preventScroll: true });
   }
 
   // Back (browser) or the reader's own buttons: the history entry we added goes away, then the dialog closes.
@@ -38,9 +42,8 @@ export function createReader({ dialog, onClose, onNext }) {
     const action = event.target.closest('[data-action]')?.dataset.action;
     if (action === 'reader-close') leave();
     if (action === 'reader-next') {
-      const was = current;
+      then = (was) => onNext?.(was);
       leave();
-      onNext?.(was);
     }
   });
 

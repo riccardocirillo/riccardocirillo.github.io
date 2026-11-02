@@ -50,7 +50,7 @@ test('F6 selective outline: the edge of the runner uses several ramp tones, neve
   expect(edge.has('#000000')).toBe(false);
 });
 
-for (const [file, size] of [['field.png', [480, 270]], ['night.png', [480, 270]], ['runner.png', [1728, 144]], ['coach.png', [576, 96]], ['pitcher.png', [288, 48]], ['mates.png', [240, 144]], ['icons.png', [168, 24]]]) {
+for (const [file, size] of [['stadium.png', [704, 424]], ['stadium-field.png', [704, 424]], ['stadium-sky.png', [704, 178]], ['stadium-stands.png', [704, 164]], ['stadium-halo.png', [136, 112]], ['stadium-roof.png', [144, 12]], ['shadow.png', [28, 6]], ['fireworks.png', [256, 32]], ['dust.png', [36, 8]], ['spark.png', [24, 12]], ['runner.png', [1728, 144]], ['coach.png', [576, 96]], ['pitcher.png', [288, 48]], ['mates.png', [240, 144]], ['icons.png', [168, 24]]]) {
   test(`${file}: ${size.join('×')} and only palette colours`, async () => {
     const { found, info } = await colours(`public/game/${file}`);
     expect([info.width, info.height]).toEqual(size);
@@ -91,17 +91,19 @@ test('runner.json describes the 36 frames of § 5 with their durations (walk, id
   expect(ms('jump')).toEqual([100, 100, 100, 100]);
 });
 
-test('night.png: same size as field.png, the sky is the night of the page, the towers are lit', async () => {
-  const { data } = await sharp('public/game/night.png').ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-  const at = (x, y) => hex(...data.subarray((y * 480 + x) * 4, (y * 480 + x) * 4 + 3));
-  expect([at(150, 12), at(151, 12)]).toContain('#0b0f1e'); // sky (dithered with navyDark near the stands)
-  expect(at(37, 2)).toBe(PALETTE.yellow); // a lamp of the left tower
-  const day = await sharp('public/game/field.png').metadata();
-  expect([day.width, day.height]).toEqual([480, 270]);
+// v4 (§ 11): the night stadium. The sky is the night of the page, the halo has lit lamps, the stands have the crowd.
+test('stadium layers: night sky, lit lamps in the halo, the crowd in the stands, the field under the wall', async () => {
+  const at = async (file, x, y) => { const { data, info } = await sharp(`public/game/${file}`).ensureAlpha().raw().toBuffer({ resolveWithObject: true }); const i = (y * info.width + x) * 4; return data[i + 3] ? hex(data[i], data[i + 1], data[i + 2]) : null; };
+  expect(await at('stadium-sky.png', 300, 2)).toBe(PALETTE.night);
+  const lamps = new Set();
+  for (let x = 60; x < 76; x++) for (let y = 5; y < 13; y++) lamps.add(await at('stadium-halo.png', x, y));
+  expect([...lamps].filter(Boolean)).toEqual(expect.arrayContaining([PALETTE.yellow, PALETTE.white]));
+  expect(await at('stadium-field.png', 300, 100)).toBeNull(); // above the wall: transparent (the sky and the stands show)
+  expect([PALETTE.grassDeep, PALETTE.grassDark, PALETTE.grass, PALETTE.grassLight]).toContain(await at('stadium-field.png', 20, 410));
 });
 
 test('PNG weight: every sheet stays light', async () => {
-  for (const [file, max] of [['field.png', 40_000], ['night.png', 40_000], ['runner.png', 25_000], ['coach.png', 8_000], ['pitcher.png', 8_000], ['mates.png', 8_000], ['fans.png', 2_000]]) {
+  for (const [file, max] of [['stadium.png', 60_000], ['stadium-field.png', 40_000], ['stadium-stands.png', 20_000], ['runner.png', 25_000], ['coach.png', 8_000], ['pitcher.png', 8_000], ['mates.png', 8_000], ['fans.png', 2_000]]) {
     expect((await sharp(`public/game/${file}`).toBuffer()).length, file).toBeLessThan(max);
   }
 });
