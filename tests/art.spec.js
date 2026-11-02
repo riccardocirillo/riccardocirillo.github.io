@@ -50,7 +50,7 @@ test('F6 selective outline: the edge of the runner uses several ramp tones, neve
   expect(edge.has('#000000')).toBe(false);
 });
 
-for (const [file, size] of [['field.png', [480, 270]], ['night.png', [480, 270]], ['runner.png', [864, 144]], ['crew.png', [384, 192]], ['icons.png', [168, 24]]]) {
+for (const [file, size] of [['field.png', [480, 270]], ['night.png', [480, 270]], ['runner.png', [1728, 144]], ['coach.png', [576, 96]], ['pitcher.png', [288, 48]], ['mates.png', [240, 144]], ['icons.png', [168, 24]]]) {
   test(`${file}: ${size.join('×')} and only palette colours`, async () => {
     const { found, info } = await colours(`public/game/${file}`);
     expect([info.width, info.height]).toEqual(size);
@@ -71,14 +71,24 @@ test('Sensor lab placeholder cover: 640×480 (160×120 at 4×), original, only p
   }
 });
 
-test('runner.json describes 18 frames of 48×48: idle (4), blink, run, swing (4), high five, cheer, wave', async () => {
+// v4 (docs/ART_BIBLE.md § 5): every animation of the table, with the durations of the art bible.
+test('runner.json describes the 36 frames of § 5 with their durations (walk, idle + blink, swing, run, high five, cheer, jump)', async () => {
   const sheet = JSON.parse(await readFile('public/game/runner.json', 'utf8'));
-  expect(sheet.frames).toHaveLength(18);
+  expect(sheet.frames).toHaveLength(36);
   expect(sheet.frames.every((f) => f.frame.w === 48 && f.frame.h === 48)).toBe(true);
-  expect(sheet.meta.size).toEqual({ w: 864, h: 144 });
+  expect(sheet.meta.size).toEqual({ w: 1728, h: 144 });
+  expect(sheet.meta.variants.map((v) => v.name)).toEqual(['researcher', 'designer', 'maker']);
   expect(sheet.meta.frameTags.map((t) => [t.name, t.from, t.to])).toEqual([
-    ['idle', 0, 3], ['blink', 4, 4], ['run', 5, 8], ['swing', 9, 12], ['highfive', 13, 13], ['cheer', 14, 15], ['wave', 16, 17],
+    ['walk', 0, 5], ['idle', 6, 9], ['blink', 10, 10], ['swing', 11, 16], ['run', 17, 24], ['highfive', 25, 28], ['cheer', 29, 31], ['jump', 32, 35],
   ]);
+  const ms = (tag) => sheet.frames.filter((f) => f.filename.includes(` ${tag} `)).map((f) => f.duration);
+  expect(ms('walk')).toEqual([100, 100, 100, 100, 100, 100]);
+  expect(ms('idle')).toEqual([180, 180, 180, 180]);
+  expect(ms('swing')).toEqual([120, 80, 40, 60, 100, 300]);
+  expect(ms('run')).toEqual(Array(8).fill(70));
+  expect(ms('highfive')).toEqual([100, 100, 140, 120]);
+  expect(ms('cheer')).toEqual([110, 110, 110]);
+  expect(ms('jump')).toEqual([100, 100, 100, 100]);
 });
 
 test('night.png: same size as field.png, the sky is the night of the page, the towers are lit', async () => {
@@ -91,17 +101,24 @@ test('night.png: same size as field.png, the sky is the night of the page, the t
 });
 
 test('PNG weight: every sheet stays light', async () => {
-  for (const [file, max] of [['field.png', 40_000], ['night.png', 40_000], ['runner.png', 25_000], ['crew.png', 15_000]]) {
+  for (const [file, max] of [['field.png', 40_000], ['night.png', 40_000], ['runner.png', 25_000], ['coach.png', 8_000], ['pitcher.png', 8_000], ['mates.png', 8_000], ['fans.png', 2_000]]) {
     expect((await sharp(`public/game/${file}`).toBuffer()).length, file).toBeLessThan(max);
   }
 });
 
-test('crew.json describes 8 frames of 48×48: idle, high five, cheer, pitch', async () => {
-  const sheet = JSON.parse(await readFile('public/game/crew.json', 'utf8'));
-  expect(sheet.frames).toHaveLength(8);
-  expect(sheet.frames.every((f) => f.frame.w === 48 && f.frame.h === 48)).toBe(true);
-  expect(sheet.meta.size).toEqual({ w: 384, h: 192 });
-  expect(sheet.meta.frameTags.map((t) => [t.name, t.from, t.to])).toEqual([['idle', 0, 1], ['highfive', 2, 2], ['cheer', 3, 4], ['pitch', 5, 7]]);
+test('crew sheets (§ 4): coaches (idle 4, high five 3, clap 2, gesture 3), pitcher (5 + look), 3 teammates, 8 fans of 6×10', async () => {
+  const tags = async (name) => JSON.parse(await readFile(`public/game/${name}.json`, 'utf8')).meta;
+  const coach = await tags('coach');
+  expect(coach.frameTags.map((t) => [t.name, t.to - t.from + 1])).toEqual([['idle', 4], ['highfive', 3], ['clap', 2], ['gesture', 3]]);
+  expect(coach.variants.map((v) => v.name)).toEqual(['first', 'third']);
+  expect((await tags('pitcher')).frameTags.map((t) => [t.name, t.to - t.from + 1])).toEqual([['pitch', 5], ['look', 1]]);
+  const mates = await tags('mates');
+  expect(mates.variants).toHaveLength(3);
+  expect(mates.frameTags.map((t) => [t.name, t.to - t.from + 1])).toEqual([['idle', 1], ['jump', 4]]);
+  const fans = await tags('fans');
+  expect(fans.cell).toEqual({ w: 6, h: 10 });
+  expect(fans.variants).toHaveLength(8);
+  expect(fans.frameTags.map((t) => t.name)).toEqual(['still', 'up']);
 });
 
 test('title.svg uses only palette colours', async () => {

@@ -279,8 +279,8 @@ h3 { font-size: 1.25rem; }
 .stage.is-zoomed .bases { visibility: hidden; transition: none; }
 
 /* Sprites: square cells of --cell px at --s×, feet on (--x, --y). A sheet is --frames cells wide and --rows cells high.
-   Runner = public/game/runner.png (15 frames × 3 uniforms), crew = public/game/crew.png (8 frames × 4 people),
-   see runner.json / crew.json. The big batter on the Start screen uses the runner sheet too.
+   v4: hand-drawn sheets from art/sprites/*.txt. Runner = public/game/runner.png (36 frames × 3 uniforms, runner.json);
+   crew = coach.png (12 × 2: first, third), pitcher.png (6 × 1), mates.png (5 × 3). The scouting portrait uses the runner too.
    To change the size of the art again, change --cell (and the sheets): nothing else here has a number in pixels. */
 .sprite, .batter {
   --cell: 48;
@@ -289,8 +289,10 @@ h3 { font-size: 1.25rem; }
   height: calc(var(--cell) * var(--s) * 1px);
   image-rendering: pixelated;
 }
-.runner, .batter { --frames: 18; --rows: 3; animation: idle 2s steps(1, end) infinite; }
-.crew-sprite { --frames: 8; --rows: 4; }
+.runner, .batter { --frames: 36; --rows: 3; animation: idle 1.44s steps(1, end) infinite; }
+.crew-sprite[data-who="coach"] { --frames: 12; --rows: 2; background-image: url("/game/coach.png"); }
+.crew-sprite[data-who="pitcher"] { --frames: 6; --rows: 1; background-image: url("/game/pitcher.png"); }
+.crew-sprite[data-who="mates"] { --frames: 5; --rows: 3; background-image: url("/game/mates.png"); }
 .sprite {
   --s: var(--fs);
   --foot: 4; /* px of the cell between the soles and the bottom edge of the cell, minus the shadow on the base */
@@ -310,39 +312,40 @@ h3 { font-size: 1.25rem; }
 }
 .runner { z-index: 3; }
 .crew-sprite {
-  background-image: url("/game/crew.png");
   background-position: 0 calc(var(--row) * var(--step));
   background-size: calc(var(--frames) * var(--cell) * var(--s) * 1px) calc(var(--rows) * var(--cell) * var(--s) * 1px);
   background-repeat: no-repeat;
 }
 
-/* Runner frames (F6): idle 0–3 · blink 4 · run 5–8 · swing 9–12 · high five 13 · cheer 14–15 · wave 16–17 */
-.is-running .runner { animation: run .4s steps(4, jump-none) infinite; }
-.runner.is-batting { animation: none; background-position-x: calc(var(--step) * 9); }
-.runner.is-swinging { animation: swing .44s steps(4, jump-none) 1 forwards; }
-.runner.is-highfive { animation: none; background-position-x: calc(var(--step) * 13); }
-.runner.is-cheer { animation: cheer .4s steps(2, jump-none) infinite; }
-.runner.is-wave { animation: wave .5s steps(2, jump-none) infinite; }
-/* Idle: the breath (frames 0 1 2 3) twice, the second time with a blink on the last frame (4): one blink every 8 frames. */
+/* Runner frames (v4, runner.json): walk 0–5 · idle 6–9 · blink 10 · swing 11–16 · run 17–24 · high five 25–28 · cheer 29–31 · jump 32–35 */
+.is-running .runner { animation: run .56s steps(8, jump-none) infinite; }
+.runner.is-batting { animation: idle 1.44s steps(1, end) infinite; }
+.runner.is-swinging { animation: swing .7s steps(6, jump-none) 1 forwards; }
+.runner.is-highfive { animation: none; background-position-x: calc(var(--step) * 27); }
+.runner.is-cheer { animation: cheer .33s steps(3, jump-none) infinite; }
+.runner.is-wave { animation: jump .4s steps(4, jump-none) infinite; }
+/* Idle: the breath (frames 6 7 8 9) twice, the second time with a blink on the last frame (10). */
 @keyframes idle {
-  0%, 50% { background-position-x: 0; }
-  12.5%, 62.5% { background-position-x: var(--step); }
-  25%, 75% { background-position-x: calc(var(--step) * 2); }
-  37.5% { background-position-x: calc(var(--step) * 3); }
-  87.5%, 100% { background-position-x: calc(var(--step) * 4); }
+  0%, 50% { background-position-x: calc(var(--step) * 6); }
+  12.5%, 62.5% { background-position-x: calc(var(--step) * 7); }
+  25%, 75% { background-position-x: calc(var(--step) * 8); }
+  37.5% { background-position-x: calc(var(--step) * 9); }
+  87.5%, 100% { background-position-x: calc(var(--step) * 10); }
 }
-@keyframes crew-idle { from { background-position-x: 0; } to { background-position-x: var(--step); } }
-.crew-sprite { animation: crew-idle 1s steps(2, jump-none) infinite; }
-@keyframes run { from { background-position-x: calc(var(--step) * 5); } to { background-position-x: calc(var(--step) * 8); } }
-@keyframes swing { from { background-position-x: calc(var(--step) * 9); } to { background-position-x: calc(var(--step) * 12); } }
-@keyframes cheer { from { background-position-x: calc(var(--step) * 14); } to { background-position-x: calc(var(--step) * 15); } }
-@keyframes wave { from { background-position-x: calc(var(--step) * 16); } to { background-position-x: calc(var(--step) * 17); } }
-/* Crew frames: idle 0–1 · high five 2 · cheer 3–4 · pitch 5–7 */
-.crew-sprite.is-highfive { animation: none; background-position-x: calc(var(--step) * 2); }
-.crew-sprite.is-cheer { animation: crew-cheer .4s steps(2, jump-none) infinite; }
-.crew-sprite.is-pitching { animation: pitch .75s steps(3, jump-none) 1 forwards; }
-@keyframes crew-cheer { from { background-position-x: calc(var(--step) * 3); } to { background-position-x: calc(var(--step) * 4); } }
-@keyframes pitch { from { background-position-x: calc(var(--step) * 5); } to { background-position-x: calc(var(--step) * 7); } }
+@keyframes run { from { background-position-x: calc(var(--step) * 17); } to { background-position-x: calc(var(--step) * 24); } }
+@keyframes swing { from { background-position-x: calc(var(--step) * 11); } to { background-position-x: calc(var(--step) * 16); } }
+@keyframes cheer { from { background-position-x: calc(var(--step) * 29); } to { background-position-x: calc(var(--step) * 31); } }
+@keyframes jump { from { background-position-x: calc(var(--step) * 32); } to { background-position-x: calc(var(--step) * 35); } }
+/* Crew (v4): coach idle 0–3 · high five 4–6 · clap 7–8 · gesture 9–11 | pitcher pitch 0–4 · look 5 | mates idle 0 · jump 1–4 */
+@keyframes crew-idle { from { background-position-x: 0; } to { background-position-x: calc(var(--step) * 3); } }
+.crew-sprite[data-who="coach"] { animation: crew-idle 1s steps(4, jump-none) infinite; }
+.crew-sprite[data-who="coach"].is-highfive { animation: none; background-position-x: calc(var(--step) * 5); }
+.crew-sprite[data-who="coach"].is-cheer { animation: crew-clap .3s steps(2, jump-none) infinite; }
+.crew-sprite[data-who="mates"].is-cheer { animation: mates-jump .4s steps(4, jump-none) infinite; }
+.crew-sprite.is-pitching { animation: pitch .72s steps(5, jump-none) 1 forwards; }
+@keyframes crew-clap { from { background-position-x: calc(var(--step) * 7); } to { background-position-x: calc(var(--step) * 8); } }
+@keyframes mates-jump { from { background-position-x: calc(var(--step) * 1); } to { background-position-x: calc(var(--step) * 4); } }
+@keyframes pitch { from { background-position-x: 0; } to { background-position-x: calc(var(--step) * 4); } }
 
 /* Ball: one 3×3 pixel ball with a dark outline, moved by src/batting.js. */
 .ball {
@@ -426,7 +429,7 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
    the start-screen batter swings when the uniform changes (src/uniform.js). */
 .panel-card { animation: slide-in .25s ease-out; }
 @keyframes slide-in { from { transform: translateY(6px); } to { transform: none; } }
-.batter.is-swinging { animation: swing .44s steps(4, jump-none) 1; }
+.batter.is-swinging { animation: swing .7s steps(6, jump-none) 1; }
 .panel-cover { width: 100%; max-height: 7rem; object-fit: cover; object-position: top; margin-bottom: .75rem; border: 1px solid var(--line); }
 
 .panel { padding: 1rem 1.25rem; background: var(--card); border: 2px solid var(--ink); box-shadow: 4px 4px 0 var(--shadow); }
@@ -745,7 +748,7 @@ th { background: var(--ink); color: var(--bg); }
 .uniform-tile[aria-pressed="true"] .tile-name::before { content: "▶ " / ""; color: var(--yellow); }
 .uniform-tile:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
 /* Portrait: the head of the 48 px frame (a 40×30 window at 1.5×) */
-.portrait { width: 40px; height: 30px; border: 1px solid var(--line); background: url("/game/runner.png") -14px calc(var(--row) * -72px) / 1296px 216px no-repeat, #1b2a4a; image-rendering: pixelated; }
+.portrait { width: 40px; height: 30px; border: 1px solid var(--line); background: url("/game/runner.png") -446px calc(var(--row) * -72px) / 2592px 216px no-repeat, #1b2a4a; image-rendering: pixelated; }
 .pick-skip { display: inline-flex; align-items: center; gap: .35em; min-height: 44px; margin-left: auto; color: var(--ink); }
 @media (max-width: 699px) {
   .uniform-pick { gap: .4rem .5rem; padding: .5rem; }

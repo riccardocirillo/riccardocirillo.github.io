@@ -84,7 +84,7 @@ test.describe('Fase 1 art in the page', () => {
 
   test('the sprite sheets load at their real size', async ({ page, request }) => {
     await page.goto('/play/');
-    for (const [file, w, h] of [['field.png', 480, 270], ['runner.png', 864, 144], ['crew.png', 384, 192], ['icons.png', 168, 24]]) {
+    for (const [file, w, h] of [['field.png', 480, 270], ['runner.png', 1728, 144], ['coach.png', 576, 96], ['pitcher.png', 288, 48], ['mates.png', 240, 144], ['icons.png', 168, 24]]) {
       const size = await page.evaluate((src) => new Promise((resolve) => { const i = new Image(); i.onload = () => resolve([i.naturalWidth, i.naturalHeight]); i.src = src; }), `/game/${file}`);
       expect(size, file).toEqual([w, h]);
     }

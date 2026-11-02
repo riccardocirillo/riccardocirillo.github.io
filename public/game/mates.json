@@ -1,0 +1,94 @@
+{
+ "frames": [
+  {
+   "filename": "mates idle 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 300
+  },
+  {
+   "filename": "mates jump 0",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100
+  },
+  {
+   "filename": "mates jump 1",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100
+  },
+  {
+   "filename": "mates jump 2",
+   "frame": {
+    "x": 144,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100
+  },
+  {
+   "filename": "mates jump 3",
+   "frame": {
+    "x": 192,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100
+  }
+ ],
+ "meta": {
+  "app": "scripts/art/grid.js",
+  "image": "mates.png",
+  "size": {
+   "w": 240,
+   "h": 144
+  },
+  "cell": {
+   "w": 48,
+   "h": 48
+  },
+  "frameTags": [
+   {
+    "name": "idle",
+    "from": 0,
+    "to": 0,
+    "direction": "forward"
+   },
+   {
+    "name": "jump",
+    "from": 1,
+    "to": 4,
+    "direction": "forward"
+   }
+  ],
+  "variants": [
+   {
+    "name": "mateA",
+    "row": 0
+   },
+   {
+    "name": "mateB",
+    "row": 1
+   },
+   {
+    "name": "mateC",
+    "row": 2
+   }
+  ]
+ }
+}

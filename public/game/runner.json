@@ -1,454 +1,584 @@
 {
-  "frames": [
-    {
-      "filename": "runner 0.aseprite",
-      "frame": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 250
-    },
-    {
-      "filename": "runner 1.aseprite",
-      "frame": {
-        "x": 48,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 250
-    },
-    {
-      "filename": "runner 2.aseprite",
-      "frame": {
-        "x": 96,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 250
-    },
-    {
-      "filename": "runner 3.aseprite",
-      "frame": {
-        "x": 144,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 250
-    },
-    {
-      "filename": "runner 4.aseprite",
-      "frame": {
-        "x": 192,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 250
-    },
-    {
-      "filename": "runner 5.aseprite",
-      "frame": {
-        "x": 240,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 100
-    },
-    {
-      "filename": "runner 6.aseprite",
-      "frame": {
-        "x": 288,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 100
-    },
-    {
-      "filename": "runner 7.aseprite",
-      "frame": {
-        "x": 336,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 100
-    },
-    {
-      "filename": "runner 8.aseprite",
-      "frame": {
-        "x": 384,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 100
-    },
-    {
-      "filename": "runner 9.aseprite",
-      "frame": {
-        "x": 432,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 110
-    },
-    {
-      "filename": "runner 10.aseprite",
-      "frame": {
-        "x": 480,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 110
-    },
-    {
-      "filename": "runner 11.aseprite",
-      "frame": {
-        "x": 528,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 110
-    },
-    {
-      "filename": "runner 12.aseprite",
-      "frame": {
-        "x": 576,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 110
-    },
-    {
-      "filename": "runner 13.aseprite",
-      "frame": {
-        "x": 624,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 400
-    },
-    {
-      "filename": "runner 14.aseprite",
-      "frame": {
-        "x": 672,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 200
-    },
-    {
-      "filename": "runner 15.aseprite",
-      "frame": {
-        "x": 720,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 200
-    },
-    {
-      "filename": "runner 16.aseprite",
-      "frame": {
-        "x": 768,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 250
-    },
-    {
-      "filename": "runner 17.aseprite",
-      "frame": {
-        "x": 816,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 48
-      },
-      "duration": 250
-    }
-  ],
-  "meta": {
-    "app": "scripts/art/runner.js",
-    "image": "runner.png",
-    "format": "RGBA8888",
-    "size": {
-      "w": 864,
-      "h": 144
-    },
-    "scale": "1",
-    "frameTags": [
-      {
-        "name": "idle",
-        "from": 0,
-        "to": 3,
-        "direction": "forward"
-      },
-      {
-        "name": "blink",
-        "from": 4,
-        "to": 4,
-        "direction": "forward"
-      },
-      {
-        "name": "run",
-        "from": 5,
-        "to": 8,
-        "direction": "forward"
-      },
-      {
-        "name": "swing",
-        "from": 9,
-        "to": 12,
-        "direction": "forward"
-      },
-      {
-        "name": "highfive",
-        "from": 13,
-        "to": 13,
-        "direction": "forward"
-      },
-      {
-        "name": "cheer",
-        "from": 14,
-        "to": 15,
-        "direction": "forward"
-      },
-      {
-        "name": "wave",
-        "from": 16,
-        "to": 17,
-        "direction": "forward"
-      }
-    ]
+ "frames": [
+  {
+   "filename": "runner walk 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 20,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner walk 1",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 20,
+    "y": 31
+   }
+  },
+  {
+   "filename": "runner walk 2",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 15,
+    "y": 27
+   }
+  },
+  {
+   "filename": "runner walk 3",
+   "frame": {
+    "x": 144,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 20,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner walk 4",
+   "frame": {
+    "x": 192,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 20,
+    "y": 31
+   }
+  },
+  {
+   "filename": "runner walk 5",
+   "frame": {
+    "x": 240,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 15,
+    "y": 27
+   }
+  },
+  {
+   "filename": "runner idle 0",
+   "frame": {
+    "x": 288,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 180,
+   "acc": {
+    "x": 18,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner idle 1",
+   "frame": {
+    "x": 336,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 180,
+   "acc": {
+    "x": 18,
+    "y": 29
+   }
+  },
+  {
+   "filename": "runner idle 2",
+   "frame": {
+    "x": 384,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 180,
+   "acc": {
+    "x": 18,
+    "y": 29
+   }
+  },
+  {
+   "filename": "runner idle 3",
+   "frame": {
+    "x": 432,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 180,
+   "acc": {
+    "x": 18,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner blink 0",
+   "frame": {
+    "x": 480,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 120,
+   "acc": {
+    "x": 18,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner swing 0",
+   "frame": {
+    "x": 528,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 120,
+   "acc": {
+    "x": 17,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner swing 1",
+   "frame": {
+    "x": 576,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 80,
+   "acc": {
+    "x": 18,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner swing 2",
+   "frame": {
+    "x": 624,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 40,
+   "acc": {
+    "x": 17,
+    "y": 32
+   }
+  },
+  {
+   "filename": "runner swing 3",
+   "frame": {
+    "x": 672,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 60,
+   "acc": {
+    "x": 17,
+    "y": 32
+   }
+  },
+  {
+   "filename": "runner swing 4",
+   "frame": {
+    "x": 720,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 17,
+    "y": 32
+   }
+  },
+  {
+   "filename": "runner swing 5",
+   "frame": {
+    "x": 768,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 300,
+   "acc": {
+    "x": 17,
+    "y": 32
+   }
+  },
+  {
+   "filename": "runner run 0",
+   "frame": {
+    "x": 816,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner run 1",
+   "frame": {
+    "x": 864,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 21,
+    "y": 29
+   }
+  },
+  {
+   "filename": "runner run 2",
+   "frame": {
+    "x": 912,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 24,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner run 3",
+   "frame": {
+    "x": 960,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 21,
+    "y": 27
+   }
+  },
+  {
+   "filename": "runner run 4",
+   "frame": {
+    "x": 1008,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner run 5",
+   "frame": {
+    "x": 1056,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 21,
+    "y": 29
+   }
+  },
+  {
+   "filename": "runner run 6",
+   "frame": {
+    "x": 1104,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 24,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner run 7",
+   "frame": {
+    "x": 1152,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 70,
+   "acc": {
+    "x": 21,
+    "y": 27
+   }
+  },
+  {
+   "filename": "runner highfive 0",
+   "frame": {
+    "x": 1200,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner highfive 1",
+   "frame": {
+    "x": 1248,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner highfive 2",
+   "frame": {
+    "x": 1296,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 140,
+   "acc": {
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner highfive 3",
+   "frame": {
+    "x": 1344,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 120,
+   "acc": {
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner cheer 0",
+   "frame": {
+    "x": 1392,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 110,
+   "acc": {
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner cheer 1",
+   "frame": {
+    "x": 1440,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 110,
+   "acc": {
+    "x": 24,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner cheer 2",
+   "frame": {
+    "x": 1488,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 110,
+   "acc": {
+    "x": 21,
+    "y": 27
+   }
+  },
+  {
+   "filename": "runner jump 0",
+   "frame": {
+    "x": 1536,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 22,
+    "y": 35
+   }
+  },
+  {
+   "filename": "runner jump 1",
+   "frame": {
+    "x": 1584,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 22,
+    "y": 32
+   }
+  },
+  {
+   "filename": "runner jump 2",
+   "frame": {
+    "x": 1632,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 22,
+    "y": 30
+   }
+  },
+  {
+   "filename": "runner jump 3",
+   "frame": {
+    "x": 1680,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 100,
+   "acc": {
+    "x": 22,
+    "y": 35
+   }
   }
+ ],
+ "meta": {
+  "app": "scripts/art/grid.js",
+  "image": "runner.png",
+  "size": {
+   "w": 1728,
+   "h": 144
+  },
+  "cell": {
+   "w": 48,
+   "h": 48
+  },
+  "frameTags": [
+   {
+    "name": "walk",
+    "from": 0,
+    "to": 5,
+    "direction": "forward"
+   },
+   {
+    "name": "idle",
+    "from": 6,
+    "to": 9,
+    "direction": "forward"
+   },
+   {
+    "name": "blink",
+    "from": 10,
+    "to": 10,
+    "direction": "forward"
+   },
+   {
+    "name": "swing",
+    "from": 11,
+    "to": 16,
+    "direction": "forward"
+   },
+   {
+    "name": "run",
+    "from": 17,
+    "to": 24,
+    "direction": "forward"
+   },
+   {
+    "name": "highfive",
+    "from": 25,
+    "to": 28,
+    "direction": "forward"
+   },
+   {
+    "name": "cheer",
+    "from": 29,
+    "to": 31,
+    "direction": "forward"
+   },
+   {
+    "name": "jump",
+    "from": 32,
+    "to": 35,
+    "direction": "forward"
+   }
+  ],
+  "variants": [
+   {
+    "name": "researcher",
+    "row": 0
+   },
+   {
+    "name": "designer",
+    "row": 1
+   },
+   {
+    "name": "maker",
+    "row": 2
+   }
+  ]
+ }
 }

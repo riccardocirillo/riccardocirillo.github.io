@@ -29,15 +29,15 @@ export const SPOTS = [
 // The runner follows the base path (home → 1st → 2nd → 3rd → home).
 export const RING = ['home', 'nipotyno', 'levante', 'sensor-lab'];
 
-// People on the field (scripts/art/crew.js draws one row each, in this order). x/y = feet, in field pixels.
-// `flip` = faces left. Teammates stand in front of the dugout (which sits at x = 110 so it is inside the phone crop).
-export const CREW_ROWS = ['coach', 'mateA', 'mateB', 'pitcher'];
+// People on the field. x/y = feet, in field pixels. `who` = the sheet (public/game/<who>.png, drawn in art/sprites/<who>.txt),
+// `row` = the variant row of that sheet (coach: 0 first, 1 third; mates: 0 A, 1 B, 2 C). `flip` = faces left.
+// Teammates stand in front of the dugout (which sits at x = 110 so it is inside the phone crop).
 export const CREW = [
-  { id: 'coach1', who: 'coach', x: 366, y: 171, flip: true },
-  { id: 'coach3', who: 'coach', x: 117, y: 171 }, // hand meets the runner's on 3rd
-  { id: 'pitcher', who: 'pitcher', x: 240, y: 171, flip: true },
-  { id: 'mateA', who: 'mateA', x: 80, y: 241 },
-  { id: 'mateB', who: 'mateB', x: 140, y: 241, flip: true },
+  { id: 'coach1', who: 'coach', row: 0, x: 366, y: 171, flip: true },
+  { id: 'coach3', who: 'coach', row: 1, x: 117, y: 171 }, // hand meets the runner's on 3rd
+  { id: 'pitcher', who: 'pitcher', row: 0, x: 240, y: 171, flip: true },
+  { id: 'mateA', who: 'mates', row: 0, x: 80, y: 241 },
+  { id: 'mateB', who: 'mates', row: 1, x: 140, y: 241, flip: true },
 ];
 
 // The home-run tour: one stop per project, each with a small moment (src/tour.js), then the last card.

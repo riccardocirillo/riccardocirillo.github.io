@@ -1,7 +1,7 @@
 // The three uniforms of the Start screen. One source for the art (scripts/art/runner.js) and the home page.
 // A uniform changes the look (palette swap + accessory), the skills shown and a suggested case.
 // It never changes the order of the cases: the game never decides the content.
-// `row` = row of the uniform in public/game/runner.png (48 px each).
+// `row` = row of the uniform in public/game/runner.png (48 px each; the variants of art/sprites/runner.txt, same order).
 export const UNIFORMS = [
   {
     id: 'researcher',

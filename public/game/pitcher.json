@@ -9,13 +9,63 @@
     "h": 48
    },
    "duration": 200
+  },
+  {
+   "filename": "pitcher pitch 1",
+   "frame": {
+    "x": 48,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 160
+  },
+  {
+   "filename": "pitcher pitch 2",
+   "frame": {
+    "x": 96,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 120
+  },
+  {
+   "filename": "pitcher pitch 3",
+   "frame": {
+    "x": 144,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 80
+  },
+  {
+   "filename": "pitcher pitch 4",
+   "frame": {
+    "x": 192,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 160
+  },
+  {
+   "filename": "pitcher look 0",
+   "frame": {
+    "x": 240,
+    "y": 0,
+    "w": 48,
+    "h": 48
+   },
+   "duration": 400
   }
  ],
  "meta": {
   "app": "scripts/art/grid.js",
   "image": "pitcher.png",
   "size": {
-   "w": 48,
+   "w": 288,
    "h": 48
   },
   "cell": {
@@ -26,7 +76,13 @@
    {
     "name": "pitch",
     "from": 0,
-    "to": 0,
+    "to": 4,
+    "direction": "forward"
+   },
+   {
+    "name": "look",
+    "from": 5,
+    "to": 5,
     "direction": "forward"
    }
   ],

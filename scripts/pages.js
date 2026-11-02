@@ -10,7 +10,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Marked } from 'marked';
 import sharp from 'sharp';
-import { FIELD, STOPS, SPOTS, CREW, CREW_ROWS, DUGOUT } from '../src/field-map.js';
+import { FIELD, STOPS, SPOTS, CREW, DUGOUT } from '../src/field-map.js';
 import { UNIFORMS } from '../src/uniforms.js';
 import { PALETTE } from '../src/palette.js';
 import { pixelText } from './art/title.js';
@@ -157,7 +157,7 @@ async function ogHome(L) {
   const SCALE = 3, CROP = { left: 120, top: 180 };
   const home = STOPS.find((s) => s.id === 'home');
   const batter = await sharp(root('public/game/runner.png'))
-    .extract({ left: 9 * 48, top: 0, width: 48, height: 48 }) // swing: the load, Researcher uniform (F6 sheet)
+    .extract({ left: 6 * 48, top: 0, width: 48, height: 48 }) // at the plate: idle 0, Researcher uniform (v4 sheet, runner.json)
     .resize(48 * SCALE, 48 * SCALE, { kernel: 'nearest' })
     .toBuffer();
   const field = await sharp(root('public/game/field.png'))
@@ -482,7 +482,7 @@ async function ballpark(L, cases) {
   const points = L.stops.map((p) => `                  <li><a class="base" href="${pointHref(L, p)}" data-stop="${p.id}" data-tag="${p.tag}" style="--x: ${pct(p.x, FIELD.width)}; --y: ${pct(p.y, FIELD.height)}; --icon: ${iconOf(p)}"><span class="base-icon"></span><span class="base-text"><span class="base-label">${escape(p.label)}</span> <span class="base-name">${escape(p.name)}</span></span></a></li>`);
   const legend = L.stops.map((p) => `          <li><a href="${pointHref(L, p)}" data-stop="${p.id}"><span class="base-icon" style="--icon: ${iconOf(p)}" aria-hidden="true"></span> <span class="map-name">${escape(p.name)}</span> <span class="map-label">${escape(p.label)}</span></a></li>`);
   // Crew sprites (coaches, teammates, pitcher): decoration only, so hidden from screen readers.
-  const crew = CREW.map((m) => `                  <div class="sprite crew-sprite${m.flip ? ' is-flipped' : ''}" data-crew="${m.id}" style="--x: ${pct(m.x, FIELD.width)}; --y: ${pct(m.y, FIELD.height)}; --row: ${CREW_ROWS.indexOf(m.who)}"></div>`);
+  const crew = CREW.map((m) => `                  <div class="sprite crew-sprite${m.flip ? ' is-flipped' : ''}" data-crew="${m.id}" data-who="${m.who}" style="--x: ${pct(m.x, FIELD.width)}; --y: ${pct(m.y, FIELD.height)}; --row: ${m.row}"></div>`);
   const covers = Object.fromEntries(await Promise.all(cases.map(async ({ data }) => [data.slug, { src: data.cover, ...(await imageSize(data.cover)) }])));
   const kicker = (id) => `${escape(point(id).label)} · ${escape(point(id).name)}`;
 
@@ -773,7 +773,7 @@ export async function generate() {
       // The sprites are CSS backgrounds (found late by the browser): preload them so the batter and the field show at once.
       scripts: [
         '<link rel="preload" as="image" href="/game/runner.png">',
-        '<link rel="preload" as="image" href="/game/crew.png">',
+        '<link rel="preload" as="image" href="/game/coach.png">',
         '<script type="module" src="/src/game.js"></script>',
       ].join('\n    '),
     }));
