@@ -17,9 +17,10 @@ test.describe('0.3 accessibility', () => {
 
   test('one single live region (the status in the game bar): the card panel announces nothing twice', async ({ page }) => {
     await page.goto('/play/');
-    await expect(page.locator('[aria-live]')).toHaveCount(0);
+    // v4 (ART_BIBLE § 8): the base preview is an <aside> announced with aria-live="polite"; the status stays the only role=status
+    await expect(page.locator('[aria-live]')).toHaveCount(1);
+    await expect(page.locator('#field-panel')).toHaveAttribute('aria-live', 'polite');
     await expect(page.locator('[role="status"]')).toHaveCount(1);
-    await expect(page.locator('#field-panel')).not.toHaveAttribute('aria-live', /.*/);
   });
 
   test('free mode announces the base once the runner arrives', async ({ page }) => {

@@ -4,6 +4,7 @@ title: "Sensor lab — Prototipos con Arduino y Teensy"
 slug: sensor-lab
 base: "Tercera base"
 description: "Caso de estudio en preparación: prototipos con Arduino y Teensy de la asignatura Multisensory Interactive Systems (Universidad de Trento)."
+teaser: "Caso de estudio en preparación: prototipos con Arduino y Teensy de la asignatura Multisensory Interactive Systems."
 og_image: /assets/sensor-lab/cover.webp
 cover: /assets/sensor-lab/cover.webp
 tldr: "Caso de estudio en preparación: prototipos con Arduino y Teensy de la asignatura Multisensory Interactive Systems (Universidad de Trento)."

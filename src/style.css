@@ -428,8 +428,7 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .tour-nav { font-size: 1rem; }
 .tour-nav .button { margin-top: 0; font-size: inherit; }
 /* In the tour the one main button is "Next base": the link to the full case study turns into the quiet one. */
-.panel[data-mode="tour"] .panel-card[data-panel]:not([data-panel="done"]) > p > a.button { background: transparent; color: var(--ink); }
-.panel[data-mode="tour"] .panel-card[data-panel]:not([data-panel="done"]) > p > a.button:hover { background: var(--card); color: var(--red); border-color: var(--red); }
+/* v4: READ ▶ is the main (yellow) button of the base preview, in the tour too. */
 @media (max-width: 699px) {
 }
 .sound-toggle .state { display: inline-block; min-width: 1.6em; padding: 0 .3em; border: 1px solid var(--ink); font-size: .8125rem; text-decoration: none; }
@@ -830,3 +829,96 @@ dialog.pause h2 { margin: 0 0 1.25rem; font-size: calc(var(--j) * 3); text-align
 }
 /* Base labels never grow past 2× (the icons on a 3× phone stay readable, not huge). */
 .is-game .base-icon { width: calc(24px * min(var(--fs), 2)); height: calc(24px * min(var(--fs), 2)); background-position: calc(var(--icon) * -24px * min(var(--fs), 2)) 0; background-size: auto calc(24px * min(var(--fs), 2)); }
+
+/* --- v4 HUD: ✕ Exit · ⏸ Pause · Esc · the base · ◆◇◇ · ♪, one row (§ 6). Exit = the first stop after "skip to content". --- */
+.hud-exit { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; padding: 0 1rem; border: 2px solid var(--ink); color: var(--ink); font-family: var(--font-mono); font-size: .9375rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; }
+.hud-exit:hover { background: var(--ink); color: var(--bg); }
+.hud-exit:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+.hud-exit[hidden] { display: none; }
+.is-game .hud { flex-wrap: nowrap; padding-block: .5rem; }
+@media (max-width: 699px) {
+  .is-game .hud { flex-wrap: wrap; }
+  .hud-exit { padding: 0 .75rem; font-size: .8125rem; }
+}
+
+/* --- v4 base preview (§ 8): not modal. Desktop: a 380 px panel on the right, the field stays visible and clickable.
+   Phones: a sheet at the bottom (about 40% of the height) with a handle; drag it down to close. It slides in 150 ms,
+   the text never fades (full contrast at every frame); at once with reduced motion. --- */
+.preview { padding: 1rem 1.25rem 1.25rem; border: 2px solid var(--ink); background: var(--card); box-shadow: 4px 4px 0 #000; }
+.preview .panel-card { animation: none; }
+.preview:not([hidden]) { animation: preview-in .15s ease-out; }
+@keyframes preview-in { from { transform: translateX(24px); } to { transform: none; } }
+.preview-handle { display: none; }
+@media (max-width: 699px) {
+  .preview:not([hidden]) { animation-name: sheet-in; }
+  @keyframes sheet-in { from { transform: translateY(24px); } to { transform: none; } }
+  .preview-handle { display: block; width: 56px; height: 6px; margin: -.5rem auto .75rem; background: var(--muted); touch-action: none; cursor: grab; }
+  .preview .panel-cover { float: left; width: 96px; max-height: 96px; margin: 0 .75rem .5rem 0; }
+}
+.preview h2 { margin: .2rem 0 .4rem; font-size: calc(var(--j) * 2.5); line-height: 1; color: var(--yellow); text-transform: none; text-shadow: 2px 2px 0 var(--red-fill); }
+.preview-teaser { margin: .25rem 0 .75rem; font-size: 1.0625rem; line-height: 1.45; }
+.preview-stats { list-style: none; clear: both; margin: 0 0 .9rem; padding: .6rem .75rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; background: var(--night); }
+.preview-stats li { display: flex; flex-direction: column; }
+.preview-stats strong { font-family: var(--font-display); font-size: calc(var(--j) * 1.5); font-weight: 400; line-height: 1; color: var(--yellow); }
+.preview-stats span { font-size: .8125rem; color: var(--ink); }
+.preview-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 0; }
+.preview-actions .button { justify-content: center; min-height: 48px; font-family: var(--font-display); font-size: calc(var(--j) * 1.25); text-transform: uppercase; letter-spacing: .04em; }
+.button.read, .button.primary { border-color: var(--yellow); background: var(--yellow); color: var(--night); box-shadow: 3px 3px 0 #000; }
+.button.read:hover, .button.primary:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.preview-meta { margin: .75rem 0 0; font-size: .875rem; color: var(--muted); }
+.is-game .preview .panel-close { padding: .2rem .5rem; }
+.is-game .field:has(.preview:not([hidden])) .game-bar, .is-game .field:has(.finale:not([hidden])) .game-bar { display: none; } /* the bar never sits under the preview or the finale */
+.is-game .bar-row[data-mode="tour"] { display: none; } /* v4: ✕ Exit is in the HUD, NEXT BASE in the preview */
+
+/* --- v4 player card with the photo (§ 10): paper frame, ink border 2 px, solid red shadow 8 px, navy bar,
+   the photo 4:5 with no filter, the name in Jersey 10 with a yellow shadow. Same colours in both themes. --- */
+.player-card { margin: 0; padding: 12px; max-width: 360px; border: 2px solid #1b2a4a; background: #f6f2ea; box-shadow: 8px 8px 0 #b3261e; color: #1b2a4a; }
+.pc-bar { display: flex; justify-content: space-between; gap: 1rem; margin: 0 0 10px; padding: 6px 10px; background: #1b2a4a; color: #f6f2ea; font-family: var(--font-mono); font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; }
+.pc-tag { color: #f2c14e; }
+.pc-photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 5; border: 2px solid #1b2a4a; background: #e8e4dc; }
+.pc-name { margin-top: 10px; font-family: var(--font-display); font-size: calc(var(--j) * 2); line-height: 1; text-transform: uppercase; color: #1b2a4a; text-shadow: 2px 2px 0 #f2c14e; }
+.story-bio .player-card { float: right; width: min(42%, 280px); margin: 0 0 1rem 1.5rem; }
+@media (max-width: 599px) { .story-bio .player-card { float: none; width: auto; margin: 0 0 1.25rem; } }
+.scout-head { flex-wrap: wrap; }
+.scout-head .player-card { width: 104px; flex: none; padding: 5px; box-shadow: 4px 4px 0 #b3261e; }
+.scout-head .player-card .pc-bar { display: none; }
+.scout-head .player-card .pc-name { margin-top: 6px; font-size: var(--j); }
+
+/* --- v4 finale (§ 10): About me with the card, then Contact & CV. On a full panel (never on the bare stadium). --- */
+.finale { position: fixed; inset: 64px 0 0; z-index: 8; overflow: auto; padding: 2rem 1rem 3rem; background: rgb(11 15 30 / .72); }
+.finale[hidden] { display: none; }
+.finale:focus { outline: none; }
+.finale-inner { display: grid; gap: 2.5rem; align-items: start; max-width: 72rem; margin: 0 auto; }
+@media (min-width: 900px) { .finale-inner { grid-template-columns: minmax(0, 360px) minmax(0, 1fr); } }
+.finale .player-card { justify-self: center; animation: card-in .3s ease-out; }
+@keyframes card-in { from { transform: translateX(-60px); } to { transform: none; } }
+.finale-text { padding: 1.5rem 1.75rem; border: 2px solid var(--line); background: var(--night); }
+.finale-title { margin: .25rem 0 1rem; font-size: calc(var(--j) * 3); line-height: 1; color: var(--yellow); text-shadow: 3px 3px 0 var(--red-fill); }
+.finale-text p { max-width: 62ch; font-size: 1.0625rem; line-height: 1.55; }
+.finale-text .motto { margin: 1.25rem 0; padding: 1rem 1.25rem; background: var(--card); box-shadow: 4px 4px 0 #000; font-family: var(--font-display); font-size: calc(var(--j) * 1.5); line-height: 1.2; }
+.finale-actions .button { min-height: 48px; font-family: var(--font-display); font-size: calc(var(--j) * 1.25); text-transform: uppercase; }
+@media (max-width: 699px) {
+  .finale { inset: 92px 0 0; padding-top: 1.25rem; }
+  .finale .player-card { width: min(72vw, 300px); }
+  .finale-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .finale-actions li:first-child { grid-column: 1 / -1; }
+}
+
+/* --- v4 reader (§ 9): the real case page, full screen, paper theme, over the stadium. --- */
+dialog.reader { width: 100vw; max-width: none; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: var(--bg); color: var(--ink); }
+dialog.reader[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+dialog.reader::backdrop { background: #0b0f1e; }
+.reader-top, .reader-bottom { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .6rem max(1rem, (100% - 60rem) / 2); }
+.reader-top { background: #0b0f1e; color: #f4f1e6; }
+.reader-top .reader-back { border-color: #f2c14e; background: #f2c14e; color: #0b0f1e; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: .06em; }
+.reader-count { font-family: var(--font-mono); letter-spacing: .1em; }
+.reader-bottom { border-top: 2px solid var(--ink); background: var(--card); }
+.reader-body { overflow: auto; overscroll-behavior: contain; padding: 1rem 0 3rem; }
+.reader-body:focus { outline: none; }
+.reader-loading { padding: 2rem 1rem; text-align: center; font-family: var(--font-mono); }
+.reader .button { min-height: 44px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .preview:not([hidden]), .finale .player-card { animation: none; }
+}
+.reduce-motion .preview:not([hidden]), .reduce-motion .finale .player-card { animation: none; }

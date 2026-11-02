@@ -126,14 +126,20 @@ test.describe('/play/ @ 1280 px', () => {
     await expect(page.getByRole('button', { name: 'Swing!' })).toBeFocused();
     await page.keyboard.press('Enter');
     await expect(hudBase(page)).toHaveText('1st base · Nipotyno');
-    await page.keyboard.press('Enter'); // Next base: Levante (the focus is on it)
-    await expect(hudBase(page)).toHaveText('2nd base · Levante');
+    // v4: keyboard visitors land on READ ▶; Tab → NEXT BASE →, Enter
+    await expect(page.locator('#field-panel [data-panel="nipotyno"] [data-action="read"]')).toBeFocused();
+    await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
-    await page.keyboard.press('Enter'); // Finish the tour
+    await expect(hudBase(page)).toHaveText('2nd base · Levante');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter');
+    await expect(hudBase(page)).toHaveText('3rd base · Sensor lab');
+    await page.keyboard.press('Tab');
+    await page.keyboard.press('Enter'); // home plate → the finale
     await expect(hudBase(page)).toHaveText('Tour complete');
     await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(3);
-    await expect(page.locator('[data-panel="done"] h2')).toHaveText('Game over? Never.');
-    await page.locator('[data-panel="done"]').getByRole('button', { name: 'Play again' }).click();
+    await expect(page.locator('#finale h2')).toHaveText("Hi, I'm Riccardo");
+    await page.locator('#finale').getByRole('button', { name: 'Play again' }).click();
     await expect(page.getByRole('button', { name: 'Swing!' })).toBeFocused();
     // free mode: ← → between the bases
     await page.locator('.base[data-stop="levante"]').click();

@@ -474,7 +474,18 @@ function aboutSection(aboutParts, id) {
   return part.replace(/^<section[^>]*>\s*<h2>[\s\S]*?<\/h2>\s*/, '').replace(/\s*<\/section>\s*$/, '');
 }
 
-async function ballpark(L, cases) {
+// --- The player card with the photo (v4, docs/ART_BIBLE.md § 10): one component for the game's finale, the Story mode's
+// chapter 0 and Multiplayer. The only photo of the site: public/assets/about/ (scripts/photo.js, no EXIF), loaded lazily.
+function playerCard(L, { eager = false } = {}) {
+  const { t } = L;
+  return `<figure class="player-card">
+          <p class="pc-bar" aria-hidden="true"><span>${escape(t.v4.playerProfile)}</span><span class="pc-tag">UX · 2027</span></p>
+          <img class="pc-photo" src="/assets/about/riccardo-640.webp" srcset="/assets/about/riccardo-320.webp 320w, /assets/about/riccardo-640.webp 640w" sizes="(max-width: 699px) 70vw, 360px" width="640" height="800" alt="Riccardo Cirillo"${eager ? '' : ' loading="lazy"'} decoding="async">
+          <figcaption class="pc-name">Riccardo Cirillo</figcaption>
+        </figure>`;
+}
+
+async function ballpark(L, cases, about, aboutParts) {
   const { t, p: prefix } = L;
   const pct = (value, total) => `${+((value / total) * 100).toFixed(3)}%`;
   const point = (id) => L.stops.find((q) => q.id === id);
@@ -500,23 +511,20 @@ async function ballpark(L, cases) {
     ...cases.map(({ data }) => {
       const cover = covers[data.slug];
       const numbers = hasNumbers(data) ? `<ul class="key-numbers" aria-label="${escape(t.keyNumbers)}">${data.stats.split(' · ').map((n) => `<li>${escape(n)}</li>`).join('')}</ul>` : '';
-      return `          <article class="panel-card" data-panel="${data.slug}" hidden>
+      const no = String(cases.findIndex((c) => c.data.slug === data.slug) + 1).padStart(2, '0');
+      const stats = hasNumbers(data) ? `<ul class="preview-stats" aria-label="${escape(t.keyNumbers)}">${data.stats.split(' · ').map((n) => { const [big, small] = statParts(n); return `<li><strong>${escape(big)}</strong> <span>${escape(small)}</span></li>`; }).join('')}</ul>` : '';
+      const meta = [data.role, data.duration].filter(Boolean).map(escape).join(' · ');
+      return `          <article class="panel-card preview-card" data-panel="${data.slug}" hidden>
             <img class="panel-cover" src="${cover.src}" alt="" width="${cover.width}" height="${cover.height}" loading="lazy" decoding="async">
-            <p class="kicker">${kicker(data.slug)}</p>
-            <h2>${escape(shortName({ data }))}<span class="sub">${escape(subtitle({ data }))}</span></h2>
-            ${numbers}
-            <p class="card-links"><a class="button" href="${prefix}/${data.slug}/">${escape(t.read)}<span class="visually-hidden">: ${escape(shortName({ data }))}</span></a></p>
+            <p class="kicker">${no} · ${escape(point(data.slug).label)}</p>
+            <h2>${escape(shortName({ data }))}</h2>
+            <p class="preview-teaser">${escape(data.teaser ?? subtitle({ data }))}</p>
+            ${stats}
+            <p class="card-links preview-actions"><a class="button read" href="${prefix}/${data.slug}/" data-action="read" data-slug="${data.slug}">${escape(t.v4.read)}<span class="visually-hidden">: ${escape(shortName({ data }))}</span> <span aria-hidden="true">▶</span></a> <button class="button ghost" type="button" data-action="next-base">${escape(t.v4.nextBase)} <span aria-hidden="true">→</span></button></p>
+            ${meta ? `<p class="preview-meta">${meta}</p>` : ''}
           </article>`;
     }),
-    `          <article class="panel-card game-over" data-panel="done" hidden>
-            <p class="kicker">${escape(t.tourDoneKicker)}</p>
-            <h2>${escape(t.gameOver)}</h2>
-            <ul class="actions">
-              <li><a class="button" href="${modeHref(L, 'story')}">${escape(t.readStory)}</a></li>
-              <li><a class="button ghost" href="${modeHref(L, 'multiplayer')}">${escape(t.modes.multiplayer.name)}</a></li>
-              <li><button class="button ghost" type="button" data-action="again">${escape(t.playAgain)}</button></li>
-            </ul>
-          </article>`,
+
   ];
 
   const tiles = L.uniforms.map((u) => `                  <li><button class="uniform-tile" type="button" data-uniform="${u.id}" aria-pressed="false"><span class="portrait" style="--row: ${u.row}" aria-hidden="true"></span> <span class="tile-name">${escape(u.label)}</span></button></li>`);
@@ -524,10 +532,11 @@ async function ballpark(L, cases) {
   const pauseItem = (tag, attrs, name, sub = '') => `            <li><${tag} class="pause-item" ${attrs}><span class="pause-name">${escape(name)}</span>${sub ? ` <span class="pause-sub">${sub}</span>` : ''}</${tag}></li>`;
 
   // data-strings: the few sentences of the game's JavaScript, in the page's language (src/game.js reads them).
-  return `      <section id="field" class="field" data-theme="night" aria-labelledby="field-title" data-strings="${escape(JSON.stringify(t.game))}">
+  return `      <section id="field" class="field" data-theme="night" aria-labelledby="field-title" data-strings="${escape(JSON.stringify({ ...t.game, backTo: t.v4.backTo }))}">
         <div class="hud">
+          <a class="hud-exit" href="${prefix}/" hidden><span aria-hidden="true">✕</span> ${escape(t.v4.exit)}<span class="visually-hidden"> · ${escape(t.v4.exitLabel)}</span></a>
           <button class="hud-pause" type="button" data-action="pause" aria-haspopup="dialog" hidden><span aria-hidden="true">⏸</span> ${escape(t.pause)}<span class="no-touch" aria-hidden="true"> · Esc</span></button>
-          <h1 id="field-title" class="hud-title">${escape(t.modes.play.name)}</h1>
+          <h1 id="field-title" class="hud-title visually-hidden">${escape(t.modes.play.name)}</h1>
           <p class="hud-base" aria-hidden="true"></p>
           <span class="hud-diamonds" aria-hidden="true" hidden><i data-corner="first"></i><i data-corner="second"></i><i data-corner="third"></i></span>
           <button class="hud-sound sound-toggle" type="button" data-action="sound" aria-pressed="false" hidden><span aria-hidden="true">♪</span> <span class="sound-word">${escape(t.sound)}<span aria-hidden="true">:</span></span> <span class="state" aria-hidden="true">${escape(t.game.off)}</span></button>
@@ -574,11 +583,32 @@ ${tiles.join('\n')}
               <p class="visually-hidden" role="status"></p>
             </div>
           </div>
-          <div class="panel" id="field-panel" tabindex="-1" role="region" aria-label="${escape(t.card)}" hidden>
+          <aside class="panel preview" id="field-panel" tabindex="-1" aria-label="${escape(t.card)}" aria-live="polite" hidden>
+            <span class="preview-handle" aria-hidden="true" title="${escape(t.v4.dragToClose)}"></span>
             <button class="panel-close" type="button" data-action="close"><span aria-hidden="true">✕</span> ${escape(t.close)}</button>
 ${panels.join('\n')}
-          </div>
+          </aside>
         </div>
+        <section class="finale" id="finale" aria-labelledby="finale-title" hidden>
+          <div class="finale-inner">
+            ${playerCard(L)}
+            <div class="finale-text">
+              <p class="kicker">${escape(t.v4.homeRunAbout)}</p>
+              <h2 id="finale-title" class="finale-title">${escape(about.body.match(/^## (.*?)\s*\{#hi-im-riccardo\}/m)?.[1] ?? 'About me')}</h2>
+              ${aboutSection(aboutParts, 'hi-im-riccardo').replace(/(<\/p>)\s*(<p>)/, `$1\n              <p class="motto">"${escape(about.data.motto)}"</p>\n              $2`)}
+              <ul class="actions finale-actions">
+                <li><a class="button primary" href="${modeHref(L, 'multiplayer')}">${escape(t.modes.multiplayer.desc)} <span aria-hidden="true">▶</span></a></li>
+                <li><a class="button ghost" href="${modeHref(L, 'story')}">${escape(t.modes.story.name)}</a></li>
+                <li><button class="button ghost" type="button" data-action="again">${escape(t.playAgain)}</button></li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        <dialog class="reader" data-theme="paper">
+          <div class="reader-top"><button class="button reader-back" type="button" data-action="reader-close"><span aria-hidden="true">◀</span> <span class="reader-back-text"></span></button><span class="reader-count"></span></div>
+          <div class="reader-body" tabindex="-1"><p class="reader-loading">${escape(t.v4.loading)}</p></div>
+          <div class="reader-bottom"><button class="button ghost" type="button" data-action="reader-close"><span aria-hidden="true">◀</span> ${escape(t.v4.backToGame)}</button><button class="button" type="button" data-action="reader-next">${escape(t.v4.nextBase)} <span aria-hidden="true">→</span></button></div>
+        </dialog>
         <nav class="stadium-map wrap wide" aria-labelledby="map-title">
           <h2 id="map-title">${escape(t.stadiumMap)}</h2>
           <ul>
@@ -663,6 +693,7 @@ function storyPage(L, about, aboutParts, cases) {
         </header>
         <div class="story-grid">
           <div class="story-bio">
+            ${playerCard(L, { eager: true })}
             ${aboutSection(aboutParts, 'hi-im-riccardo')}
             <p class="motto">"${escape(about.data.motto)}"</p>
           </div>
@@ -706,7 +737,7 @@ function multiplayerPage(L, f) {
           </section>
           <section class="scouting" data-theme="night" aria-labelledby="scout-title">
             <div class="scout-head">
-              <div class="scout-portrait" aria-hidden="true"><span class="batter"></span></div>
+              ${playerCard(L)}
               <div>
                 <p class="kicker">${escape(t.scoutingReport)}</p>
                 <h2 id="scout-title">Riccardo Cirillo</h2>
@@ -773,7 +804,7 @@ export async function generate() {
     }));
     await page('play/', layout(L, {
       ...shared, title: t.meta.play[0], description: t.meta.play[1], key: '/play/', theme: 'night', mode: 'play', bodyClass: 'play-page',
-      main: await ballpark(L, cases),
+      main: await ballpark(L, cases, about, aboutParts),
       // The sprites are CSS backgrounds (found late by the browser): preload them so the batter and the field show at once.
       scripts: [
         '<link rel="preload" as="image" href="/game/runner.png">',

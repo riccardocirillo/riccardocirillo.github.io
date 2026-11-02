@@ -4,6 +4,7 @@ title: "Levante — Saber en pocas horas si el mar es seguro"
 slug: levante
 base: "Segunda base"
 description: "Diseño de servicio y de dashboard para una boya con IA en el borde que detecta bacterias en aguas de baño. El concepto reduce el tiempo de confirmación de ~48 a ~3 horas. EIT Digital Summer School 2026, nota final 9/10."
+teaser: "Diseño de servicio y de dashboard para una boya con IA en el borde que detecta bacterias en aguas de baño."
 og_image: /assets/levante/dashboard.webp
 cover: /assets/levante/buoy-0.webp
 tldr: "Hoy se tarda de 24 a 48 horas en confirmar que el agua de baño está contaminada. En un reto de una semana de EIT Digital, nuestro equipo de 6 diseñó Levante: una boya sensora solar con IA en el borde y un servicio de monitorización. Investigué la normativa y co-creé las personas y los journey maps. También diseñé el dashboard de monitorización."

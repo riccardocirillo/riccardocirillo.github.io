@@ -12,6 +12,7 @@
 import { FIELD, WORLD, STOPS, RING, CREW, DUGOUT } from './field-map.js';
 import { every } from './loop.js';
 import { createCrowd } from './crowd.js';
+import { createReader } from './reader.js';
 import { UNIFORMS } from './uniforms.js';
 import { atBat } from './batting.js';
 import { sound } from './sound.js';
@@ -25,6 +26,9 @@ if (stage) start();
 // The visitor's choices in this browser (storage may be blocked: then nothing is remembered).
 function load(key) { try { return localStorage.getItem(key); } catch { return null; } }
 function save(key, value) { try { localStorage.setItem(key, value); } catch { /* ignore */ } }
+// The state of this visit (v4, ART_BIBLE § 6): bases visited and uniform, in sessionStorage (may be blocked too).
+function loadSession() { try { return JSON.parse(sessionStorage.getItem('game') ?? '{}'); } catch { return {}; } }
+function saveSession(state) { try { sessionStorage.setItem('game', JSON.stringify(state)); } catch { /* ignore */ } }
 
 function start() {
   const runner = stage.querySelector('.runner');
@@ -72,7 +76,12 @@ function start() {
   const scoreboard = stage.querySelector('.scoreboard');
   const scoreLights = [...scoreboard.querySelectorAll('.sb-bases i')];
   const crowd = createCrowd(stage.querySelector('.crowd'), { reduceMotion });
-  const visited = new Set();
+  const visited = new Set(loadSession().visited ?? []);
+  const finale = field.querySelector('#finale');
+  // Keyboard or pointer: the focus jumps to READ only for keyboard visitors (the preview never traps the focus).
+  let keyboardUser = false;
+  addEventListener('keydown', () => { keyboardUser = true; }, true);
+  addEventListener('pointerdown', () => { keyboardUser = false; }, true);
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
   const say = (text) => { status.textContent = text; };
@@ -134,6 +143,7 @@ function start() {
   const showBase = (text) => { hudBase.textContent = text; };
   function arrive(id) {
     if (isProject(id)) visited.add(id);
+    saveSession({ visited: [...visited], uniform: load('uniform') });
     scoreLights.forEach((el, i) => el.classList.toggle('is-on', visited.has(RING[i + 1])));
     for (const el of diamonds) {
       const stop = RING[['first', 'second', 'third'].indexOf(el.dataset.corner) + 1];
@@ -178,6 +188,21 @@ function start() {
     camera(null);
     if (focus) (opener ?? links.find((l) => l.dataset.stop === current)).focus({ preventScroll: true });
   }
+
+  // Phones: the preview is a sheet at the bottom; dragging its top edge down closes it (✕ does the same).
+  panel.addEventListener('pointerdown', (event) => {
+    if (!event.target.closest('.preview-handle')) return;
+    const y0 = event.clientY;
+    const move = (e) => { panel.style.translate = `0 ${Math.max(0, e.clientY - y0)}px`; };
+    const up = (e) => {
+      removeEventListener('pointermove', move);
+      removeEventListener('pointerup', up);
+      panel.style.translate = '';
+      if (e.clientY - y0 > 60) { if (mode === 'tour') { setMode('free'); say(T.tourEnded); } closePanel({ focus: false }); }
+    };
+    addEventListener('pointermove', move);
+    addEventListener('pointerup', up);
+  });
 
   function mark(id) {
     for (const link of field.querySelectorAll('[data-stop]')) {
@@ -224,10 +249,40 @@ function start() {
   // Replace (never add) the history entry, so the address can be shared and one Back press leaves the page.
   const setHash = (id) => { if (location.hash !== `#${id}`) history.replaceState({ stop: id }, '', `#${id}`); };
 
+  // The finale (§ 10): About me with the photo, then Contact & CV. It slides in from the left (at once with reduced motion).
+  function showFinale() {
+    for (const id of RING) if (isProject(id)) visited.add(id);
+    arrive('home');
+    showBase(T.tourDone);
+    closePanel({ focus: false });
+    finale.hidden = false;
+    finale.focus({ preventScroll: true });
+  }
+  function hideFinale() { finale.hidden = true; }
+
+  function focusPreview() {
+    if (!keyboardUser) return;
+    panel.querySelector('[data-panel]:not([hidden]) .read, [data-panel]:not([hidden]) .button')?.focus({ preventScroll: true });
+  }
+
   const tour = createTour({
-    stage, panel, bar, runner, crew, crewAt, byId, nameOf, reduceMotion, sound, sleep, say, setHash, runTo,
-    // Back on home plate after 3rd base: every base is lit and the HUD says so.
-    done() { for (const id of RING) if (isProject(id)) visited.add(id); arrive('home'); showBase(T.tourDone); },
+    stage, runner, crew, crewAt, byId, nameOf, reduceMotion, sound, sleep, say, setHash, runTo, focusPreview,
+    lookAt: (point) => camera(point),
+    finale: showFinale,
+  });
+
+  // The next base after the one the runner is on (NEXT BASE →, in the preview and in the reader).
+  function nextBase() {
+    if (mode === 'tour') return tour.next();
+    const i = RING.indexOf(current);
+    go(RING[(i + 1) % RING.length], { focus: keyboardUser ? 'panel' : 'none' });
+  }
+
+  let readerClosedAt = 0;
+  const reader = createReader({
+    dialog: field.querySelector('dialog.reader'),
+    onClose() { readerClosedAt = performance.now(); },
+    onNext() { nextBase(); },
   });
 
   function setMode(next) {
@@ -308,6 +363,7 @@ function start() {
 
   function go(id, { focus = 'panel', from = null } = {}) {
     const wasTour = mode === 'tour';
+    hideFinale();
     opener = from ?? links.find((l) => l.dataset.stop === id);
     if (mode !== 'free') setMode('free');
     setHash(id);
@@ -315,7 +371,7 @@ function start() {
     const note = `${wasTour ? `${T.tourEnded} ` : ''}${nameOf(id)}, ${textOf(id, 'label')}.`;
     arrived.then(() => say(note));
     if (focus === 'base') links.find((l) => l.dataset.stop === id).focus();
-    else arrived.then(() => panel.focus({ preventScroll: true }));
+    else if (focus === 'panel') arrived.then(() => (keyboardUser ? focusPreview() : panel.focus({ preventScroll: true })));
   }
 
   // Bases on the field and in the "Stadium map" list
@@ -361,7 +417,7 @@ function start() {
     else if (!event.shiftKey && i === items.length - 1) { event.preventDefault(); items[0].focus(); }
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !dialog.open) { event.preventDefault(); openPause(); }
+    if (event.key === 'Escape' && !dialog.open && !reader.open) { event.preventDefault(); openPause(); }
   });
 
   // --- Controls -----------------------------------------------------------------
@@ -388,8 +444,14 @@ function start() {
     else if (action === 'swing') swing();
     else if (action === 'pause') openPause();
     else if (action === 'resume') closePause();
-    else if (action === 'next' && mode === 'tour') tour.next();
-    else if (action === 'back' && mode === 'tour') tour.back();
+    else if (action === 'next-base') nextBase();
+    else if (action === 'read') {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return; // a new tab: the real page
+      event.preventDefault();
+      const link = event.target.closest('[data-action="read"]');
+      const id = link.dataset.slug;
+      reader.show(link, { label: fill(T.backTo, { base: textOf(id, 'label') }), name: nameOf(id), i: RING.indexOf(id), n: RING.length - 1 });
+    }
     else if (action === 'sound') { sound.set(!sound.on); showToggles(); }
     else if (action === 'motion') { motionOff = !motionOff; save('motion', motionOff ? 'reduced' : 'full'); showToggles(); }
     else if (action === 'close') {
@@ -400,14 +462,17 @@ function start() {
       say(T.tourEnded);
       refocus(links.find((l) => l.dataset.stop === current));
     } else if (action === 'again') {
+      hideFinale();
       closePanel({ focus: false });
       batUp();
       swingButton.focus({ preventScroll: true });
     } else if (mode === 'bat' && event.target.closest('.stage') && !event.target.closest('.base')) swing();
+    else if (mode === 'tour' && event.target.closest('.stage') && !event.target.closest('.base')) tour.skip();
   });
 
   // Space swings while the field is on screen (not when typing or on another control).
   document.addEventListener('keydown', (event) => {
+    if (mode === 'tour' && event.key === ' ' && !dialog.open && !reader.open && !event.target.closest('a, button, input, textarea, select, [contenteditable]')) { event.preventDefault(); tour.skip(); return; }
     if (mode !== 'bat' || dialog.open || event.key !== ' ' || event.target.closest('a, button, input, textarea, select, [contenteditable]')) return;
     const box = stage.getBoundingClientRect();
     if (box.bottom < 0 || box.top > innerHeight) return;
@@ -421,6 +486,7 @@ function start() {
     if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
     if (!event.target.closest('.stage, .panel')) return;
     event.preventDefault();
+    if (mode === 'tour' && event.key === 'ArrowRight') { tour.next(); return; }
     const index = STOPS.findIndex((s) => s.id === current);
     const dir = event.key === 'ArrowRight' ? 1 : -1;
     go(STOPS[(index + dir + STOPS.length) % STOPS.length].id, { focus: 'base' });
@@ -438,6 +504,7 @@ function start() {
   // Only other anchors or an address that was typed can add history entries,
   // so Back/Forward here simply means "free mode" at whatever the address says.
   window.addEventListener('popstate', () => {
+    if (reader.open || performance.now() - readerClosedAt < 100) return; // Back closed the reader: stay where we are
     const id = location.hash.slice(1);
     if (!id) { if (mode !== 'bat' && mode !== 'pick') { setMode('free'); runTo('home', { animate: false }); } return; }
     if (!byId[id]) { if (mode === 'tour') setMode('free'); return; } // other anchors are not bases

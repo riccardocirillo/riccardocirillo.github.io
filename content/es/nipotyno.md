@@ -4,6 +4,7 @@ title: "Nipotyno — Un mentor digital para personas mayores que usan servicios 
 slug: nipotyno
 base: "Primera base"
 description: "Investigación y diseño UX de un asistente de doble pantalla que guía a las personas mayores para pedir citas médicas y pagar recibos públicos en línea. SUS 78,75; 6/6 completaron las dos tareas, una persona con ayuda del facilitador."
+teaser: "Un asistente de doble pantalla que guía a las personas mayores para pedir citas médicas y pagar recibos públicos en línea."
 og_image: /assets/nipotyno/home_05.webp
 cover: /assets/nipotyno/home_05.webp
 tldr: "En Italia, las personas mayores tienen que usar servicios públicos en línea, y a muchas les genera estrés. En un equipo de 4 estudiamos cómo se las arreglan y probamos dos conceptos. El mejor se convirtió en un 'mentor digital' de doble pantalla. Las 6 personas mayores del test final completaron las dos tareas, una de ellas con ayuda del facilitador; SUS 78,75 (Bueno)."

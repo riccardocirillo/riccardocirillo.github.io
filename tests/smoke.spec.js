@@ -112,9 +112,9 @@ test.describe('phone (390 px): simplified touch field on /play/', () => {
       await page.goto(`/play/#${slug}`);
       await expect(panel(page)).toHaveAttribute('data-panel', slug);
       await expect(page.locator('.stage')).toBeInViewport();
-      await panel(page).getByRole('link', { name: /Read the case study/ }).click();
+      await panel(page).getByRole('link', { name: /^Read/ }).click();
       await expect(page).toHaveURL(new RegExp(`/${slug}/$`));
-      await expect(page.locator('article.case h1')).toBeVisible(); // F4: no reader any more, the page itself
+      await expect(page.locator('dialog.reader article.case h1')).toBeVisible(); // v4: the real page's <main>, in the reader
     }
   });
 });
@@ -146,7 +146,7 @@ test.describe('desktop (1280 px): the ballpark on /play/', () => {
     await expect(panel(page)).toHaveAttribute('data-panel', 'levante');
     await expect(page.locator('.base[data-stop="levante"]')).toHaveAttribute('aria-current', 'location');
     await expect(page.locator('#field-panel')).toBeFocused();
-    await panel(page).getByRole('link', { name: /Read the case study/ }).click();
+    await panel(page).getByRole('link', { name: /^Read/ }).click();
     await expect(page).toHaveURL(/\/levante\/$/);
   });
 

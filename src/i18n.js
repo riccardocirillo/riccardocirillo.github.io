@@ -148,6 +148,8 @@ export const STRINGS = {
     aboutMe: 'About me',
     contact: 'Contact & CV',
     // Text of the game (src/game.js, src/tour.js, src/reader.js)
+    // v4 game flow (docs/ART_BIBLE.md § 6–10)
+    v4: { exit: 'Exit', exitLabel: 'Exit to the title screen', read: 'Read', nextBase: 'Next base', close: 'Close', backTo: 'Back to {base}', backToGame: 'Back to game', playerProfile: 'Player profile', homeRunAbout: 'Home run · About me', readerLabel: 'Case study: {name}', loading: 'Loading…', dragToClose: 'Drag down to close' },
     game: {
       atBat: 'At bat. Swing to hit the pitch.',
       tourEnded: 'Tour ended. Free mode.',
@@ -288,6 +290,8 @@ export const STRINGS = {
     mood: '<strong>Ambiente:</strong> un partido de béisbol de día, dibujado como un juego arcade de 16 bits. Referencia de estilo: {link}. Todo el arte de esta web es mío.',
     aboutMe: 'Sobre mí',
     contact: 'Contacto y CV',
+    // v4 [CHECK]
+    v4: { exit: 'Salir', exitLabel: 'Salir a la pantalla de título', read: 'Leer', nextBase: 'Siguiente base', close: 'Cerrar', backTo: 'Volver a {base}', backToGame: 'Volver al juego', playerProfile: 'Perfil del jugador', homeRunAbout: 'Home run · Sobre mí', readerLabel: 'Caso de estudio: {name}', loading: 'Cargando…', dragToClose: 'Desliza hacia abajo para cerrar' },
     game: {
       atBat: 'Al bate. Batea para golpear el lanzamiento.',
       tourEnded: 'Tour terminado. Modo libre.',
@@ -457,6 +461,8 @@ export const STRINGS = {
     mood: '<strong>Atmosfera:</strong> una partita di baseball di giorno, disegnata come un gioco arcade a 16 bit. Riferimento di stile: {link}. Tutta la grafica qui è mia.',
     aboutMe: 'Chi sono',
     contact: 'Contatti e CV',
+    // v4 [CHECK]
+    v4: { exit: 'Esci', exitLabel: 'Esci alla schermata del titolo', read: 'Leggi', nextBase: 'Prossima base', close: 'Chiudi', backTo: 'Torna a {base}', backToGame: 'Torna al gioco', playerProfile: 'Profilo giocatore', homeRunAbout: 'Home run · Chi sono', readerLabel: 'Caso di studio: {name}', loading: 'Caricamento…', dragToClose: 'Trascina giù per chiudere' },
     game: {
       atBat: 'In battuta. Batti per colpire il lancio.',
       tourEnded: 'Tour finito. Modalità libera.',

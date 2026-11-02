@@ -5,8 +5,8 @@ import { test, expect } from '@playwright/test';
 const count = (page) => page.locator('.hud-base');
 const panel = (page) => page.locator('#field-panel [data-panel]:visible');
 const bar = (page, mode) => page.locator(`.game-bar [data-mode="${mode}"]`);
-const nextButton = (page) => page.getByRole('button', { name: /^(Next base|Finish the tour)/ });
-const backButton = (page) => panel(page).getByRole('button', { name: 'Back' });
+// v4: NEXT BASE → sits in the base preview (§ 8); there is no ◀ Back any more (the field itself is the way back).
+const nextButton = (page) => panel(page).locator('[data-action="next-base"]');
 const status = (page) => page.locator('.game-bar [role="status"]');
 
 test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
@@ -31,40 +31,30 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await expect(page).toHaveURL(/#nipotyno$/);
     await expect(panel(page)).toHaveAttribute('data-panel', 'nipotyno');
     await expect(panel(page).locator('.panel-cover')).toBeVisible();
-    // controls are inside the card: one main button with the name of the next base, no Back on the first stop
-    await expect(nextButton(page)).toHaveText('Next base: Levante →');
-    await expect(panel(page).locator('.tour-nav')).toHaveCount(1);
-    await expect(nextButton(page)).toBeFocused();
-    await expect(backButton(page)).toHaveCount(0);
-    // no timer, no Pause inside the tour (F5: the only pause is the game's menu in the HUD), no old bar controls
-    await expect(page.locator('.timer, .tour-nav [data-action="pause"], .game-bar [data-action="pause"], .tour-step')).toHaveCount(0);
-
-    await nextButton(page).click();
-    await expect(count(page)).toHaveText('2nd base · Levante');
-    await expect(nextButton(page)).toBeFocused(); // keyboard users keep going with Enter
-    await backButton(page).click();
-    await expect(count(page)).toHaveText('1st base · Nipotyno');
+    // v4: READ ▶ (yellow) and NEXT BASE → in the preview; no timer, no Pause inside the tour
+    await expect(nextButton(page)).toHaveText('Next base →');
+    await expect(panel(page).locator('[data-action="read"]')).toContainText('Read');
+    await expect(page.locator('.timer, .tour-nav, .game-bar [data-action="pause"], .tour-step')).toHaveCount(0);
 
     for (const [slug, name] of [['levante', 'Levante'], ['sensor-lab', 'Sensor lab']]) {
       await nextButton(page).click();
       await expect(count(page)).toContainText(name);
       await expect(panel(page)).toHaveAttribute('data-panel', slug);
     }
-    // last base: the main button finishes the tour
-    await expect(nextButton(page)).toHaveText('Finish the tour →');
+    // after 3rd base: home plate, then the About me finale with the photo and Contact & CV (§ 10)
     await nextButton(page).click();
     await expect(count(page)).toHaveText('Tour complete');
-    await expect(panel(page)).toHaveAttribute('data-panel', 'done');
-    // F5: "Game over? Never." with three ways on
-    await expect(panel(page).getByRole('heading')).toHaveText('Game over? Never.');
-    await expect(panel(page).getByRole('link', { name: 'Read the story' })).toHaveAttribute('href', '/story/');
-    await expect(panel(page).getByRole('link', { name: 'Multiplayer' })).toHaveAttribute('href', '/multiplayer/');
-    await expect(nextButton(page)).toHaveCount(0);
-    await expect(backButton(page)).toBeVisible();
+    await expect(page.locator('#finale')).toBeVisible();
+    await expect(page.locator('#finale h2')).toHaveText("Hi, I'm Riccardo");
+    await expect(page.locator('#finale img.pc-photo')).toHaveAttribute('alt', 'Riccardo Cirillo');
+    await expect(page.locator('#finale').getByRole('link', { name: /Contact & CV/ })).toHaveAttribute('href', '/multiplayer/');
+    await expect(page.locator('#finale').getByRole('link', { name: 'Story mode' })).toHaveAttribute('href', '/story/');
+
     await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(3); // the 3 bases
     await expect(page).toHaveURL(/#home$/);
 
-    await panel(page).getByRole('button', { name: 'Play again' }).click();
+    await page.locator('#finale').getByRole('button', { name: 'Play again' }).click();
+    await expect(page.locator('#finale')).toBeHidden();
     await expect(bar(page, 'bat')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Swing!' })).toBeFocused();
     await expect(page.locator('#field-panel')).toBeHidden(); // back at bat: the card closes, the whole field is free
@@ -83,15 +73,13 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await expect(visited).toHaveCount(2);
     await expect(page.locator('.hud-diamonds i.is-current')).toHaveAttribute('data-corner', 'second');
     await expect(status(page)).toHaveText('Tour 2 of 3: Levante.');
-    await backButton(page).click();
-    await expect(visited).toHaveCount(2); // visited stays filled, the current one moves back
-    await expect(page.locator('.hud-diamonds i.is-current')).toHaveAttribute('data-corner', 'first');
+    await expect(page.locator('.scoreboard .sb-bases i.is-on')).toHaveCount(2); // v4: the scoreboard lights them too
   });
 
   test('Space and a click on the field also swing', async ({ page }) => {
     await page.goto('/play/');
     await page.getByRole('button', { name: /^Skip/ }).click();
-    await page.locator('#field-title').click(); // focus on the page next to the field, not on a control
+    await page.evaluate(() => document.activeElement?.blur()); // focus on the page, not on a control (v4: the title is for screen readers only)
     await page.keyboard.press('Space');
     await expect(count(page)).toHaveText('1st base · Nipotyno');
 
@@ -134,7 +122,7 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await page.keyboard.press('Enter'); // "Skip to content" → #main: an anchor that is not a base
     await expect(page).toHaveURL(/#main$/);
     await page.goBack(); // back from #main to the base address: free mode, not the tour
-    await expect(bar(page, 'free')).toBeVisible();
+    await expect(bar(page, 'free')).toHaveJSProperty('hidden', false); // (the bar itself hides under the preview, v4)
     await expect(bar(page, 'tour')).toBeHidden();
   });
 
@@ -144,7 +132,7 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
     await page.locator('.base[data-stop="sensor-lab"]').click();
-    await expect(bar(page, 'free')).toBeVisible();
+    await expect(bar(page, 'free')).toHaveJSProperty('hidden', false);
     await expect(bar(page, 'tour')).toBeHidden();
     await expect(panel(page)).toHaveAttribute('data-panel', 'sensor-lab');
     await expect(status(page)).toHaveText('Tour ended. Free mode. Sensor lab, 3rd base.');
@@ -154,8 +142,8 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
-    await page.getByRole('button', { name: 'Exit tour' }).click();
-    await expect(bar(page, 'free')).toBeVisible();
+    await panel(page).locator('..').getByRole('button', { name: 'Close' }).click(); // v4: ✕ Close on the preview leaves the tour
+    await expect(bar(page, 'free')).toHaveJSProperty('hidden', false);
     await expect(status(page)).toHaveText('Tour ended. Free mode.');
     await expect(page.locator('.tour-nav')).toHaveCount(0);
 
@@ -168,7 +156,7 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await expect(page.locator('#field-panel')).toBeHidden();
 
     await page.goto('/play/#levante');
-    await expect(bar(page, 'free')).toBeVisible();
+    await expect(bar(page, 'free')).toHaveJSProperty('hidden', false); // (under the preview the bar itself is hidden, v4)
     await expect(page.getByRole('button', { name: 'Swing!' })).toBeHidden();
     await expect(page.locator('.uniform-pick')).toBeHidden();
     await expect(panel(page)).toHaveAttribute('data-panel', 'levante');
@@ -196,7 +184,7 @@ test.describe('game @ 1280 px with motion', () => {
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(page.locator('.banner')).toBeVisible({ timeout: 10_000 });
     await expect(count(page)).toHaveText('1st base · Nipotyno', { timeout: 10_000 });
-    await expect(page.locator('.stage')).toHaveClass(/is-zoomed/, { timeout: 10_000 });
+    await expect(page.locator('.stage')).toHaveClass(/is-moment/, { timeout: 10_000 });
     await expect(page.locator('.runner')).toHaveClass(/is-highfive/);
     await expect(page.locator('[data-crew="coach1"]')).toHaveClass(/is-highfive/);
     await page.screenshot({ path: 'tests/screenshots/tour-highfive-1280.png' });
@@ -209,7 +197,7 @@ test.describe('game @ 1280 px with motion', () => {
     // Next works while a moment is playing: go on and click again during the zoom of the next stop
     await nextButton(page).click();
     await expect(count(page)).toHaveText('2nd base · Levante');
-    await expect(page.locator('.stage')).toHaveClass(/is-zoomed/, { timeout: 5_000 });
+    await expect(page.locator('.stage')).toHaveClass(/is-moment/, { timeout: 5_000 });
     await nextButton(page).click(); // the zoom is still on
     await expect(count(page)).toHaveText('3rd base · Sensor lab', { timeout: 10_000 });
   });

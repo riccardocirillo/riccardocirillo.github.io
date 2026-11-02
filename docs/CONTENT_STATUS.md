@@ -17,3 +17,5 @@ Contact sheets of all images: `docs/assets-preview/`.
 | content/es/*.md (about + 3 cases) | **[CHECK]** first draft by Claude (Fase 3, 21/10), translated from the English files | native speaker (the one who reviews the ES CV); remove the `[CHECK]` note at the top of each file after the review |
 | content/it/*.md (about + 3 cases) | **[CHECK]** first draft by Claude (Fase 3, 21/10) | Riccardo; remove the `[CHECK]` note at the top of each file after the review |
 | src/i18n.js (ES and IT interface: buttons, labels, base names, uniforms, status line, studies) | **[CHECK]** first draft by Claude (Fase 3, 21/10) | same reviewers; names to confirm: Investigador / Ricercatore, "Becario" / "Tirocinante" |
+
+- [CHECK] v4 (02/11/2026): new `teaser:` line in content/es/*.md and content/it/*.md (the game's base preview), cut from each case's own description, no new facts. EN is final.

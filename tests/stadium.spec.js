@@ -49,9 +49,11 @@ test.describe('stadium @ 1280×800', () => {
     await page.locator('.stage [data-stop="nipotyno"]').click();
     await expect(card(page)).toHaveAttribute('data-panel', 'nipotyno');
     await expect(card(page).locator('.panel-cover')).toBeVisible();
-    await expect(card(page).locator('.key-numbers li')).toHaveText(['13 interviews', '6 testers', 'SUS 78.75']);
-    await expect(card(page).getByRole('link', { name: /Read the case study/ })).toHaveAttribute('href', '/nipotyno/');
-    await expect(card(page).locator('p')).toHaveCount(2); // the kicker and the link: no TL;DR, no role
+    // v4 (§ 8): label, title, teaser, 3 numbers, READ ▶ and NEXT BASE →, one small line role · dates
+    await expect(card(page).locator('.preview-stats li')).toHaveText(['13 interviews', '6 testers', '78.75 SUS']);
+    await expect(card(page).getByRole('link', { name: /^Read/ })).toHaveAttribute('href', '/nipotyno/');
+    await expect(card(page).locator('.preview-teaser')).toHaveText('A dual-screen assistant that guides older adults through booking medical visits and paying public bills online.');
+    await expect(card(page).locator('p')).toHaveCount(4); // label, teaser, the buttons, role · dates: no TL;DR
     const drawer = await page.locator('#field-panel').boundingBox();
     const base = await page.locator('.stage [data-stop="nipotyno"]').boundingBox();
     expect(base.x + base.width).toBeLessThanOrEqual(drawer.x); // 1st base and its label are not under the card

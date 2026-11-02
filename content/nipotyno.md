@@ -3,6 +3,7 @@ title: "Nipotyno — A digital mentor for older adults using public services"
 slug: nipotyno
 base: "1st base"
 description: "UX research and design for a dual-screen assistant that guides older adults through booking medical visits and paying public bills online. SUS 78.75; 6/6 completed both tasks, one with help from the facilitator."
+teaser: "A dual-screen assistant that guides older adults through booking medical visits and paying public bills online."
 og_image: /assets/nipotyno/home_05.webp
 cover: /assets/nipotyno/home_05.webp
 tldr: "Older adults in Italy have to use public services online, and many find it stressful. In a team of 4 we studied how they cope and tested two concepts. The better one became a dual-screen 'digital mentor'. All 6 older adults in the final test completed both tasks, one with help from the facilitator; SUS 78.75 (Good)."

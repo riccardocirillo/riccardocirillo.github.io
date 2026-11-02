@@ -88,8 +88,8 @@ test.describe('languages @ 1280 px', () => {
   });
 
   for (const [lang, words] of Object.entries({
-    es: { next: 'Siguiente base: Levante →', count: 'Primera base · Nipotyno', swing: '¡Batea!', read: 'Lee el caso de estudio' },
-    it: { next: 'Prossima base: Levante →', count: 'Prima base · Nipotyno', swing: 'Batti!', read: 'Leggi il caso studio' },
+    es: { next: 'Siguiente base →', count: 'Primera base · Nipotyno', swing: '¡Batea!', read: 'Leer' },
+    it: { next: 'Prossima base →', count: 'Prima base · Nipotyno', swing: 'Batti!', read: 'Leggi' },
   })) {
     test(`/${lang}/play/: the game and the chapters speak ${lang}, no English left in the interface`, async ({ page }) => {
       await page.emulateMedia({ reducedMotion: 'reduce' });
@@ -106,12 +106,12 @@ test.describe('languages @ 1280 px', () => {
       await page.getByRole('button', { name: words.swing }).click();
       await expect(page.locator('.hud-base')).toHaveText(words.count);
       await expect(page).toHaveURL(new RegExp(`/${lang}/play/#nipotyno$`));
-      const next = page.locator('#field-panel .tour-nav .button');
+      const next = page.locator('#field-panel [data-panel="nipotyno"] [data-action="next-base"]'); // v4: NEXT BASE → in the preview
       await expect(next).toHaveText(words.next);
       await next.click();
       await expect(page.locator('#field-panel [data-panel="levante"]')).toBeVisible();
 
-      // the case opens in this language (F4: the real page), and the next chapter stays in it
+      // the case opens in this language (v4: the real page's <main> in the reader), and the next chapter stays in it
       const card = page.locator('#field-panel [data-panel="levante"]');
       await card.getByRole('link', { name: new RegExp(`^${words.read}`) }).click();
       await expect(page).toHaveURL(new RegExp(`/${lang}/levante/$`));

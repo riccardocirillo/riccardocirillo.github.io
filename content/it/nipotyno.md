@@ -4,6 +4,7 @@ title: "Nipotyno — Un mentore digitale per gli anziani che usano i servizi pub
 slug: nipotyno
 base: "Prima base"
 description: "Ricerca e design UX di un assistente a doppio schermo che guida le persone anziane a prenotare visite mediche e pagare bollettini pubblici online. SUS 78,75; 6/6 hanno completato entrambi i compiti, uno con l'aiuto del facilitatore."
+teaser: "Un assistente a doppio schermo che guida le persone anziane a prenotare visite mediche e pagare bollettini pubblici online."
 og_image: /assets/nipotyno/home_05.webp
 cover: /assets/nipotyno/home_05.webp
 tldr: "In Italia gli anziani devono usare i servizi pubblici online, e molti lo trovano stressante. In un team di 4 abbiamo studiato come se la cavano e testato due concept. Il migliore è diventato un 'mentore digitale' a doppio schermo. Tutti e 6 gli anziani del test finale hanno completato entrambi i compiti, uno con l'aiuto del facilitatore; SUS 78,75 (Buono)."

@@ -3,6 +3,7 @@ title: "Levante — Knowing within hours if the sea is safe"
 slug: levante
 base: "2nd base"
 description: "Service and dashboard design for an edge-AI buoy that detects bacteria in bathing water. The concept cuts confirmation time from ~48 to ~3 hours. EIT Digital Summer School 2026, final grade 9/10."
+teaser: "Service and dashboard design for an edge-AI buoy that detects bacteria in bathing water."
 og_image: /assets/levante/dashboard.webp
 cover: /assets/levante/buoy-0.webp
 tldr: "Today it takes 24–48 hours to confirm that bathing water is contaminated. In a one-week EIT Digital challenge, our team of 6 designed Levante: a solar-powered sensing buoy with edge AI plus a monitoring service. I researched the rules and co-created the personas and journey maps. I also designed the monitoring dashboard."
