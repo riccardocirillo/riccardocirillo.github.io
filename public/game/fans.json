@@ -1,0 +1,92 @@
+{
+ "frames": [
+  {
+   "filename": "fans still 0",
+   "frame": {
+    "x": 0,
+    "y": 0,
+    "w": 6,
+    "h": 10
+   },
+   "duration": 500,
+   "acc": {
+    "x": 1,
+    "y": 0
+   }
+  },
+  {
+   "filename": "fans up 0",
+   "frame": {
+    "x": 6,
+    "y": 0,
+    "w": 6,
+    "h": 10
+   },
+   "duration": 500,
+   "acc": {
+    "x": 1,
+    "y": 0
+   }
+  }
+ ],
+ "meta": {
+  "app": "scripts/art/grid.js",
+  "image": "fans.png",
+  "size": {
+   "w": 12,
+   "h": 80
+  },
+  "cell": {
+   "w": 6,
+   "h": 10
+  },
+  "frameTags": [
+   {
+    "name": "still",
+    "from": 0,
+    "to": 0,
+    "direction": "forward"
+   },
+   {
+    "name": "up",
+    "from": 1,
+    "to": 1,
+    "direction": "forward"
+   }
+  ],
+  "variants": [
+   {
+    "name": "red",
+    "row": 0
+   },
+   {
+    "name": "blue",
+    "row": 1
+   },
+   {
+    "name": "white",
+    "row": 2
+   },
+   {
+    "name": "yellow",
+    "row": 3
+   },
+   {
+    "name": "green",
+    "row": 4
+   },
+   {
+    "name": "navy",
+    "row": 5
+   },
+   {
+    "name": "coral",
+    "row": 6
+   },
+   {
+    "name": "grey",
+    "row": 7
+   }
+  ]
+ }
+}

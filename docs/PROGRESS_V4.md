@@ -4,7 +4,7 @@ Diario dell'esecuzione autonoma di `docs/PROMPT_V4.md` sul ramo `v4` (dal 02/11/
 Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi continua dalla prima cosa non fatta.
 
 ## Stato
-- Fase attuale: **B · pose chiave**
+- Fase attuale: **C · animazioni complete, crew, pubblico**
 - Fatto: Fase 0 (commit `v4 0: art bible e prompt`, base di partenza 339/339 test verdi, build ok, node 22.19, sharp 0.35.5)
 
 ## Piano (per me, non serve approvazione)
@@ -19,6 +19,21 @@ Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi contin
 - 0 · Controlli iniziali — ok. 339/339 verdi prima di toccare il codice.
 - A · Strumenti — grid-parse.js + grid.js, npm run art, /art-lab/ (dev), 6 controlli nuovi in tests/art.spec.js, prova del metodo 0 pixel diversi. 344/344 verdi.
 
+- B · Pose chiave (in corso) — art/sprites/batter.txt: idle, swing (contatto), corsa (contatto), 5 in alto (contatto), salto a casa, camminata con mazza in spalla × 3 divise (navy+lente, rosso+matita, grigio+chiave). 3 giri: bersaglio corretto (13 pixel isolati, mento, mazza, logo, orecchino), corsa v1→v3, swing v1→v2 (mazza lunga, corpo spostato a sinistra), salto v1→v3. Foglio docs/assets-preview/art-bible/gate-B.png. Revisione indipendente in corso.
+- (anticipo E) scripts/photo.js: foto 4:5 640/320 WebP senza metadati (verificato con sharp).
+- Strumenti per disegnare: scripts/art/preview.js (foglio a N× + silhouette + grigi).
+
+- B · revisione 1 (subagent): 3 alti + 7 medi + 4 bassi, verdetto "sotto il bersaglio". Corretti: mani divise e avambraccio davanti al petto (idle), mazza 17 px rastremata con pomello + fianchi ruotati + piede dietro in punta (swing), luce dcba (5 in alto), logo e gomitiera in tutte le pose, scarpe dietro a cuneo, braccio a L (corsa), camminata più stretta con guanto alla spalla, contorno selettivo automatico (1→2, G→g, a→b, t→u sul lato in alto a sinistra), paraorecchie + ricci a ciuffi + barba 'h', accessori con contorno scuro. Revisione 2: 1 alto + 3 medi, "pari"; corretti (braccio davanti della corsa, gomitiere 3×2, bordo maglia, avambraccio dietro). Revisione 3: solo bassi, verdetto "sopra il bersaglio". **Porta B superata.** 356/356 verdi. Foglio gate-B.png.
+- (anticipo C) art/sprites/fans.txt: 8 tifosi 6×10, fermo/braccio su. art/sprites/coach.txt: coach con cappellino, giacca a vento, barba; variante 3ª con barba grigia (solo frame idle per ora).
+
+### Metodo di lavoro (per ripartire)
+- Le griglie si costruiscono nella cartella scratchpad della sessione con: build.mjs (righe da segmenti "y: x:PIXEL"), edit.mjs (modifiche [x,y,"pixel"]), sheet.mjs (monta art/sprites/batter.txt da head.part, *.grid, poses.json, legend.txt e applica il contorno selettivo), coach.mjs (monta coach.txt), iso.mjs (pixel isolati). Se la sessione è nuova e lo scratchpad è vuoto: si lavora direttamente su art/sprites/*.txt (sono la fonte vera, complete).
+- Anteprima: node scripts/art/preview.js <foglio> <out.png> [scala] [sfondo].
+
 ## [CHECK] da guardare
+- [CHECK] salto a casa: braccia ancora lunghe e sottili, busto 15 px contro 18 delle altre pose (difetto basso della revisione).
+- [CHECK] camminata: a 1× somiglia ancora alla posa di attesa (mazza in diagonale, gambe ad A).
+- [CHECK] swing: la gomitiera è sul gomito dietro (accettabile secondo il revisore).
 
 ## Problemi aperti
+- push del ramo v4 dopo A: "Failed to connect to github.com port 443" (rete). Riprovo alla fine di ogni fase.

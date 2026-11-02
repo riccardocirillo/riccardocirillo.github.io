@@ -1,0 +1,70 @@
+# The crowd (docs/ART_BIBLE.md § 4): 8 different fans of 6×10 px, frame A (still) and B (arm up).
+# One base fan, 8 variants (rows of the sheet) = shirt, skin, hair and cap. Drawn on a <canvas> over the stands.
+# Hands may stand alone (`j`): at 6×10 a hand is one pixel.
+size: 6x10
+palette:
+  h hair
+  k black
+  c skin
+  j skin !
+  R red
+  r redDark
+  1 navyDark
+  2 navy
+  3 navyMid
+  4 navyLight
+  a skinDeep
+  b skinDark
+  d skinLight
+  w white
+  W greyLight
+  g grey
+  G greyDark
+  Y yellow
+  v dirt
+  s grass
+  Q grassDark
+  L redLight
+  D skinLight !
+  E skinDark !
+  F skinDeep !
+tags:
+  still 0-0
+  up 1-1
+variants:
+  red
+  blue R>4 r>3 h>k c>d j>D
+  white R>w r>W c>b j>E acc=cap
+  yellow R>Y r>v h>k c>b j>E
+  green R>s r>Q h>g c>d j>D
+  navy R>3 r>2 h>k c>a j>F
+  coral R>L r>R h>Y c>d j>D
+  grey R>g r>G acc=navycap
+=== part cap 4x2
+YYYY
+Y...
+=== part navycap 4x2
+2222
+2...
+--- still 0 500 acc=1,0
+.hhh..
+.hccc.
+.cccc.
+..cc..
+RRRRRr
+RRRRRr
+jRRRRj
+.RRRR.
+.1111.
+.1111.
+--- up 0 500 acc=1,0
+.hhh.j
+.hcccR
+.ccccR
+..ccR.
+RRRRr.
+RRRRr.
+jRRRr.
+.RRRr.
+.1111.
+.1111.
