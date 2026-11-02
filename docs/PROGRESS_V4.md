@@ -4,7 +4,7 @@ Diario dell'esecuzione autonoma di `docs/PROMPT_V4.md` sul ramo `v4` (dal 02/11/
 Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi continua dalla prima cosa non fatta.
 
 ## Stato
-- Fase attuale: **F · momenti, rifinitura, test, porta di qualità F**
+- Fase attuale: **finita (0 → F)**. Prossimo passo: Riccardo gioca in locale e decide la pubblicazione (comando in fondo a docs/PROMPT_V4.md).
 - Fatto: Fase 0 (commit `v4 0: art bible e prompt`, base di partenza 339/339 test verdi, build ok, node 22.19, sharp 0.35.5)
 
 ## Piano (per me, non serve approvazione)
@@ -32,6 +32,24 @@ Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi contin
 
 - E · Percorso — HUD con ✕ Exit, anteprima (aside, destra/basso, maniglia), lettore src/reader.js, momenti in src/tour.js, finale con figurina e foto (scripts/photo.js), teaser nei 9 file, sessionStorage. Test del vecchio flusso aggiornati, tests/photo.spec.js nuovo. 356/356 verdi. Screenshot del giro in runs/E (d-*, m-*).
 
+- F · Momenti e prove — effetti dell'home run (pausa d'impatto, flash, scossa, scia, fuochi, ola, HOME RUN), fari all'avvio, polvere e scintilla, tempi esatti del § 5, OG dallo stadio di notte, tests/v4.spec.js. Porta F superata al 3° giro. 374/374 verdi.
+
+## Relazione finale (03/11/2026)
+**Fatto per fase**
+- 0: controlli, base 339/339 verdi.
+- A: griglie di testo → PNG/JSON (scripts/art/grid.js), /art-lab/ solo in dev, 6 controlli automatici, prova del metodo con 0 pixel diversi.
+- B: Riccardo a mano in 6 pose chiave × 3 divise; porta B al 3° giro, verdetto "sopra il bersaglio".
+- C: 36 frame del § 5 con le durate, coach 1ª/3ª, lanciatore, 3 compagni, 8 tifosi; vecchi fogli in archivio.
+- D: stadio di notte a strati (704×424), gioco a tutto schermo con scala intera, camera, parallasse, pubblico vivo, tabellone; titolo e 404 col nuovo stadio.
+- E: HUD con ✕ Exit, anteprima della base, lettore nel gioco, momenti sulle basi, finale About me con la figurina e la foto (anche nella Story mode e in Multiplayer), teaser, stato in sessionStorage.
+- F: effetti dell'home run, rifinitura, test nuovi, porta F al 3° giro.
+
+**Test:** 374 passati su 374 (all'inizio 339). Nuovi: tests/v4.spec.js (10), tests/photo.spec.js (2), controlli delle griglie in tests/art.spec.js, formati a tutto schermo in tests/field.spec.js.
+
+**Decisioni "(auto)" importanti:** vedi DECISIONS.md 02–03/11. In breve: telefono in verticale a 3×; casa base in modalità libera apre ancora email e CV, il giro finisce sul finale; field.png/night.png in archivio, anche l'OG usa lo stadio di notte; una pulizia automatica dei pixel isolati dopo il montaggio dei frame.
+
+**Prove (Definizione di fatto):** build ok; npm test 374/374; screenshot 1280 e 390 di ogni passo in docs/assets-preview/art-bible/runs/F (d-01…d-09, m-01…m-09); tastiera (Exit primo dopo lo skip link, READ/NEXT/Esc/Indietro testati); contrasto con axe su ogni schermata; reduced motion testato; nessun errore in console nel giro completo. "Online": no, la pubblicazione la decide Riccardo.
+
 ### Metodo di lavoro (per ripartire)
 - Le griglie si costruiscono nella cartella scratchpad della sessione con: build.mjs (righe da segmenti "y: x:PIXEL"), edit.mjs (modifiche [x,y,"pixel"]), sheet.mjs (monta art/sprites/batter.txt da head.part, *.grid, poses.json, legend.txt e applica il contorno selettivo), anim.mjs + batter.json/coach.json/pitcher.json/mates.json (montaggio con from=, contorno selettivo e pulizia), anchor2.mjs (punti di aggancio), iso.mjs (pixel isolati). Se la sessione è nuova e lo scratchpad è vuoto: si lavora direttamente su art/sprites/*.txt (sono la fonte vera, complete).
 - Giro completo con screenshot: W=1280 H=800 TAG=d node --input-type=module < scratchpad/tour.mjs (RUN=E|F)
@@ -39,9 +57,15 @@ Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi contin
 - Anteprima: node scripts/art/preview.js <foglio> <out.png> [scala] [sfondo].
 
 ## [CHECK] da guardare
+- [CHECK] compagni: tengono le braccia alzate per tutto il gioco (il loro "idle" è il salto accovacciato); l'art bible li vuole fermi fino a casa base (difetto basso, porta F).
+- [CHECK] lanciatore: il guantone nero con il trattino bianco può sembrare una maschera; ombre dei giocatori a scacchi scuri (difetti bassi, porta F).
+- [CHECK] mentre l'omino corre tra le basi l'HUD mostra ancora la base di partenza fino all'arrivo (basso).
+- [CHECK] Levante: i numeri "~48 h → ~3 h (concept)" e "team of 6" nell'anteprima sono lunghi/senza etichetta (vengono da stats nel contenuto, non li ho cambiati).
+- [CHECK] teaser ES/IT da rivedere (CONTENT_STATUS); stringhe v4 ES/IT in src/i18n.js.
+- [CHECK] telefono orizzontale (844×390) a 2×: non vede tutto il mondo (la regola "scala intera che copre" non lo permette).
 - [CHECK] salto a casa: braccia ancora lunghe e sottili, busto 15 px contro 18 delle altre pose (difetto basso della revisione).
 - [CHECK] camminata: a 1× somiglia ancora alla posa di attesa (mazza in diagonale, gambe ad A).
 - [CHECK] swing: la gomitiera è sul gomito dietro (accettabile secondo il revisore).
 
 ## Problemi aperti
-- push del ramo v4 dopo A: "Failed to connect to github.com port 443" (rete). Riprovo alla fine di ogni fase.
+- push del ramo v4: "Failed to connect to github.com port 443" dopo ogni fase, anche il 03/11 con la rete tornata (Google risponde, GitHub no, anche fuori dal sandbox). Tutti i commit sono in locale sul ramo v4.

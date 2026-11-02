@@ -44,7 +44,9 @@ export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion, onHo
     });
   });
 
+  let scoreShown = false;
   async function homeRun(run) {
+    scoreShown = false;
     runner.classList.replace('is-batting', 'is-swinging');
     // load, step and smear (240 ms), then the contact and the impact pause (120 ms): the hit is felt
     await sleep(240);
@@ -59,9 +61,10 @@ export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion, onHo
     for (const el of trail) el.hidden = true;
     ball.hidden = true;
     banner.hidden = false;
+    scoreShown = true;
     onHomeRun();
     sound.play('crowd');
-    await sleep(1300);
+    await sleep(900);
     if (run.cancelled) return;
     finish();
   }
@@ -111,10 +114,16 @@ export function atBat({ stage, runner, pitcher, ball, banner, reduceMotion, onHo
       stage.classList.add('is-batting');
       if (!reduceMotion.matches) loop(pitching);
     },
-    // The visitor swings: resolves after the home run. Several presses = the same swing.
+    // The visitor swings: resolves after the home run. A second press skips to the end (never stuck, § 6).
     swing() {
       if (!pitching) return Promise.resolve();
-      if (swing) return swing.promise;
+      if (swing) {
+        const done = swing;
+        if (pitching) pitching.cancelled = true;
+        if (!scoreShown) onHomeRun();
+        finish();
+        return done.promise;
+      }
       let resolve;
       swing = { promise: new Promise((r) => { resolve = r; }) };
       swing.resolve = resolve;

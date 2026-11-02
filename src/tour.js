@@ -75,9 +75,13 @@ export function createTour(ctx) {
   return {
     start() { step(0); },
     next() { if (shown < TOUR.length - 1) step(shown + 1); },
+    goTo(i) { step(i); }, // NEXT BASE from a base reached in free mode: the tour goes on from there
     get step() { return shown; },
     // A click or Space during a moment: it ends at once (never stuck).
-    skip() { if (stage.classList.contains('is-moment')) { run++; endMoment(); if (TOUR[shown]?.panel) ctx.finale(); } },
+    skip() {
+      ctx.hurry?.();
+      if (stage.classList.contains('is-moment')) { run++; endMoment(); if (TOUR[shown]?.panel) ctx.finale(); }
+    },
     // Leaving the tour: whatever was still going on stops.
     stop() { run++; endMoment(); },
   };

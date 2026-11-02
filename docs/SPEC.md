@@ -1,5 +1,12 @@
 # SPEC — Riccardo's portfolio (v0.2, 2026-10-20)
 
+> **v4 · Art pass + continuous game (02/11/2026) — OVERRIDES the Gameplay parts below.** Source of truth: docs/ART_BIBLE.md; plan: docs/PROMPT_V4.md.
+> - **Pixels by hand:** every character is a text grid (art/sprites/*.txt, one character = one palette colour) turned into PNG + JSON by `npm run art` (scripts/art/grid.js): runner (36 frames × 3 uniforms, durations of § 5), coach (1st/3rd), pitcher, 3 teammates, 8 fans. /art-lab/ (dev only) shows them at 8×, animated, with silhouette and greys.
+> - **Night stadium, full screen:** world 704×424 in layers (scripts/art/stadium.js), the smallest whole scale that covers the screen (phones held upright ≥ 3×), a camera that follows the runner (src/game.js, one rAF in src/loop.js), live crowd (src/crowd.js), lit towers, live scoreboard.
+> - **Continuous game (/play/):** HUD ✕ Exit · ⏸ Pause · Esc · base · ◆◇◇ · ♪ → uniform → Swing! (home run: impact pause, flash, shake, trail, fireworks, ola, HOME RUN) → 1st (high five) → 2nd (fist up) → 3rd ("go home" + high five) → home plate (jump, teammates) → About me finale with the photo card → Contact & CV. On every base a non-modal preview (READ ▶ · NEXT BASE →); READ opens the real page's <main> in a reader <dialog> (paper; the address becomes /nipotyno/, Back or Esc close it). Nothing moves on by itself. /play/#<case> reopens on that base; visited bases in sessionStorage.
+> - **Photo:** the only photo of the site, public/assets/about/riccardo-640/-320.webp (scripts/photo.js, no EXIF), in one player card (finale, Story mode chapter 0, Multiplayer). docs/reference/ stays private.
+> - Without JS: the still stadium with the bases as links and the mode bar. Reduced motion: no shake, parallax, fireworks, ola or flash; key poses still.
+
 > **v3 Title screen (F3–F4, 29/10/2026) — OVERRIDES the home, lobby and stadium parts below.** Plan: docs/PROMPT_V3.md.
 > - `/` = **title screen** (night theme): bar "name · EN ES IT · CV ↓ · Contact"; logo RICCARDO CIRILLO (Jersey 10, red shadow); "UX Research & Design · internship in Madrid, Feb–Jul 2027"; menu of 3 real links **Story mode** (/story/) · **Gameplay** (/play/) · **Multiplayer** (/multiplayer/) with a ▶ cursor (↑ ↓ inside the menu, src/title.js); **Quick picks** = the 3 projects (01 Nipotyno, 02 Levante, 03 Sensor lab). Works without JS. No gate.
 > - **Mode bar** on every other page: "◀ Title screen" · Story mode · Gameplay · Multiplayer (current one lit, aria-current) · EN ES IT · CV ↓.

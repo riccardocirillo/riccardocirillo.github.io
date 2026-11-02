@@ -88,13 +88,18 @@ test.describe('v4 game @ 1280×800, reduced motion', () => {
     await expect(page).toHaveURL(/\/play\/#levante$/);
   });
 
-  test('/play/#levante opens the game on 2nd base, already reached; the visited bases are kept for the visit', async ({ page }) => {
+  test('/play/#levante opens the game on 2nd base, already reached (1st counts too); NEXT BASE goes on to the finale; state kept for the visit', async ({ page }) => {
     await page.goto('/play/#levante');
     await expect(hud(page)).toHaveText('2nd base · Levante');
     await expect(preview(page)).toHaveAttribute('data-panel', 'levante');
-    await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(1);
+    await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(2);
     await page.goto('/play/');
-    await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(1); // sessionStorage
+    await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(2); // sessionStorage
+    // from a base reached by its address, NEXT BASE goes on as the tour and home plate always ends on the finale
+    await page.goto('/play/#sensor-lab');
+    await next(page).click();
+    await expect(page.locator('#finale')).toBeVisible();
+    await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(3);
   });
 
   test('axe on every screen: uniform, at bat, preview, pause menu', async ({ page }) => {
@@ -121,6 +126,20 @@ test.describe('v4 game @ 1280×800, reduced motion', () => {
 
 test.describe('v4 game @ 1280×800 with motion', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
+
+  test('never stuck: a second press skips the home run and the run, the 1st base preview comes within 2.5 s', async ({ page }) => {
+    await page.goto('/play/');
+    await page.getByRole('button', { name: /^Skip/ }).click();
+    await expect(page.locator('.runner')).not.toHaveClass(/is-walking/, { timeout: 5_000 });
+    const t0 = Date.now();
+    await page.getByRole('button', { name: 'Swing!' }).click();
+    await page.waitForTimeout(150);
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(150);
+    await page.locator('.stage').click({ position: { x: 300, y: 300 } });
+    await expect(preview(page)).toHaveAttribute('data-panel', 'nipotyno', { timeout: 2_500 });
+    expect(Date.now() - t0).toBeLessThan(2_500);
+  });
 
   test('home run: impact pause, flash and shake, HOME RUN on the scoreboard, fireworks; no console errors', async ({ page }) => {
     const errors = [];
@@ -150,11 +169,16 @@ test.describe('v4 game @ 390×844 (phone)', () => {
     await play(page);
     const sheet = await page.locator('#field-panel').boundingBox();
     expect(Math.round(sheet.y + sheet.height)).toBe(844);
-    await expect(preview(page).getByRole('link', { name: /^Read/ })).toBeInViewport();
-    await expect(next(page)).toBeInViewport();
+    // READ ▶ and NEXT BASE → fully on screen without scrolling the sheet, at every base, on one line each
+    for (let i = 0; i < 3; i++) {
+      await expect(preview(page).getByRole('link', { name: /^Read/ })).toBeInViewport({ ratio: 1 });
+      await expect(next(page)).toBeInViewport({ ratio: 1 });
+      expect((await next(page).boundingBox()).height).toBeLessThan(60);
+      if (i < 2) { await next(page).tap(); await expect(preview(page)).toHaveAttribute('data-panel', ['levante', 'sensor-lab'][i]); }
+    }
     await axe(page, 'phone preview');
-    await page.screenshot({ path: 'tests/screenshots/v4-1st-390.png' });
-    for (let i = 0; i < 3; i++) await next(page).tap();
+    await page.screenshot({ path: 'tests/screenshots/v4-3rd-390.png' });
+    await next(page).tap();
     await expect(page.locator('#finale')).toBeVisible();
     const card = await page.locator('#finale .player-card').boundingBox();
     const text = await page.locator('#finale .finale-text').boundingBox();

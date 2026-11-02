@@ -9,7 +9,7 @@
 // Every base opens its card over the stadium (a drawer on desktop, under the stage on phones); ✕ Close closes it.
 // The address shows the base (/play/#nipotyno) and is only REPLACED, never added to: one Back press leaves the page.
 // Deep links skip the uniform and the at-bat. With reduced motion: no pitch and no zoom (the tour is the same, still).
-import { FIELD, WORLD, STOPS, RING, CREW, DUGOUT } from './field-map.js';
+import { FIELD, WORLD, STOPS, RING, CREW, DUGOUT, TOUR } from './field-map.js';
 import { every } from './loop.js';
 import { createCrowd } from './crowd.js';
 import { createReader } from './reader.js';
@@ -113,6 +113,7 @@ function start() {
     if (cam.h > cam.w * 1.2) s = Math.max(s, 3);
     cam.s = s;
     field.style.setProperty('--fs', s);
+    field.style.setProperty('--hud-h', `${hud.offsetHeight}px`);
     aim(true);
   }
   function aim(snap = false) {
@@ -121,8 +122,9 @@ function start() {
     const ax = cardOpen && cam.w >= 700 ? cam.w * 0.3 : cam.w * 0.5;
     const ay = cardOpen && cam.w < 700 ? cam.h * 0.3 : cam.h * 0.55;
     const clamp = (v, min) => Math.min(0, Math.max(min, v));
+    const sheet = cardOpen && cam.w < 700 ? panel.offsetHeight : 0;
     cam.tx = clamp(ax - point.x * cam.s, cam.w - WORLD.width * cam.s);
-    cam.ty = clamp(ay - (point.y - 20) * cam.s, cam.h - WORLD.height * cam.s);
+    cam.ty = clamp(ay - (point.y - 20) * cam.s, cam.h - WORLD.height * cam.s - sheet);
     if (snap || reduceMotion.matches) { cam.x = cam.tx; cam.y = cam.ty; }
     paint();
   }
@@ -254,7 +256,10 @@ function start() {
         if (!looking) aim();
         if (!stops.length) { running.stop(); running = null; stage.classList.remove('is-running'); arrived(); resolve(); }
       };
-      running = { stop: every(tick) };
+      // hurry(): a click or Space while running = there at once (never stuck)
+      const finish = () => { const last = stops.at(-1); if (last) { pos = { x: last.x, y: last.y }; stops.length = 0; } tick(performance.now(), 0); };
+      running = { stop: every(tick), finish };
+      panel.hidden = true; // the preview of the base left behind goes away as the run starts
     });
   }
 
@@ -279,6 +284,7 @@ function start() {
 
   const tour = createTour({
     stage, runner, crew, crewAt, byId, nameOf, reduceMotion, sound, sleep, say, setHash, runTo, focusPreview,
+    hurry: () => running?.finish(),
     lookAt: (point) => camera(point),
     finale: showFinale,
   });
@@ -287,7 +293,10 @@ function start() {
   function nextBase() {
     if (mode === 'tour') return tour.next();
     const i = RING.indexOf(current);
-    go(RING[(i + 1) % RING.length], { focus: keyboardUser ? 'panel' : 'none' });
+    const nextId = RING[(i + 1) % RING.length];
+    const step = TOUR.findIndex((s) => s.stop === nextId);
+    if (step >= 0 && isProject(current)) { hideFinale(); setMode('tour'); tour.goTo(step); return; }
+    go(nextId, { focus: keyboardUser ? 'panel' : 'none' });
   }
 
   let readerClosedAt = 0;
@@ -511,6 +520,8 @@ function start() {
   const fromHash = () => {
     const id = location.hash.slice(1);
     if (!byId[id]) return false;
+    // a base reached by its address: the bases before it on the way count as visited (§ 6)
+    for (const stop of RING.slice(1, RING.indexOf(id))) visited.add(stop);
     runTo(id, { animate: false });
     return true;
   };
