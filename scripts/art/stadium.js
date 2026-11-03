@@ -7,11 +7,13 @@
 //                      clustered dirt lit from the top left, clean chalk lines, bases with a shadow, mound, dugout
 //   stadium-roof.png   8 the dugout roof, in front of the players
 //   shadow.png         7 the short shadows of a player (4 lights → several directions)
+//   stadium-apron.png  fix1: the same stadium drawn APRON px further on every side (sky above, skyline, stands and
+//                      grass at the sides, grass below), hollow where the world is: wide or tall screens never show a gap
 //   stadium.png        everything flattened, for the title screen, the 404 and /art-lab/
 // Every colour comes from src/palette.js; no random noise: textures are ordered (dither matrix, fixed patterns, fixed seed).
 import sharp from 'sharp';
 import { PALETTE } from '../../src/palette.js';
-import { WORLD, STOPS, DUGOUT, TOWERS, SCOREBOARD, FIELD_TOP } from '../../src/field-map.js';
+import { WORLD, STOPS, DUGOUT, TOWERS, SCOREBOARD, FIELD_TOP, APRON } from '../../src/field-map.js';
 import { loadSheet, render } from './grid.js';
 import { CROWD_ROWS, crowdLayout, seeded } from '../../src/crowd-layout.js';
 
@@ -20,10 +22,12 @@ const B4 = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
 const dith = (x, y, t) => t * 16 > B4[y & 3][x & 3];
 const hex = (name) => [1, 3, 5].map((i) => parseInt(PALETTE[name].slice(i, i + 2), 16));
 
-function layer(w = W, h = H) {
+// A layer of w×h pixels whose top-left corner is the world point (x0, y0): the apron starts left of and above the world.
+function layer(w = W, h = H, x0 = 0, y0 = 0) {
   const px = Array.from({ length: h }, () => Array(w).fill(null));
-  const set = (x, y, c) => { if (x >= 0 && y >= 0 && x < w && y < h) px[y][x] = c; };
-  const get = (x, y) => (x >= 0 && y >= 0 && x < w && y < h ? px[y][x] : null);
+  const inside = (x, y) => x >= x0 && y >= y0 && x < x0 + w && y < y0 + h;
+  const set = (x, y, c) => { if (inside(x, y)) px[y - y0][x - x0] = c; };
+  const get = (x, y) => (inside(x, y) ? px[y - y0][x - x0] : null);
   const rect = (x, y, rw, rh, c) => { for (let yy = y; yy < y + rh; yy++) for (let xx = x; xx < x + rw; xx++) set(xx, yy, c); };
   async function png(file) {
     const data = Buffer.alloc(w * h * 4);
@@ -31,14 +35,13 @@ function layer(w = W, h = H) {
     await sharp(data, { raw: { width: w, height: h, channels: 4 } }).png({ palette: true, colours: 64, quality: 100, dither: 0, effort: 10, compressionLevel: 9 }).toFile(file);
     return { data, w, h };
   }
-  return { px, w, h, set, get, rect, png };
+  return { px, w, h, x0, y0, x1: x0 + w, y1: y0 + h, set, get, rect, png };
 }
 
 // --- 1 + 2: sky and skyline -------------------------------------------------------------------------------------
-function sky() {
-  const L = layer(W, FIELD_TOP);
+function sky(L = layer(W, FIELD_TOP)) {
   const rnd = seeded(11);
-  for (let y = 0; y < FIELD_TOP; y++) for (let x = 0; x < W; x++) {
+  for (let y = L.y0; y < FIELD_TOP; y++) for (let x = L.x0; x < L.x1; x++) {
     const t = y / 112;
     let c = 'night';
     if (t > 0.35) c = dith(x, y, (t - 0.35) / 0.25) || t > 0.6 ? 'navyDark' : 'night';
@@ -50,14 +53,25 @@ function sky() {
     L.set(x, y, i % 5 ? 'navyPale' : 'white');
     if (i % 9 === 0) { L.set(x - 1, y, 'navyLight'); L.set(x + 1, y, 'navyLight'); L.set(x, y - 1, 'navyLight'); L.set(x, y + 1, 'navyLight'); }
   }
+  // the apron: more stars in the sky around the world (a seed of its own, so the world's sky stays the same)
+  if (L.x0 < 0) {
+    const more = seeded(23);
+    for (let i = 0; i < 260; i++) {
+      const x = L.x0 + Math.floor(more() * L.w), y = L.y0 + Math.floor(more() * (58 - L.y0));
+      if (x >= 0 && x < W && y >= 0) continue;
+      L.set(x, y, i % 5 ? 'navyPale' : 'white');
+      if (i % 9 === 0) { L.set(x - 1, y, 'navyLight'); L.set(x + 1, y, 'navyLight'); L.set(x, y - 1, 'navyLight'); L.set(x, y + 1, 'navyLight'); }
+    }
+  }
   // moon: a crescent lit from the left
   for (let y = 18; y < 38; y++) for (let x = 36; x < 56; x++) {
     const inMoon = (x - 46) ** 2 + (y - 28) ** 2 <= 56, bite = (x - 50) ** 2 + (y - 25) ** 2 <= 44;
     if (inMoon && !bite) L.set(x, y, x < 43 ? 'skinPale' : 'skinLight');
   }
-  // skyline: generic blocks (no real building), lower behind the scoreboard
-  let x = 0;
-  while (x < W) {
+  // skyline: generic blocks (no real building), lower behind the scoreboard; the apron goes on at both sides
+  const blocks = (from, to, rnd) => {
+  let x = from;
+  while (x < to) {
     const bw = 12 + Math.floor(rnd() * 22);
     let bh = 10 + Math.floor(rnd() * 24);
     if (x > 282 && x < 422) bh = 6 + Math.floor(rnd() * 8);
@@ -68,6 +82,9 @@ function sky() {
     }
     x += bw + Math.floor(rnd() * 3);
   }
+  };
+  blocks(0, W, rnd);
+  if (L.x0 < 0) { const side = seeded(31); blocks(L.x0, 0, side); blocks(W, L.x1, side); }
   return L;
 }
 
@@ -103,11 +120,24 @@ async function fansGrid() {
   };
 }
 
-async function stands(fan) {
-  const L = layer(W, STAND.bottom + 2);
+// The apron's fans: the same rows and aisles, a seed of their own, only outside the world.
+function apronSeats(L) {
+  const rnd = seeded(29);
+  const seats = [];
+  CROWD_ROWS.forEach((y, row) => {
+    for (let x = L.x0 + 4 + (row % 2) * 3; x < L.x1 - 8; x += 7) {
+      if (x > -8 && x < W) continue;
+      if (((x % 88) + 88) % 88 > 80) continue;
+      if (rnd() < 0.86) seats.push({ x, y, row, kind: Math.floor(rnd() * 8) });
+    }
+  });
+  return seats;
+}
+
+async function stands(fan, L = layer(W, STAND.bottom + 2)) {
   towersInto(L, false);
-  for (let y = STAND.top; y < STAND.bottom; y++) for (let x = 0; x < W; x++) L.set(x, y, (y - STAND.top) % 9 < 7 ? 'navyDark' : 'navy');
-  for (const s of crowdLayout()) {
+  for (let y = STAND.top; y < STAND.bottom; y++) for (let x = L.x0; x < L.x1; x++) L.set(x, y, (y - STAND.top) % 9 < 7 ? 'navyDark' : 'navy');
+  for (const s of L.x0 < 0 ? apronSeats(L) : crowdLayout()) {
     for (const [x, y, c] of fan(s.kind, 0)) L.set(s.x + x, s.y + y, c);
     // the back rows are further from the lights: one pixel in two goes dark (ordered, so no noise)
     if (s.row < 2) for (let y = 0; y < 10; y++) for (let x = 0; x < 6; x++) if (L.get(s.x + x, s.y + y) && (x + y + s.row) % 2 === 0) L.set(s.x + x, s.y + y, 'navyDark');
@@ -136,22 +166,22 @@ function halo() {
 }
 
 // --- 6: the field -----------------------------------------------------------------------------------------------
-function field() {
-  const L = layer(W, H);
+function field(L = layer(W, H)) {
   const [home, first, second, third] = ['home', 'nipotyno', 'levante', 'sensor-lab'].map((id) => STOPS.find((s) => s.id === id));
   const plate = { x: home.x, y: home.y - 4 };
   // outfield wall with generic ads, then the warning track
-  L.rect(0, 160, W, 12, 'navyDark');
-  L.rect(0, 160, W, 1, 'navyMid');
-  for (let x = 10; x < W - 30; x += 64) {
+  L.rect(L.x0, 160, L.w, 12, 'navyDark');
+  L.rect(L.x0, 160, L.w, 1, 'navyMid');
+  for (let x = 10 - 64 * Math.ceil(-L.x0 / 64); x < L.x1 - 30; x += 64) {
+    if (L.x0 === 0 && x >= W - 30) break;
     L.rect(x, 163, 44, 6, 'navy');
     L.rect(x + 3, 165, 14, 2, (x >> 6) % 2 ? 'red' : 'yellow');
     L.rect(x + 20, 165, 20, 2, 'navyLight');
   }
-  L.rect(0, 172, W, 6, 'dirtDark');
-  L.rect(0, 172, W, 1, 'wood');
+  L.rect(L.x0, 172, L.w, 6, 'dirtDark');
+  L.rect(L.x0, 172, L.w, 1, 'wood');
   // mowed grass: two dark tones in a diagonal checker (one direction of light)
-  for (let y = FIELD_TOP; y < H; y++) for (let x = 0; x < W; x++) {
+  for (let y = FIELD_TOP; y < L.y1; y++) for (let x = L.x0; x < L.x1; x++) {
     const k = y - FIELD_TOP;
     L.set(x, y, (Math.floor((x + k) / 22) + Math.floor((x - k + 704) / 22)) % 2 ? 'grassDeep' : 'grassDark');
   }
@@ -165,11 +195,12 @@ function field() {
   }
   // dirt: lit rim top left, dark rim bottom right, clusters of 2–3 px in a fixed pattern
   const grass = (c) => c === 'grassDeep' || c === 'grassDark';
-  const snapshot = L.px.map((r) => [...r]);
+  const snap = L.px.map((r) => [...r]);
+  const at = (x, y) => snap[y - L.y0][x - L.x0];
   for (let y = FIELD_TOP + 1; y < H - 1; y++) for (let x = 1; x < W - 1; x++) {
-    if (snapshot[y][x] !== 'dirtDark') continue;
-    if (grass(snapshot[y - 1][x]) || grass(snapshot[y][x - 1])) L.set(x, y, 'dirt');
-    else if (grass(snapshot[y + 1][x]) || grass(snapshot[y][x + 1])) L.set(x, y, 'wood');
+    if (at(x, y) !== 'dirtDark') continue;
+    if (grass(at(x, y - 1)) || grass(at(x - 1, y))) L.set(x, y, 'dirt');
+    else if (grass(at(x, y + 1)) || grass(at(x + 1, y))) L.set(x, y, 'wood');
     else if ((x * 13 + y * 7) % 29 === 0) { L.set(x, y, 'wood'); L.set(x + 1, y, 'wood'); }
     else if ((x * 5 + y * 11) % 37 === 0) { L.set(x, y, 'dirt'); L.set(x, y + 1, 'dirt'); L.set(x + 1, y, 'dirt'); }
   }
@@ -180,7 +211,7 @@ function field() {
   for (let y = FIELD_TOP; y < H; y++) for (let x = 0; x < W; x++) {
     for (const [px, py, r] of pools) {
       const d = Math.hypot(x - px, (y - py) * 1.6);
-      if (d < r && dith(x, y, Math.min(1, (1 - d / r) * 1.6))) { L.set(x, y, up[lit[y][x]] ?? lit[y][x]); break; }
+      if (d < r && dith(x, y, Math.min(1, (1 - d / r) * 1.6))) { const c = lit[y - L.y0][x - L.x0]; L.set(x, y, up[c] ?? c); break; }
     }
   }
   // chalk: foul lines from home plate, bases with a shadow, home plate and the boxes
@@ -231,10 +262,20 @@ function shadow() {
   return L;
 }
 
+// --- fix1: the apron, the stadium going on around the world; hollow inside (the layers above cover the world) -------
+async function apron(fan) {
+  const L = layer(W + 2 * APRON.x, H + 2 * APRON.y, -APRON.x, -APRON.y);
+  sky(L);
+  await stands(fan, L);
+  field(L);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) L.set(x, y, null);
+  return L;
+}
+
 export async function stadium(out) {
   const fan = await fansGrid();
   const layers = {
-    sky: sky(), stands: await stands(fan), halo: halo(), field: field(), roof: roof(), shadow: shadow(),
+    sky: sky(), stands: await stands(fan), halo: halo(), field: field(), roof: roof(), shadow: shadow(), apron: await apron(fan),
   };
   const made = {};
   for (const [name, L] of Object.entries(layers)) made[name] = await L.png(out(name === 'shadow' ? 'shadow.png' : `stadium-${name}.png`));

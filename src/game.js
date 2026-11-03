@@ -9,7 +9,7 @@
 // Every base opens its card over the stadium (a drawer on desktop, under the stage on phones); ✕ Close closes it.
 // The address shows the base (/play/#nipotyno) and is only REPLACED, never added to: one Back press leaves the page.
 // Deep links skip the uniform and the at-bat. With reduced motion: no pitch and no zoom (the tour is the same, still).
-import { FIELD, WORLD, STOPS, RING, CREW, DUGOUT, TOUR } from './field-map.js';
+import { FIELD, WORLD, CORE, APRON, FIELD_TOP, STOPS, RING, CREW, ON_DECK, TOUR } from './field-map.js';
 import { every } from './loop.js';
 import { createCrowd } from './crowd.js';
 import { createReader } from './reader.js';
@@ -32,6 +32,7 @@ function saveSession(state) { try { sessionStorage.setItem('game', JSON.stringif
 
 function start() {
   const runner = stage.querySelector('.runner');
+  const runnerShadow = stage.querySelector('.runner-shadow');
   const panel = document.querySelector('#field-panel');
   const links = [...stage.querySelectorAll('.base[data-stop]')];
   const byId = Object.fromEntries(STOPS.map((s) => [s.id, s]));
@@ -97,46 +98,80 @@ function start() {
   const nameOf = (id) => textOf(id, 'name');
   const isProject = (id) => id !== 'home' && Boolean(byId[id]);
 
+  // The runner, his shadow (a layer under everyone) and his drawing order (--fy, the row of his feet: lower = in front).
   const place = ({ x, y }) => {
-    runner.style.setProperty('--x', `${(Math.round(x) / FIELD.width) * 100}%`);
-    runner.style.setProperty('--y', `${(Math.round(y) / FIELD.height) * 100}%`);
+    for (const el of [runner, runnerShadow]) {
+      el.style.setProperty('--x', `${(Math.round(x) / FIELD.width) * 100}%`);
+      el.style.setProperty('--y', `${(Math.round(y) / FIELD.height) * 100}%`);
+    }
+    runner.style.setProperty('--fy', Math.round(y));
   };
 
-  // --- Full screen (v4, ART_BIBLE § 7): whole-number scale that covers the screen, a camera that follows the runner ---
-  // Scale: the smallest whole number that covers the screen with the world; phones held upright get 3× (about 130×260
-  // world pixels around the runner). Camera: translate() of whole screen pixels, a small delay (lerp), stops at the
-  // edges of the world, and keeps the runner clear of the card (left half on wide screens, top part on phones).
-  const cam = { x: 0, y: 0, tx: 0, ty: 0, s: 1, w: 0, h: 0 };
+  // --- Full screen (fix1, ART_BIBLE § 7): the CORE of the stadium (lamps to dugout, src/field-map.js) is always in view ---
+  // Scale: the largest whole number with which the core fits on the screen under the HUD; phones held upright 2× (the
+  // whole height of the stadium, the camera only moves sideways). The apron (more stadium drawn around the world) fills
+  // what is left; a fractional scale (in 1/48 steps, so a sprite cell stays whole pixels; nearest neighbour) only where a
+  // whole number would leave a gap, or where the core fits less than 2× (see fit()). Camera: translate() of whole screen pixels with a small delay
+  // (lerp). The core is centred; the camera follows the runner only where the core does not fit (phones), and moves
+  // aside for the card when it would cover the base.
+  const cam = { x: 0, y: 0, tx: 0, ty: 0, s: 1, w: 0, h: 0, top: 0, fitX: true, fitY: true, restX: 0, restY: 0 };
+  const DRAWN = { w: WORLD.width + 2 * APRON.x, h: WORLD.height + 2 * APRON.y };
   function fit() {
     cam.w = innerWidth; cam.h = innerHeight;
-    let s = Math.max(Math.ceil(cam.w / WORLD.width), Math.ceil(cam.h / WORLD.height));
-    if (cam.h > cam.w * 1.2) s = Math.max(s, 3);
+    cam.top = hud.offsetHeight;
+    const room = cam.h - cam.top;
+    const upright = cam.h > cam.w * 1.2;
+    const most = upright ? Math.min(2, room / CORE.h) : Math.min(cam.w / CORE.w, room / CORE.h);
+    const cover = Math.max(cam.w / DRAWN.w, cam.h / DRAWN.h);
+    // under 2× a whole number would leave the core small (1× = half a laptop screen) or cut (phones held sideways):
+    // then the scale is the largest that keeps the core whole, in 1/48 steps
+    let s = most >= 2 ? Math.floor(most) : Math.floor(most * 48) / 48;
+    if (s < cover) s = Math.ceil(cover * 48) / 48;
     cam.s = s;
+    cam.fitX = CORE.w * s <= cam.w;
+    cam.fitY = CORE.h * s <= room + 1;
+    cam.restX = cam.fitX ? Math.round((cam.w - CORE.w * s) / 2 - CORE.x * s) : 0;
+    cam.restY = Math.round(cam.fitY ? cam.top + (room - CORE.h * s) / 2 - CORE.y * s : cam.top - CORE.y * s);
     field.style.setProperty('--fs', s);
-    field.style.setProperty('--hud-h', `${hud.offsetHeight}px`);
+    field.style.setProperty('--hud-h', `${cam.top}px`);
+    // phones held upright: the uniform bar sits on the outfield grass, between the wall and 2nd base (src/style.css)
+    field.style.setProperty('--band-top', `${cam.restY + (FIELD_TOP + 6) * s}px`);
     aim(true);
   }
   function aim(snap = false) {
-    const point = looking ?? pos;
+    // while the uniform is chosen (phones): the runner on deck and home plate, where he is going, both in the picture
+    const point = looking ?? (mode === 'pick' ? { x: (pos.x * 2 + byId.home.x) / 3, y: pos.y } : pos);
+    const s = cam.s;
     const cardOpen = !panel.hidden;
-    const ax = cardOpen && cam.w >= 700 ? cam.w * 0.3 : cam.w * 0.5;
-    const ay = cardOpen && cam.w < 700 ? cam.h * 0.3 : cam.h * 0.55;
-    const clamp = (v, min) => Math.min(0, Math.max(min, v));
-    const sheet = cardOpen && cam.w < 700 ? panel.offsetHeight : 0;
-    cam.tx = clamp(ax - point.x * cam.s, cam.w - WORLD.width * cam.s);
-    cam.ty = clamp(ay - (point.y - 20) * cam.s, cam.h - WORLD.height * cam.s - sheet);
+    const phone = cam.w < 700;
+    const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+    let tx = cam.restX, ty = cam.restY;
+    if (!cam.fitX) tx = clamp((cardOpen && !phone ? cam.w * 0.3 : cam.w * 0.5) - point.x * s, cam.w - WORLD.width * s, 0);
+    else if (cardOpen && !phone) {
+      // the card on the right: if it would cover the point (and the coach next to it), slide the stadium left just enough
+      const edge = cam.w - panel.offsetWidth - 16 - 64 * s; // 64 world px: the coach next to the base and his arm
+      tx -= Math.max(0, tx + point.x * s - edge);
+    }
+    if (cardOpen && phone) {
+      // the sheet at the bottom: lift the stadium so the point stays above it
+      const sheet = panel.offsetHeight;
+      ty = Math.min(ty, cam.top + (cam.h - sheet - cam.top) * 0.6 - point.y * s);
+    }
+    cam.tx = clamp(tx, cam.w - (WORLD.width + APRON.x) * s, APRON.x * s);
+    cam.ty = clamp(ty, cam.h - (WORLD.height + APRON.y) * s, APRON.y * s);
     if (snap || reduceMotion.matches) { cam.x = cam.tx; cam.y = cam.ty; }
     paint();
   }
-  // Parallax: the far layers move a little less than the field (none with reduced motion).
+  // Parallax: when the camera moves away from where it rests, the far layers move a little less than the field
+  // (none with reduced motion).
   function paint() {
     const x = Math.round(cam.x), y = Math.round(cam.y);
     world.style.setProperty('--cx', `${x}px`);
     world.style.setProperty('--cy', `${y}px`);
-    const restX = (cam.w - WORLD.width * cam.s) / 2;
+    const restX = cam.fitX ? cam.restX : (cam.w - WORLD.width * cam.s) / 2;
     for (const [i, k] of [[0, 0.2], [1, 0.08]]) {
       world.style.setProperty(`--px${i}`, reduceMotion.matches ? '0px' : `${Math.round((restX - x) * k)}px`);
-      world.style.setProperty(`--py${i}`, reduceMotion.matches ? '0px' : `${Math.round(-y * k)}px`);
+      world.style.setProperty(`--py${i}`, reduceMotion.matches ? '0px' : `${Math.round((cam.restY - y) * k)}px`);
     }
   }
   every(() => {
@@ -146,6 +181,9 @@ function start() {
     paint();
   });
   addEventListener('resize', fit);
+  // the HUD can grow after the fonts load (a second row on narrow phones): the core must still fit under it
+  let hudHeight = 0;
+  new ResizeObserver(() => { if (hud.offsetHeight !== hudHeight && cam.w) { hudHeight = hud.offsetHeight; fit(); } }).observe(hud);
 
   // --- HUD: the base and the bases visited ------------------------------------------------
 
@@ -310,6 +348,7 @@ function start() {
     if (mode === 'bat' && next !== 'bat') batting.stop();
     if (mode === 'tour' && next !== 'tour') tour.stop();
     mode = next;
+    field.dataset.mode = next; // CSS: where the bottom bar sits (the uniform bar never covers the runner or the teammates)
     panel.dataset.mode = next; // CSS: in the tour the "Read the case study" link is the quiet button
     pick.hidden = next !== 'pick';
     swingBox.hidden = next !== 'bat';
@@ -325,16 +364,31 @@ function start() {
   // --- Uniform: the first step, can be skipped (the runner's row of public/game/runner.png) -----------
 
   const tiles = [...pick.querySelectorAll('[data-uniform]')];
-  function wear(id) {
+  const dress = (id) => {
     const uniform = UNIFORMS.find((u) => u.id === id) ?? UNIFORMS[0];
     field.style.setProperty('--uniform-row', uniform.row);
+    return uniform;
+  };
+  function wear(id) {
+    const uniform = dress(id);
     for (const tile of tiles) tile.setAttribute('aria-pressed', String(tile.dataset.uniform === uniform.id));
     return uniform.id;
   }
   wear(load('uniform'));
+  // fix1: pointing at a tile (or focusing it) dresses the runner waiting on deck; leaving the tiles puts the chosen one back.
+  for (const tile of tiles) {
+    tile.addEventListener('pointerenter', () => dress(tile.dataset.uniform));
+    tile.addEventListener('focus', () => dress(tile.dataset.uniform));
+  }
+  const tileList = pick.querySelector('.uniform-tiles');
+  tileList.addEventListener('pointerleave', () => { if (!tileList.contains(document.activeElement)) dress(load('uniform')); });
+  tileList.addEventListener('focusout', (event) => { if (!tileList.contains(event.relatedTarget)) dress(load('uniform')); });
 
   // No focus jump on load: a keyboard visitor starts from the top of the page (skip link, ⏸ Pause, then the tiles).
+  // The runner waits on deck, in front of the dugout, fully in view while the visitor chooses.
   function choose() {
+    pos = { ...ON_DECK };
+    place(pos);
     setMode('pick');
     showBase(`${textOf('home', 'label')} · ${T.atBatBase}`);
   }
@@ -354,15 +408,15 @@ function start() {
       runner.classList.remove('is-walking');
       if (mode !== 'bat') return;
       runner.classList.remove('is-flipped');
-      batting.start();
+      if (!batting.active) batting.start(); // a swing may already be on its way (never start the at-bat twice)
     });
   }
 
-  // The runner comes out of the dugout and walks to home plate, then the pitches start.
+  // The runner walks from the on-deck spot in front of the dugout to home plate, then the pitches start.
   function entrance() {
     batting.stop();
     current = 'dugout'; // not a stop (no link, no card): only where the runner comes from
-    pos = { ...DUGOUT };
+    pos = { ...ON_DECK };
     place(pos);
     runner.classList.add('is-walking'); // out of the dugout: the walk with the bat on the shoulder
     batUp();
@@ -426,7 +480,7 @@ function start() {
   function closePause() {
     if (!dialog.open) return;
     dialog.close();
-    if (mode === 'bat') batting.start();
+    if (mode === 'bat' && !running) batting.start(); // still walking to the plate: the arrival starts the pitches
     (beforePause?.isConnected && beforePause !== document.body ? beforePause : pauseButton).focus({ preventScroll: true });
   }
   // Esc: the dialog would close itself; do it our way (the focus goes back where it was).

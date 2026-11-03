@@ -56,7 +56,7 @@ Questo file è la fonte di verità per la v4. Se contraddice `docs/PROMPT_V3.md`
 - **Coach 1ª base:** divisa rossa, cappellino, giacca a vento, guarda a sinistra. Idle 4 frame (braccia conserte, batte il piede), 5 in alto 3, applauso 2.
 - **Coach 3ª base:** stesso modello con altra faccia e barba grigia, guarda a destra. Gesto "vai a casa" (3 frame) prima del 5 in alto.
 - **Lanciatore:** divisa grigia avversaria. Caricamento con la gamba alta e lancio in 5 frame, poi si gira a guardare la palla (1 frame).
-- **Compagni ×3:** navy, con 3 teste diverse. Davanti al dugout; a casa base saltano a braccia alzate (4 frame).
+- **Compagni ×3:** navy, con 3 teste diverse. Davanti al dugout, fermi in piedi con le braccia giù (frame idle); a casa base saltano a braccia alzate (4 frame).
 - **Pubblico:**
   - 8 tifosi diversi da 6×10 px, 2 frame (fermi / braccia su);
   - file con scarto fisso (seed). La fila alta è più scura, la fila bassa più chiara;
@@ -101,15 +101,17 @@ Regole:
 ## 7. Schermo intero e camera
 - `/play/` con JS: il gioco occupa `100dvw × 100dvh`, senza bordi, senza scroll della pagina e senza cornice intorno al campo.
 - **Mondo** 640×360 più un margine di 32 px per lato (704×424), disegnato tutto. Le coordinate delle basi stanno in `src/field-map.js` (aggiornalo; le basi ora sono più al centro e in basso, vedi `targets/night_target_640x360.png`).
-- **Scala:** intera, la più piccola che copre lo schermo in entrambe le dimensioni (`Math.ceil`), poi si taglia. Mai sfocato: `image-rendering: pixelated`.
-- **Camera:** un contenitore del mondo con `transform: translate()` di valori interi (in px dello schermo). Segue l'omino con un piccolo ritardo (lerp), si ferma ai bordi del mondo e lascia libera la zona coperta dall'anteprima: su desktop l'omino resta nella metà sinistra, su telefono nella parte alta.
+- **Cuore** (fix1, 03/11): `CORE` = 640×360 da x 32, y 40 (dalla cima dei fari fino a casa base, al dugout e ai piedi dei compagni). Su desktop, tablet e telefono orizzontale si vede **sempre tutto il cuore**, sotto l'HUD.
+- **Grembiule** (fix1): `APRON` = altro stadio disegnato intorno al mondo, 288 px ai lati e 176 sopra e sotto (`public/game/stadium-apron.png`, 1280×776, vuoto dove c'è il mondo): cielo con stelle sopra, skyline, tribune con tifosi e muro ai lati, prato a scacchi sotto. Lo spazio in più non resta mai vuoto, anche a 21:9 e 4:3. Mai bande nere.
+- **Scala** (fix1): la più grande intera con cui il cuore sta nello schermo sotto l'HUD (`floor(min(larghezza / 640, (altezza − HUD) / 360))`). Sotto il 2× (portatili 1280×720, telefono orizzontale) e solo dove il grembiule lascerebbe un vuoto si passa a una scala frazionaria a passi di 1/48 (una cella di sprite resta di pixel interi), sempre nearest-neighbor. Telefono verticale (altezza > 1,2 × larghezza): 2×, tutta l'altezza dello stadio. Mai sfocato: `image-rendering: pixelated`.
+- **Camera:** un contenitore del mondo con `transform: translate()` di valori interi (in px dello schermo), con un piccolo ritardo (lerp). Parte con lo stadio intero inquadrato (il cuore al centro, sotto l'HUD) e **segue l'omino solo dove il cuore non sta già tutto nello schermo** (telefono verticale: solo in orizzontale). Si ferma ai bordi del grembiule. Lascia libera la zona coperta dall'anteprima: su desktop sposta lo stadio a sinistra solo quanto basta perché la base e il suo coach non finiscano sotto la scheda; su telefono alza lo stadio sopra il pannello in basso.
 - **Tagli** (vedi la tavola Stadium):
-  - desktop 16:9 = tutto il mondo;
-  - tablet 4:3 = parte centrale;
-  - telefono verticale = circa 130×260 px di mondo a 3×, centrati sull'omino;
-  - telefono orizzontale = come il desktop.
+  - desktop, tablet 4:3, 21:9 e telefono orizzontale = tutto il cuore, più il grembiule intorno;
+  - telefono verticale = tutta l'altezza a 2× (circa 195 px di mondo in larghezza), la camera segue l'omino in orizzontale.
 - I link delle basi sono `<a>` dentro il mondo e si muovono con la camera. Bersagli ≥ 44 px, focus visibile.
 - Parallasse leggera sugli strati lontani quando la camera si muove (spenta con reduced motion).
+- **Ordine di disegno** (fix1): i personaggi si ordinano per la y dei piedi (`z-index` = 100 + y); il tetto del dugout copre solo chi ha i piedi dietro la sua linea (`ROOF_LINE`). Le ombre sono uno strato sotto tutti i personaggi, mai sopra una testa. Le etichette delle basi stanno sopra tutti.
+- **Scelta della divisa** (fix1): l'omino aspetta davanti al dugout, sull'erba (`ON_DECK`), tutto visibile e lontano da tetto, compagni ed etichette; passando su una divisa cambia lì. La barra delle divise non copre mai l'omino né i compagni: in basso a destra su desktop, una scheda stretta a destra su 4:3 e telefono orizzontale, sul prato sotto il muro sul telefono verticale.
 
 ## 8. Anteprima della base (non modale)
 - **Contenuto:**

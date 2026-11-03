@@ -4,7 +4,7 @@ Diario dell'esecuzione autonoma di `docs/PROMPT_V4.md` sul ramo `v4` (dal 02/11/
 Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi continua dalla prima cosa non fatta.
 
 ## Stato
-- Fase attuale: **finita (0 → F)**. Prossimo passo: Riccardo gioca in locale e decide la pubblicazione (comando in fondo a docs/PROMPT_V4.md).
+- Fase attuale: **finita (0 → F) + fix1 (03/11)**. Prossimo passo: Riccardo gioca in locale e decide la pubblicazione (comando in fondo a docs/PROMPT_V4.md).
 - Fatto: Fase 0 (commit `v4 0: art bible e prompt`, base di partenza 339/339 test verdi, build ok, node 22.19, sharp 0.35.5)
 
 ## Piano (per me, non serve approvazione)
@@ -56,13 +56,18 @@ Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi contin
 - Screenshot con Playwright vero (il browser MCP ha zoom 50%): SHOTS="nome|url|w|h|ms" OUT=cartella node --input-type=module < scratchpad/shots.mjs (dev server su 5173).
 - Anteprima: node scripts/art/preview.js <foglio> <out.png> [scala] [sfondo].
 
+## fix1 (03/11/2026, dopo la prova di Riccardo)
+- 1 · Titolo fluido: base --tf con clamp() (rem + vw/vh), tutto in em; blocco 88vw centrato, colonne 58/38, menu ≥ 9vh. 1280×720: nome, ruolo, date, CV, menu e Nipotyno nel primo schermo; da 768 px di altezza anche le 3 card. Telefono uguale.
+- 2 · Stadio intero: il cuore 640×360 (fari → dugout) sempre visibile sotto l'HUD; scala intera più grande che ci sta, frazionaria a passi di 1/48 sotto il 2×; grembiule disegnato (stadium-apron.png) al posto delle zone vuote; camera ferma su desktop, segue solo in orizzontale sul telefono verticale (2×).
+- 3 · Omino davanti al dugout durante la scelta della divisa (ON_DECK), ombre in uno strato sotto tutti, ordine per la y dei piedi, barra delle divise lontana da omino e compagni; compagni fermi a braccia giù fino a casa base.
+- Test: tests/fix1.spec.js nuovo (titolo a 6 misure, stadio a 9 misure, omino a 9 misure, ordine di disegno, compagni fermi); field.spec.js alla regola nuova. Screenshot prima/dopo in docs/assets-preview/art-bible/runs/fix1/.
+- [CHECK] sotto il 2× (1280×720, 1024×768, telefono orizzontale) la scala è frazionaria: su schermi retina non si nota, su un monitor a bassa densità qualche riga di pixel è doppia.
+
 ## [CHECK] da guardare
-- [CHECK] compagni: tengono le braccia alzate per tutto il gioco (il loro "idle" è il salto accovacciato); l'art bible li vuole fermi fino a casa base (difetto basso, porta F).
 - [CHECK] lanciatore: il guantone nero con il trattino bianco può sembrare una maschera; ombre dei giocatori a scacchi scuri (difetti bassi, porta F).
 - [CHECK] mentre l'omino corre tra le basi l'HUD mostra ancora la base di partenza fino all'arrivo (basso).
 - [CHECK] Levante: i numeri "~48 h → ~3 h (concept)" e "team of 6" nell'anteprima sono lunghi/senza etichetta (vengono da stats nel contenuto, non li ho cambiati).
 - [CHECK] teaser ES/IT da rivedere (CONTENT_STATUS); stringhe v4 ES/IT in src/i18n.js.
-- [CHECK] telefono orizzontale (844×390) a 2×: non vede tutto il mondo (la regola "scala intera che copre" non lo permette).
 - [CHECK] salto a casa: braccia ancora lunghe e sottili, busto 15 px contro 18 delle altre pose (difetto basso della revisione).
 - [CHECK] camminata: a 1× somiglia ancora alla posa di attesa (mazza in diagonale, gambe ad A).
 - [CHECK] swing: la gomitiera è sul gomito dietro (accettabile secondo il revisore).

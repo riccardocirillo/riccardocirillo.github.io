@@ -10,7 +10,7 @@ import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { Marked } from 'marked';
 import sharp from 'sharp';
-import { FIELD, STOPS, SPOTS, CREW, DUGOUT, TOWERS, SCOREBOARD } from '../src/field-map.js';
+import { FIELD, STOPS, SPOTS, CREW, DUGOUT, TOWERS, SCOREBOARD, APRON, ON_DECK, ROOF_LINE } from '../src/field-map.js';
 import { UNIFORMS } from '../src/uniforms.js';
 import { PALETTE } from '../src/palette.js';
 import { pixelText } from './art/title.js';
@@ -494,7 +494,10 @@ async function ballpark(L, cases, about, aboutParts) {
   const points = L.stops.map((p) => `                  <li><a class="base" href="${pointHref(L, p)}" data-stop="${p.id}" data-tag="${p.tag}" style="--x: ${pct(p.x, FIELD.width)}; --y: ${pct(p.y, FIELD.height)}; --icon: ${iconOf(p)}"><span class="base-icon"></span><span class="base-text"><span class="base-label">${escape(p.label)}</span> <span class="base-name">${escape(p.name)}</span></span></a></li>`);
   const legend = L.stops.map((p) => `          <li><a href="${pointHref(L, p)}" data-stop="${p.id}"><span class="base-icon" style="--icon: ${iconOf(p)}" aria-hidden="true"></span> <span class="map-name">${escape(p.name)}</span> <span class="map-label">${escape(p.label)}</span></a></li>`);
   // Crew sprites (coaches, teammates, pitcher): decoration only, so hidden from screen readers.
-  const crew = CREW.map((m) => `                  <div class="sprite crew-sprite${m.flip ? ' is-flipped' : ''}" data-crew="${m.id}" data-who="${m.who}" style="--x: ${pct(m.x, FIELD.width)}; --y: ${pct(m.y, FIELD.height)}; --row: ${m.row}"></div>`);
+  // fix1: --fy = the feet's row, the drawing order (lower on screen = in front); the shadows are a layer under everyone.
+  const at = (p) => `--x: ${pct(p.x, FIELD.width)}; --y: ${pct(p.y, FIELD.height)}`;
+  const crew = CREW.map((m) => `                <div class="sprite crew-sprite${m.flip ? ' is-flipped' : ''}" data-crew="${m.id}" data-who="${m.who}" style="${at(m)}; --fy: ${m.y}; --row: ${m.row}"></div>`);
+  const shadows = CREW.map((m) => `                <div class="shadow" style="${at(m)}"></div>`);
   const covers = Object.fromEntries(await Promise.all(cases.map(async ({ data }) => [data.slug, { src: data.cover, ...(await imageSize(data.cover)) }])));
   const kicker = (id) => `${escape(point(id).label)} · ${escape(point(id).name)}`;
 
@@ -547,6 +550,7 @@ async function ballpark(L, cases, about, aboutParts) {
           <div class="stage-col">
             <div class="stage">
               <div class="world">
+                <img class="apron" src="/game/stadium-apron.png" alt="" width="${FIELD.width + 2 * APRON.x}" height="${FIELD.height + 2 * APRON.y}">
                 <img class="layer layer-sky" src="/game/stadium-sky.png" alt="" width="${FIELD.width}" height="178">
                 <img class="layer layer-stands" src="/game/stadium-stands.png" alt="" width="${FIELD.width}" height="164">
 ${TOWERS.map((tw, i) => `                <img class="halo" src="/game/stadium-halo.png" alt="" width="136" height="112" style="--x: ${pct(tw.x - 60, FIELD.width)}; --y: ${pct(tw.y - 4, FIELD.height)}; --i: ${i}">`).join('\n')}
@@ -554,11 +558,13 @@ ${TOWERS.map((tw, i) => `                <img class="halo" src="/game/stadium-ha
                 <div class="scoreboard" aria-hidden="true" style="--x: ${pct(SCOREBOARD.x, FIELD.width)}; --y: ${pct(SCOREBOARD.y, FIELD.height)}"><span class="sb-bases"><i></i><i></i><i></i></span><span class="sb-text">${escape(t.homeRun)}</span></div>
                 <div class="fireworks" aria-hidden="true"><i style="--x: 25%; --y: 6%; --d: 0s"></i><i style="--x: 47%; --y: 3%; --d: .35s"></i><i style="--x: 70%; --y: 8%; --d: .7s"></i></div>
                 <img class="layer layer-field" src="/game/stadium-field.png" alt="${escape(t.fieldAlt)}" width="${FIELD.width}" height="${FIELD.height}">
+${shadows.join('\n')}
+                <div class="shadow runner-shadow" style="${at(ON_DECK)}"></div>
 ${crew.join('\n')}
-                <div class="sprite runner" style="--x: ${pct(DUGOUT.x, FIELD.width)}; --y: ${pct(DUGOUT.y, FIELD.height)}"></div>
+                <div class="sprite runner" style="${at(ON_DECK)}; --fy: ${ON_DECK.y}"></div>
                 <div class="ball" hidden></div>
                 <div class="trail" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
-                <img class="layer layer-roof" src="/game/stadium-roof.png" alt="" width="144" height="12" style="--x: ${pct(DUGOUT.x - 72, FIELD.width)}; --y: ${pct(DUGOUT.y - 40, FIELD.height)}">
+                <img class="layer layer-roof" src="/game/stadium-roof.png" alt="" width="144" height="12" style="--x: ${pct(DUGOUT.x - 72, FIELD.width)}; --y: ${pct(DUGOUT.y - 40, FIELD.height)}; --fy: ${ROOF_LINE}">
                 <ul class="bases" aria-label="${escape(t.stadium)}">
 ${points.join('\n')}
                 </ul>

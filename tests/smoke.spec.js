@@ -89,10 +89,10 @@ test.describe('phone (390 px): simplified touch field on /play/', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true });
   const panel = (page) => page.locator('#field-panel [data-panel]:visible');
 
-  test('world at 3× (704×424 world pixels, sharp, cropped by the screen), touch bases at least 24 px high', async ({ page }) => {
+  test('world at 2× (fix1: the whole height of the stadium, sharp, cropped at the sides), touch bases at least 24 px high', async ({ page }) => {
     await page.goto('/play/');
     const box = await page.locator('.layer-field').boundingBox();
-    expect([box.width, box.height]).toEqual([704 * 3, 424 * 3]);
+    expect([box.width, box.height]).toEqual([704 * 2, 424 * 2]);
     for (const base of await page.locator('.base').all()) {
       expect((await base.boundingBox()).height).toBeGreaterThanOrEqual(24);
     }

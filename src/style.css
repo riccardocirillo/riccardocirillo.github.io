@@ -174,7 +174,7 @@ h3 { font-size: 1.25rem; }
 /* --- Ballpark (v4, docs/ART_BIBLE.md § 7 + § 11). The world is 704×424 world pixels (src/field-map.js WORLD): the night
    stadium in layers, every one at the same whole-number scale --fs (sharp pixels). Positions are --x / --y in % of the world.
    Without JS: the world at 1× (2× from 1000 px wide), centred in the stage and cropped at the sides.
-   With JS (src/game.js, html.is-game): the game fills the screen, --fs = the smallest whole scale that covers it, and a
+   With JS (src/game.js, html.is-game): the game fills the screen, --fs = the largest scale that shows the whole stadium core (fix1, src/game.js fit()), and a
    camera moves the world with transform: translate() in whole screen pixels (--cx, --cy). --- */
 .field { --fs: 1; padding-block: 0 1.5rem; }
 @media (min-width: 1000px) {
@@ -189,11 +189,13 @@ h3 { font-size: 1.25rem; }
   width: calc(704px * var(--fs));
   height: calc(424px * var(--fs));
 }
-.layer, .halo { position: absolute; left: 0; top: 0; max-width: none; image-rendering: pixelated; pointer-events: none; }
+.layer, .halo, .apron { position: absolute; left: 0; top: 0; max-width: none; image-rendering: pixelated; pointer-events: none; }
+/* fix1: the apron = the stadium going on around the world (src/field-map.js APRON, 288 px at the sides, 176 above and below) */
+.apron { left: calc(-288px * var(--fs)); top: calc(-176px * var(--fs)); width: calc(1280px * var(--fs)); height: calc(776px * var(--fs)); }
 .layer-sky { width: 100%; height: calc(178px * var(--fs)); transform: translate(var(--px0, 0px), var(--py0, 0px)); }
 .layer-stands { width: 100%; height: calc(164px * var(--fs)); transform: translate(var(--px1, 0px), var(--py1, 0px)); }
 .layer-field { width: 100%; height: 100%; }
-.layer-roof { left: var(--x); top: var(--y); z-index: 4; width: calc(144px * var(--fs)); height: calc(12px * var(--fs)); }
+.layer-roof { left: var(--x); top: var(--y); z-index: calc(100 + var(--fy)); width: calc(144px * var(--fs)); height: calc(12px * var(--fs)); }
 /* The four halos of the towers: lit one after the other when the game starts (src/game.js adds .lights-on). */
 .halo { left: var(--x); top: var(--y); width: calc(136px * var(--fs)); height: calc(112px * var(--fs)); transform: translate(var(--px1, 0px), var(--py1, 0px)); }
 .is-game .stage:not(.lights-on) .halo { visibility: hidden; }
@@ -215,7 +217,7 @@ h3 { font-size: 1.25rem; }
   position: absolute;
   left: var(--x);
   top: var(--y);
-  z-index: 3;
+  z-index: 600; /* over every player (their z-index is 100 + the row of their feet) */
   display: flex;
   align-items: center;
   gap: 6px;
@@ -299,23 +301,24 @@ h3 { font-size: 1.25rem; }
   position: absolute;
   left: var(--x);
   top: var(--y);
-  z-index: 2;
+  z-index: calc(100 + var(--fy, 300)); /* fix1: sorted by the row of the feet, lower on screen = in front (the roof too) */
   transform: translate(-50%, calc(-100% + var(--foot) * var(--s) * 1px));
   pointer-events: none;
 }
 .sprite.is-flipped { transform: translate(-50%, calc(-100% + var(--foot) * var(--s) * 1px)) scaleX(-1); }
-/* Short shadows in two directions (four lights): public/game/shadow.png under the feet. */
-.sprite::before {
-  content: "";
+/* Short shadows in two directions (four lights): public/game/shadow.png centred under the feet. fix1: a layer of their
+   own under all the players (z-index 1), so a shadow never falls on a head. */
+.shadow {
   position: absolute;
-  left: 50%;
-  bottom: calc((var(--foot) - 3) * var(--s) * 1px);
-  width: calc(28px * var(--s));
-  height: calc(6px * var(--s));
-  transform: translateX(-50%);
+  left: var(--x);
+  top: var(--y);
+  z-index: 1;
+  width: calc(28px * var(--fs));
+  height: calc(6px * var(--fs));
+  transform: translate(-50%, -50%);
   background: url("/game/shadow.png") 0 0 / 100% 100%;
   image-rendering: pixelated;
-  z-index: -1;
+  pointer-events: none;
 }
 .runner, .batter {
   background-image: url("/game/runner.png");
@@ -323,7 +326,6 @@ h3 { font-size: 1.25rem; }
   background-size: calc(var(--frames) * var(--cell) * var(--s) * 1px) calc(var(--rows) * var(--cell) * var(--s) * 1px);
   background-repeat: no-repeat;
 }
-.runner { z-index: 3; }
 .crew-sprite {
   background-position: 0 calc(var(--row) * var(--step));
   background-size: calc(var(--frames) * var(--cell) * var(--s) * 1px) calc(var(--rows) * var(--cell) * var(--s) * 1px);
@@ -362,7 +364,7 @@ h3 { font-size: 1.25rem; }
   position: absolute;
   left: var(--x);
   top: var(--y);
-  z-index: 4;
+  z-index: 590;
   width: calc(3px * var(--fs));
   height: calc(3px * var(--fs));
   background: #ffffff;
@@ -585,6 +587,8 @@ th { background: var(--ink); color: var(--bg); }
 .title-stadium { --ts: 2; position: absolute; left: 50%; bottom: 0; z-index: 0; width: calc(704px * var(--ts)); max-width: none; height: calc(424px * var(--ts)); transform: translateX(-50%); image-rendering: pixelated; pointer-events: none; filter: brightness(.42); }
 @media (min-width: 1409px), (min-height: 917px) { .title-stadium { --ts: 3; } }
 @media (min-width: 2113px), (min-height: 1341px) { .title-stadium { --ts: 4; } }
+@media (min-width: 2817px), (min-height: 1697px) { .title-stadium { --ts: 5; } } /* fix1: 4K screens are covered too */
+@media (min-width: 3521px), (min-height: 2121px) { .title-stadium { --ts: 6; } }
 @media (max-width: 699px) { .title-stadium { display: none; } } /* phones: the menu and the projects need the room */
 .title-grid { position: relative; z-index: 1; display: grid; gap: 3rem; max-width: 72rem; }
 @media (min-width: 1000px) {
@@ -956,7 +960,7 @@ dialog.reader::backdrop { background: #0b0f1e; }
 .is-running .runner:not(.is-walking)::after { content: ""; position: absolute; left: 18%; bottom: calc(1px * var(--s)); width: calc(12px * var(--s)); height: calc(8px * var(--s)); background: url("/game/dust.png") 0 0 / calc(36px * var(--s)) 100%; image-rendering: pixelated; animation: dust .21s steps(3, jump-none) infinite; }
 @keyframes dust { from { background-position-x: 0; } to { background-position-x: calc(-24px * var(--s)); } }
 /* the ball's trail, 6 positions behind it */
-.trail i { position: absolute; left: var(--x); top: var(--y); width: calc(2px * var(--fs)); height: calc(2px * var(--fs)); background: #c7ecff; z-index: 5; }
+.trail i { position: absolute; left: var(--x); top: var(--y); width: calc(2px * var(--fs)); height: calc(2px * var(--fs)); background: #c7ecff; z-index: 590; }
 .trail i:nth-child(n + 4) { background: #8fb0d8; }
 /* fireworks: 3 bursts of 8 frames (100 ms each) over the stands */
 .fireworks i { position: absolute; left: var(--x); top: var(--y); width: calc(32px * var(--fs)); height: calc(32px * var(--fs)); background: url("/game/fireworks.png") 0 0 / calc(256px * var(--fs)) 100%; image-rendering: pixelated; visibility: hidden; }
@@ -996,4 +1000,73 @@ dialog.reader::backdrop { background: #0b0f1e; }
   .preview-card > .preview-meta { order: 4; }
   .preview-actions .button { width: 100%; min-height: 44px; padding-inline: .5rem; white-space: nowrap; font-size: var(--j); }
   .preview .kicker { white-space: nowrap; font-size: .8125rem; }
+}
+
+/* --- fix1 · the uniform bar never covers the runner (on deck, in front of the dugout) or the teammates (§ 6, § 7).
+   Landscape screens: a compact card in the bottom right corner, on the right-field grass under 1st base (clear of the
+   Home plate label). Phones held upright: on the outfield grass under the wall (--band-top from src/game.js).
+   Short landscape screens (phones held sideways): a narrow card on the right, the tiles as small columns. --- */
+.is-game .field[data-mode="pick"] .game-bar { left: auto; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); width: min(26rem, calc(100vw - 32px)); max-width: none; transform: none; }
+.is-game .uniform-pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .5rem .75rem; }
+.is-game .uniform-pick h2 { width: auto; }
+.is-game .pick-skip { grid-column: 2; grid-row: 1; margin: 0; }
+.is-game .uniform-tiles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: auto; gap: .4rem; }
+.is-game .uniform-tile { width: 100%; padding-right: .5rem; font-size: .875rem; white-space: nowrap; }
+.is-game .uniform-tile[aria-pressed="true"] .tile-name { color: var(--yellow); }
+.is-game .uniform-tile[aria-pressed="true"] .tile-name::before { content: none; } /* the yellow frame says it: the name stays on one line */
+@media (max-aspect-ratio: 3/2) {
+  .is-game .uniform-pick { gap: .25rem .5rem; padding: .4rem .5rem .5rem; }
+  .is-game .uniform-pick h2 { font-size: var(--j); }
+  .is-game .uniform-tile { flex-direction: column; justify-content: center; gap: .15rem; padding: .25rem; font-size: .8125rem; }
+}
+@media (max-aspect-ratio: 5/6) {
+  .is-game .field[data-mode="pick"] .game-bar { top: var(--band-top, 40%); right: 12px; bottom: auto; left: 12px; width: auto; }
+}
+@media (max-aspect-ratio: 3/2) and (min-aspect-ratio: 5/6), (max-height: 500px) and (orientation: landscape) {
+  .is-game .field[data-mode="pick"] .game-bar { right: 12px; bottom: 12px; width: min(17rem, 33vw); }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .is-game .hud { padding-block: .25rem; } /* the stadium needs the height */
+}
+
+/* --- fix1 · the title screen grows with the screen (big screens no longer look small and empty).
+   One base size --tf: a rem part and a vw/vh part (it grows with the screen; browser zoom and the user's font size still
+   work, WCAG 1.4.4). Everything on the title screen and its bar is in em of it, spaces on one scale: .5 / 1 / 1.5 / 2 / 3 em.
+   Layout: about 88vw wide, centred under the bar; name + menu ~58%, Quick picks ~38%. Phones: as before (--tf = 16 px). --- */
+:root { --tf: clamp(1rem, .45vw + .55vh + .375rem, 1.75rem); }
+.title-bar { font-size: var(--tf); }
+.title-bar .bar { gap: .5em 1.5em; padding-block: .5em; }
+.title-bar .brand, .title-bar .lang-switch a, .title-bar .cv-top, .title-bar .contact-top { min-height: max(44px, 2.75em); font-size: .9375em; }
+.title-bar .contact-top { padding: 0 1em; }
+.title-bar .lang-switch ul { font-size: 1em; }
+.title-bar .lang-switch li + li::before { padding-inline: .35em; }
+.title-screen { --tj: calc(var(--tf) * 1.1667); /* the Jersey 10 step, as --j */ display: grid; align-content: center; min-height: calc(100dvh - var(--tf) * 3.75 - 4px); padding-block: 1em 1.5em; font-size: var(--tf); }
+.title-grid { gap: 2em; }
+.logo { font-size: calc(var(--tj) * 4); }
+.role { margin: 1em 0 .5em; font-size: 1.375em; }
+.role-sub { margin: 0 0 1.5em; font-size: 1em; }
+.title-menu ul { gap: 1em; max-width: none; }
+.menu-item { display: flex; flex-direction: column; justify-content: center; min-height: max(56px, 9vh); padding: .75em 1.5em .75em 3em; }
+.menu-name { font-size: calc(var(--tj) * 2); }
+.menu-desc { margin-top: .5em; font-size: 1em; }
+.title-menu:not(:hover):not(:focus-within) [data-first]::before, .menu-item:hover::before, .menu-item:focus-visible::before { left: .9em; top: calc(50% - 1.2em); font-size: 1.25em; }
+.menu-hint { margin: 1em 0 0; padding: .25em .5em; font-size: .875em; }
+.quick-picks h2 { margin: 0 0 .5em; font-size: calc(var(--tj) * 2); }
+.picks { gap: 1em; }
+.pick { gap: 1em 1.5em; padding: 1.5em; }
+.pick-no { width: 4em; height: 4em; font-size: 1em; }
+.pick-no { font-size: calc(var(--tj) * 2); width: calc(var(--tf) * 4); height: calc(var(--tf) * 4); }
+.pick-name { font-size: calc(var(--tj) * 2); }
+.pick-line { margin-top: .5em; font-size: 1em; }
+.pick-stats { margin-top: .5em; font-size: .8125em; }
+@media (min-width: 700px) {
+  .title-bar .bar, .title-screen .title-grid { width: min(88vw, 2400px); max-width: none; padding-inline: 0; }
+  .logo { font-size: calc(var(--tj) * 5.5); }
+}
+@media (min-width: 1000px) {
+  .title-grid { grid-template-columns: minmax(0, 58fr) minmax(0, 38fr); column-gap: 4%; }
+}
+@media (max-width: 599px) {
+  .pick { gap: .9em; padding: 1em; }
+  .pick-no { width: calc(var(--tf) * 2.75); height: calc(var(--tf) * 2.75); font-size: calc(var(--tj) * 1.5); }
 }

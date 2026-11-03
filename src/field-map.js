@@ -4,6 +4,11 @@
 // (moves the runner, the camera). Change a position here and everything follows.
 export const WORLD = { width: 704, height: 424, margin: 32 };
 export const FIELD = WORLD; // the base links and the sprites are placed in % of this box
+// fix1 (§ 7): the CORE is what every screen shows whole, from the top of the lamps to home plate and the dugout (the
+// teammates' feet). The APRON is more stadium drawn around the world (sky above, stands and grass at the sides and
+// below, public/game/stadium-apron.png), so the room left over on wide, tall or 21:9 screens is never empty.
+export const CORE = { x: 32, y: 40, w: 640, h: 360 };
+export const APRON = { x: 288, y: 176 };
 export const FIELD_TOP = 178; // first row of the field layer under the wall and the track (the sky layer stops here)
 export const TOWERS = [{ x: 102, y: 50 }, { x: 237, y: 42 }, { x: 467, y: 42 }, { x: 602, y: 50 }]; // top-left of each lamp head
 export const SCOREBOARD = { x: 302, y: 72, w: 100, h: 40 };
@@ -20,6 +25,11 @@ export const STOPS = [
 // The dugout is only scenery (F1): the runner comes out of it when the visitor enters the ballpark (src/game.js).
 // x/y = the middle of its front edge (the roof is a layer of its own, in front of the players).
 export const DUGOUT = { x: 162, y: 372 };
+// fix1: while the visitor chooses the uniform the runner waits here, on the grass in front of the dugout: fully in
+// view, clear of the roof, of the teammates and of every label. Then he walks to home plate.
+export const ON_DECK = { x: 264, y: 396 };
+// The bottom edge of the dugout roof: a player whose feet are above this line stands behind the roof (src/style.css).
+export const ROOF_LINE = DUGOUT.y - 28;
 
 // The scoreboard, the pitcher's mound and the ticket booth: clickable in Fase 2, scenery since F5 (less to read in the game).
 // Kept here because their icons follow the 4 of STOPS in public/game/icons.png (scripts/art/icons.js).
