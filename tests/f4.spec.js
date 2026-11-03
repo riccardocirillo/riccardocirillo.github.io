@@ -14,7 +14,7 @@ for (const { width, height } of [{ width: 1280, height: 800 }, { width: 390, hei
       const role = page.locator('.role');
       const cv = page.locator('.title-bar a[href="/cv/CV_Riccardo_Cirillo_EN.pdf"]');
       await expect(role).toContainText('UX Research & Design');
-      await expect(role).toContainText('Madrid, Feb–Jul 2027');
+      await expect(role).toContainText('internship starting February 2027');
       await expect(page.locator('footer a[href="mailto:riccardo.cirillo.work@gmail.com"]')).toBeVisible();
       await expect(page.locator('.picks > li')).toHaveCount(3);
       for (const slug of CASES) await expect(page.locator(`.picks a[href="/${slug}/"]`)).toBeVisible();
@@ -134,7 +134,7 @@ test.describe('Multiplayer', () => {
   test('ticket with the email and both CVs; scouting report from facts.md; no LinkedIn yet', async ({ page }) => {
     await page.goto('/multiplayer/');
     await expect(page.locator('h1')).toHaveText('Multiplayer');
-    await expect(page.locator('.mp-sub')).toHaveText('Contact & CV. Looking for a teammate for February–July 2027?');
+    await expect(page.locator('.mp-sub')).toHaveText('Contact & CV. Looking for a teammate from February 2027?');
     await expect(page.locator('.ticket a[href="mailto:riccardo.cirillo.work@gmail.com"]')).toHaveText('riccardo.cirillo.work@gmail.com');
     await expect(page.locator('.ticket a[href$="_EN.pdf"]')).toBeVisible();
     await expect(page.locator('.ticket a[href$="_ES.pdf"]')).toHaveAttribute('lang', 'es');
@@ -142,6 +142,24 @@ test.describe('Multiplayer', () => {
     await expect(page.locator('.scout-rows')).toContainText('University of Trento');
     await expect(page.locator('a[href*="linkedin"]')).toHaveCount(0);
   });
+});
+
+// The internship has only a start date: no place and no end month (CLAUDE.md, Goal). Education keeps the study places.
+test.describe('internship: start date only', () => {
+  const NO = /Madrid|\bJul|julio|luglio/;
+  for (const lang of ['', '/es', '/it']) {
+    test(`${lang || '/en'}: role, footer and scouting report name no place and no end month`, async ({ page }) => {
+      await page.goto(`${lang}/`);
+      await expect(page.locator('.role')).toHaveText(/2027/);
+      await expect(page.locator('.role')).not.toHaveText(NO);
+      await expect(page.locator('footer')).not.toHaveText(NO);
+      await page.goto(`${lang}/multiplayer/`);
+      await expect(page.locator('footer')).not.toHaveText(NO);
+      const rows = page.locator('.scout-rows > div').filter({ hasNot: page.locator('ul') });
+      await expect(rows).toHaveCount(4);
+      for (const row of await rows.all()) await expect(row).not.toHaveText(NO);
+    });
+  }
 });
 
 test.describe('old links of the v2 home', () => {

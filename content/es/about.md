@@ -14,7 +14,7 @@ Así empiezo cada proyecto. Hablo con las personas que lo van a usar y las obser
 ## Hola, soy Riccardo {#hi-im-riccardo}
 Soy investigador y diseñador UX y estoy terminando el máster de EIT Digital en Human-Computer Interaction and Design. He estudiado en Italia, España y Francia, y trabajo en italiano, inglés y español.
 
-Busco **unas prácticas de UX research y diseño en Madrid, de febrero a julio de 2027**, junto con mi trabajo de fin de máster.
+Busco **prácticas de UX research y diseño a partir de febrero de 2027**, compatibles con mi Trabajo Fin de Máster.
 
 ## Cómo diseño {#how-i-design}
 1. Primero descubro y luego diseño. Entrevisto y observo a las personas antes, para que el diseño siga lo que hacen de verdad.

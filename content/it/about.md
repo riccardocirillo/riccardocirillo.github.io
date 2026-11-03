@@ -14,7 +14,7 @@ headline: "UX Research & Design"
 ## Ciao, sono Riccardo {#hi-im-riccardo}
 Sono un UX researcher e designer e sto finendo il master EIT Digital in Human-Computer Interaction and Design. Ho studiato in Italia, Spagna e Francia, e lavoro in italiano, inglese e spagnolo.
 
-Cerco **un tirocinio in UX research e design a Madrid, da febbraio a luglio 2027**, insieme alla mia tesi magistrale.
+Cerco **un tirocinio in UX research e design da febbraio 2027**, in cui svolgere anche la tesi magistrale.
 
 ## Come progetto {#how-i-design}
 1. Prima scopro, poi progetto. Intervisto e osservo le persone all'inizio, così il progetto segue quello che fanno davvero.

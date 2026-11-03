@@ -141,7 +141,7 @@ test.describe('languages @ 1280 px', () => {
     await expect(page.locator('.story-bio')).toContainText('master EIT Digital');
     await expect(page.locator('.story-how ol li')).toHaveCount(3);
     await page.goto('/it/multiplayer/');
-    for (const piece of ['Cittadino UE', 'NIE spagnolo', 'Italiano (madrelingua)', 'Inglese B2', 'Spagnolo B2', 'Tirocinio curricolare + tesi magistrale']) {
+    for (const piece of ['Cittadino UE', 'NIE spagnolo', 'Italiano (madrelingua)', 'Inglese B2', 'Spagnolo B2', 'Tirocinio curriculare + tesi magistrale']) {
       await expect(page.locator('.scouting')).toContainText(piece);
     }
   });

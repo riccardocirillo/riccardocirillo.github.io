@@ -18,7 +18,7 @@ test('palette has exactly 34 colours (16 + 8 for the 480×270 art + 10 for the F
   expect(allowed.size).toBe(34);
 });
 
-// F6: four ramps of 5 tones, darkest first, with the exact colours of the plan (docs/PROMPT_V3.md).
+// F6: four ramps of 5 tones, darkest first, with the exact colours of the plan (docs/archive/PROMPT_V3.md).
 // The plan also says "max 20° of hue per step", but its own colours move more (red 328°→3°, grass 164°→122°): the exact
 // colours win, so the test checks the order and the values, not the hue steps (DECISIONS.md, F6).
 const lum = (hexColor) => [1, 3, 5].reduce((sum, i, k) => sum + parseInt(hexColor.slice(i, i + 2), 16) * [0.2126, 0.7152, 0.0722][k], 0);

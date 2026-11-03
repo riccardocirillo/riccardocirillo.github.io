@@ -2,7 +2,7 @@
 
 Deciso con Riccardo il 02/11/2026. Fonte visiva: canvas Claude Design "Portfolio · Art bible & game flow".
 Le tavole in PNG e i bersagli di qualità stanno in `docs/assets-preview/art-bible/` (privata, mai nel repo).
-Questo file è la fonte di verità per la v4. Se contraddice `docs/PROMPT_V3.md` o `docs/SPEC.md`, vale questo file; scrivi la decisione in `docs/DECISIONS.md`.
+Questo file è la fonte di verità per la v4. Se contraddice `docs/archive/PROMPT_V3.md` o `docs/SPEC.md`, vale questo file; scrivi la decisione in `docs/DECISIONS.md`.
 
 ## 0. Decisioni (02/11)
 1. **Pixel a mano.** I personaggi non si disegnano più con forme geometriche (`ellipse`, `rect`). Ogni frame è una griglia di testo (un carattere = un colore della palette) e uno script la converte in PNG.

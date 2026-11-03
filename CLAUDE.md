@@ -1,14 +1,14 @@
 # Riccardo's portfolio — baseball pixel game
 
 Interactive UX/HCI portfolio of Riccardo Cirillo (EIT Digital MSc, Human-Computer Interaction and Design).
-Goal: get a UX internship in Madrid (Feb–Jul 2027). The site is sent to recruiters with ONE fixed link.
+Goal: get a UX internship starting in February 2027. On the site and in the CVs never state an end date, a duration or the internship location. The site is sent to recruiters with ONE fixed link.
 
 ## Read first
 - @docs/SPEC.md — concept, scenes, interaction, rules (source of truth)
 - docs/ART_BIBLE.md — v4 art bible: pixel rules, characters, night stadium, game flow (source of truth for the v4 art and game)
 - docs/ROADMAP.md — milestones + Definition of Done; work on ONE milestone per session (read at the start of each session)
 - docs/DECISIONS.md — log of decisions (append one line per decision)
-- docs/MEETING_2026-10-20.md — why the decisions were taken (read when in doubt)
+- docs/archive/MEETING_2026-10-20.md — why the decisions were taken (read when in doubt)
 - docs/CONTENT_STATUS.md — all content is READY in content/ and public/ (do not rewrite it; render it). Lines with [CHECK] must be confirmed by Riccardo.
 - New ideas go to docs/BACKLOG.md, not into the current session.
 
@@ -26,7 +26,7 @@ Goal: get a UX internship in Madrid (Feb–Jul 2027). The site is sent to recrui
 - Never publish research participants' data (audio, transcripts, names). Group work always credits the team.
 - Keep it light: low-res pixel art scaled up, compressed images, respect `prefers-reduced-motion`.
 - A milestone is done only when the Definition of Done in docs/ROADMAP.md passes (build, Playwright + axe, screenshots 1280/390 px, keyboard, contrast, reduced motion, online, commit). Show the evidence.
-- taste-skill (design-taste-frontend): use only its no-slop checks and the screenshot look-and-fix loop. Do NOT run scripts/draw.mjs or scripts/assets.mjs, do not propose new directions, photos or fonts: the style is decided in docs/PROMPT_V3.md (night + paper themes, Jersey 10 + Atkinson, original pixel art).
+- taste-skill (design-taste-frontend): use only its no-slop checks and the screenshot look-and-fix loop. Do NOT run scripts/draw.mjs or scripts/assets.mjs, do not propose new directions, photos or fonts: the style is decided in docs/archive/PROMPT_V3.md (night + paper themes, Jersey 10 + Atkinson, original pixel art).
 
 ## Working with Riccardo
 - He is new to Claude Code. Reply in Italian, short, simple words; explain technical terms in one line.

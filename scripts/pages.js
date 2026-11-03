@@ -721,10 +721,10 @@ function storyPage(L, about, aboutParts, cases) {
 // content/facts.md (no new data; no LinkedIn until there is a URL). The portrait is the batter of the game.
 function multiplayerPage(L, f) {
   const { t } = L;
-  const [position, city, dates] = t.headline.split(' · ');
+  const [position] = t.headline.split(' · ');
   const rows = [
     [t.scout.position, escape(position)],
-    [t.scout.available, `${escape(city)}, ${escape(dates)} · ${escape(f.thesis)}`],
+    [t.scout.available, `${escape(t.availableFrom)} · ${escape(f.thesis)}`],
     [t.scout.status, f.status.map(escape).join(' · ')],
     [t.scout.languages, f.languages.map(escape).join(' · ')],
     [t.scout.education, `<ul>${f.schools.map((s) => `<li>${escape(s)}</li>`).join('')}</ul>`],

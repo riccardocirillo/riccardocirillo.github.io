@@ -7,8 +7,8 @@
 > - **Photo:** the only photo of the site, public/assets/about/riccardo-640/-320.webp (scripts/photo.js, no EXIF), in one player card (finale, Story mode chapter 0, Multiplayer). docs/reference/ stays private.
 > - Without JS: the still stadium with the bases as links and the mode bar. Reduced motion: no shake, parallax, fireworks, ola or flash; key poses still.
 
-> **v3 Title screen (F3–F4, 29/10/2026) — OVERRIDES the home, lobby and stadium parts below.** Plan: docs/PROMPT_V3.md.
-> - `/` = **title screen** (night theme): bar "name · EN ES IT · CV ↓ · Contact"; logo RICCARDO CIRILLO (Jersey 10, red shadow); "UX Research & Design · internship in Madrid, Feb–Jul 2027"; menu of 3 real links **Story mode** (/story/) · **Gameplay** (/play/) · **Multiplayer** (/multiplayer/) with a ▶ cursor (↑ ↓ inside the menu, src/title.js); **Quick picks** = the 3 projects (01 Nipotyno, 02 Levante, 03 Sensor lab). Works without JS. No gate.
+> **v3 Title screen (F3–F4, 29/10/2026) — OVERRIDES the home, lobby and stadium parts below.** Plan: docs/archive/PROMPT_V3.md.
+> - `/` = **title screen** (night theme): bar "name · EN ES IT · CV ↓ · Contact"; logo RICCARDO CIRILLO (Jersey 10, red shadow); "UX Research & Design · internship starting February 2027"; menu of 3 real links **Story mode** (/story/) · **Gameplay** (/play/) · **Multiplayer** (/multiplayer/) with a ▶ cursor (↑ ↓ inside the menu, src/title.js); **Quick picks** = the 3 projects (01 Nipotyno, 02 Levante, 03 Sensor lab). Works without JS. No gate.
 > - **Mode bar** on every other page: "◀ Title screen" · Story mode · Gameplay · Multiplayer (current one lit, aria-current) · EN ES IT · CV ↓.
 > - **Story mode** (paper): /story/ = chapter 0 (bio, motto, How I design) → /nipotyno/ (1 of 3) → /levante/ (2 of 3) → /sensor-lab/ (3 of 3, ends with "That's the story" + Multiplayer + Play the game). Each chapter: progress bars, big outlined number, title, player card (role, team, when, methods, PDF), key numbers on a dark strip, the text, "◀ Title screen" + "Next chapter ▶".
 > - **Gameplay** (/play/, night, F5): the game is the page. HUD in one row (⏸ Pause · Esc · GAMEPLAY · the base · 3 diamonds of the bases visited · Sound). First step: choose a uniform (3 small tiles under the field, Skip). Then Swing! → home run → tour (Next base, never automatic) → "Game over? Never." (Read the story · Multiplayer · Play again). Points: 1st Nipotyno, 2nd Levante, 3rd Sensor lab, home plate = Multiplayer (email + CVs); scoreboard, mound, ticket booth, bullpen, dugout = scenery. Cards: cover, name, one line, key numbers, Read the case study (the real page). **Pause menu** (modal dialog, Esc or ⏸, focus kept inside): Resume · Read this project · Switch to Story mode · Multiplayer · Title screen; then EN ES IT, Sound, Reduce motion (remembered). With JS the HUD replaces the mode bar and the footer; without JS the mode bar stays and one sentence links the 3 case pages and the Story mode.
@@ -16,9 +16,9 @@
 > - Old links: /#nipotyno, /#levante, /#sensor-lab → the case page; /#about, /#how → /story/; /#contact → /multiplayer/; /#field → /play/ (inline script; without JS the same ids sit on the title screen).
 > - Type: Jersey 10 (titles, menus, numbers) + Atkinson Hyperlegible Next (text) + Atkinson Hyperlegible Mono (labels). Themes: night and paper (src/style.css). Square frames, 2 px border + solid shadow.
 
-> **v0.2 — Team meeting decisions (see MEETING_2026-10-20.md) OVERRIDE anything below that conflicts:**
+> **v0.2 — Team meeting decisions (see docs/archive/MEETING_2026-10-20.md) OVERRIDE anything below that conflicts:**
 > - Stack: Vite + HTML/CSS/SVG + plain JS (no Phaser). The site works without the game.
-> - Home = first viewport already shows name, "UX Research & Design intern · Madrid · Feb–Jul 2027", CV EN/ES, contacts, Nipotyno card. No gate before content.
+> - Home = first viewport already shows name, "UX Research & Design intern · available from February 2027", CV EN/ES, contacts, Nipotyno card. No gate before content.
 > - Every case = real static page with Open Graph (`/nipotyno/`, `/levante/`, `/housing/`, `/lab/`). `/nipotyno/` for consultancies/corporates; home for studios/startups.
 > - Diamond = pixel PNG **480×270** (Fase 1, 21/10: ×1.5, 24-colour palette, 48 px sprites, 24 px icons) at a whole-number scale: 2× (960×540) from 1000 px wide, 1× below with simplified touch labels (the list of cases stays below). On a phone the 480 px picture is centred and cropped (about 64 px per side): everything clickable stays between x = 64 and x = 416. The field is shown in every version. Until the stadium becomes the navigation centre (Fase 2) the card sits below the field on desktop.
 > - **UPDATE (Riccardo): the COMPLETE portfolio is built in ~2 days** — uniforms, batting, home-run tour and all case studies included (see ROADMAP). No phased release.
@@ -29,7 +29,7 @@
 Draft prepared in the "Internship" project. Open points are marked **[OPEN]**: interview Riccardo about them before building.
 
 ## 1. Goal and audience
-- **Goal:** get a UX / user research internship in Madrid (Feb–Jul 2027) combined with the master's thesis.
+- **Goal:** get a UX / user research internship starting in February 2027 (no end date, duration or location on the site) combined with the master's thesis.
 - **Audience:** recruiters and UX leads. They spend a few minutes, skim, and want to see **process, role and results** (NN/g; UX Design Institute: 2–3 strong case studies, simple navigation, no gimmicks that block content).
 - **Tension to solve:** a playful, memorable game AND fast access to the content. The game is the wrapper, the case studies are the product.
 
@@ -84,9 +84,9 @@ All case-study text goes in `content/<case>.md` (prepared in the Internship proj
 
 | Case | Sources (Mac) | To create |
 |---|---|---|
-| Nipotyno (UPM HCI Project, team of 4 + business plan) | `~/Desktop/INFO INTERSHIP/II SEMESTRE/HCI Project/` (HIGH FIDELITY PROTOTYPE/SCREEN: 20 screens; NavigatioMap.png; screen_layout_options.pdf; lo-fi and hi-fi reports, SUS 78.75, UEQ Good/Excellent); `.../II SEMESTRE/Entrepreneurship and business modelling/FIRST PART/` | Device mockups, process diagram |
+| Nipotyno (UPM HCI Project, team of 4 + business plan) | `~/Desktop/INFO INTERSHIP/5_Materiale_corsi_UPM/II SEMESTRE/HCI Project/` (HIGH FIDELITY PROTOTYPE/SCREEN: 20 screens; NavigatioMap.png; screen_layout_options.pdf; lo-fi and hi-fi reports, SUS 78.75, UEQ Good/Excellent); `.../II SEMESTRE/Entrepreneurship and business modelling/FIRST PART/` | Device mockups, process diagram |
 | Levante (EIT Digital Summer School 2026, team of 6) | `~/Desktop/EIT/SUMMER SCHOOL/PROJECT/` (personas, user journeys, dashboard overview.png, Dashboard.mov, device concepts, BMC, final slides) | Process diagram; Riccardo designed the dashboard |
-| Student housing research (UPM HCI Intro + Ethics, team of 6) | `~/Desktop/INFO INTERSHIP/I SEMESTRE/HCI-Introduction and Design Methods/` (final report, wireflow, layout scheme, contextual inquiry, coding) | Screens from wireflow, findings summary |
+| Student housing research (UPM HCI Intro + Ethics, team of 6) | `~/Desktop/INFO INTERSHIP/5_Materiale_corsi_UPM/I SEMESTRE/HCI-Introduction and Design Methods/` (final report, wireflow, layout scheme, contextual inquiry, coding) | Screens from wireflow, findings summary |
 | Lab | Heuristic evaluation (individual) `.../II SEMESTRE/Evaluation of Interactive System/Individual Evaluation/Final Report/`; Discord iOS UX analysis, sketches (`.../I SEMESTRE/User Experience and Mobile Interaction/`); A/B test | One card each: image + 2 lines |
 
 Never publish: interview audio/transcripts, participant names, personal documents.

@@ -13,7 +13,7 @@ That's how I start every project. I talk to the people who will use it and watch
 ## Hi, I'm Riccardo {#hi-im-riccardo}
 I'm a UX researcher and designer finishing the EIT Digital master's in Human-Computer Interaction and Design. I've studied in Italy, Spain and France, and I work in Italian, English and Spanish.
 
-I'm looking for a **UX research and design internship in Madrid, February to July 2027**, alongside my master's thesis.
+I'm looking for a **UX research and design internship starting in February 2027**, alongside my master's thesis.
 
 ## How I design {#how-i-design}
 1. I find out before I design. I interview and observe people first, so the design follows what they actually do.
