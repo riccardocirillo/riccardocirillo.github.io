@@ -73,4 +73,4 @@ Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi contin
 - [CHECK] swing: la gomitiera è sul gomito dietro (accettabile secondo il revisore).
 
 ## Problemi aperti
-- push del ramo v4: "Failed to connect to github.com port 443" dopo ogni fase, anche il 03/11 con la rete tornata (Google risponde, GitHub no, anche fuori dal sandbox). Tutti i commit sono in locale sul ramo v4.
+- (risolto 03/11) push del ramo v4: riuscito con fix1, il ramo è su GitHub (origin/v4). Nessun merge in main.
