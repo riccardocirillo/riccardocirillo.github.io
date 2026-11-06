@@ -481,7 +481,8 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .tldr p { margin-bottom: 0; }
 
 figure { margin: 1.5rem 0; }
-figure img { border: 1px solid var(--line); background: var(--card); }
+figure img, .case-video video { border: 1px solid var(--line); background: var(--card); }
+.case-video video { display: block; width: 100%; height: auto; }
 /* On screen a tall image (a phone screen is 2000+ px) is at most 70% of the window high, centred, never bigger than its real size.
    The width is worked out from the image's own proportions (--w / --h, set by scripts/pages.js) instead of `max-height` + `width: auto`:
    that way the box has the right size before the image has loaded and the page does not jump. */

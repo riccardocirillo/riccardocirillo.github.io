@@ -49,7 +49,7 @@ We designed a service around the lab test. Sensors on a buoy measure turbidity, 
 ## Prototype
 I designed Tidewatch, the dashboard for labs and municipalities. It shows the sectors and active alerts, a risk map of the coast and a feed of recent alerts with their sampling status. The team can see at a glance where to go first.
 
-![Tidewatch dashboard: sectors, active alerts, risk map and recent alerts](/assets/levante/dashboard.webp)
+<figure class="case-video"><video src="/assets/levante/dashboard.mp4" poster="/assets/levante/dashboard.webp" width="1280" height="800" aria-label="Video of the Tidewatch dashboard: sectors, active alerts, risk map and recent alerts" loop muted playsinline controls preload="none"></video></figure>
 
 ![Concept render of the solar-powered sensing buoy and its modules](/assets/levante/buoy-0.webp)
 

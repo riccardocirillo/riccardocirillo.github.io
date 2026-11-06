@@ -145,3 +145,4 @@
 - 2026-11-06 — Nipotyno, Test: 7 colonne non stanno nella colonna di testo accanto alla scheda giocatore (circa 80 px a colonna): se una pagina ha .phases, quella sezione e le seguenti escono dalla griglia (.chapter-rest) e la scheda sticky si ferma prima; lo schema usa tutta la larghezza da 1000 px. Levante e Sensor lab non cambiano. (auto)
 - 2026-11-06 — Nipotyno, Test: facsimile del bollettino pagoPA tolto dalla pagina e dal repo (pagopa.webp non era usato altrove). (Riccardo)
 - 2026-11-06 — Nipotyno, Prototype: corretto sinistra/destra: lo schermo sinistro è l'assistente, il destro è il servizio (EN, ES, IT; negli alt l'errore non c'era). (Riccardo)
+- 2026-11-06 — Levante, Prototype: video della dashboard in loop e muto al posto dello screenshot (dashboard.mp4, 1280×800, 3,3 MB, con dashboard.webp come copertina). Parte quando entra in vista, una volta sola; con movimento ridotto resta sulla copertina; controlli del browser per la pausa. (Riccardo)

@@ -472,7 +472,10 @@ async function casePage(L, c, i, all) {
     imageAlt: `${shortName(c)}, ${t.caseBy} (${L.stop(data.slug).label})`,
     main,
     mode: 'story',
-    ...(html.includes('class="proto"') ? { scripts: '<script type="module" src="/src/prototype.js"></script>' } : {}),
+    scripts: [
+      html.includes('class="proto"') && '<script type="module" src="/src/prototype.js"></script>',
+      html.includes('class="case-video"') && '<script type="module" src="/src/case-video.js"></script>',
+    ].filter(Boolean).join('\n    '),
   });
 }
 

@@ -48,7 +48,7 @@ Diseñamos un servicio alrededor del test de laboratorio. Los sensores de una bo
 ## Prototipo
 Diseñé Tidewatch, el dashboard para laboratorios y ayuntamientos. Muestra los sectores y las alertas activas, un mapa de riesgo de la costa y un listado de alertas recientes con su estado de muestreo. El equipo ve de un vistazo adónde ir primero.
 
-![Dashboard Tidewatch: sectores, alertas activas, mapa de riesgo y alertas recientes](/assets/levante/dashboard.webp)
+<figure class="case-video"><video src="/assets/levante/dashboard.mp4" poster="/assets/levante/dashboard.webp" width="1280" height="800" aria-label="Vídeo del dashboard Tidewatch: sectores, alertas activas, mapa de riesgo y alertas recientes" loop muted playsinline controls preload="none"></video></figure>
 
 ![Render de concepto de la boya sensora solar y sus módulos](/assets/levante/buoy-0.webp)
 

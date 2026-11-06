@@ -3,6 +3,7 @@
 // The address becomes the page's (history.pushState): a reload opens the real static page, and Back closes the reader
 // (the address goes back to /play/#<case>). Esc and the two "Back" buttons do the same. If fetch fails: the real page.
 import { initPrototypes } from './prototype.js';
+import { initCaseVideos } from './case-video.js';
 
 export function createReader({ dialog, onClose, onNext }) {
   const body = dialog.querySelector('.reader-body');
@@ -70,6 +71,7 @@ export function createReader({ dialog, onClose, onNext }) {
         if (current?.href !== href) return; // closed or replaced in the meantime
         body.replaceChildren(...[...main.children].map((el) => document.importNode(el, true)));
         initPrototypes(body);
+        initCaseVideos(body);
         body.scrollTop = 0;
       } catch {
         location.href = href; // the real page, a normal change of page
