@@ -85,9 +85,26 @@ Este es el prototipo de alta fidelidad que probamos. Está en italiano, como las
 </details>
 
 ## Test
-Hicimos el test con 6 participantes en sesiones en remoto. Usaron facsímiles de papel realistas (una receta, un recibo pagoPA y una tarjeta de prueba), así que nadie tuvo que inventarse datos.
+Probamos el prototipo de alta fidelidad con 6 personas mayores en su casa: en 4 sesiones el facilitador estaba en la sala y 2 fueron totalmente en línea. Cada sesión duró de 40 a 60 minutos. Uno de nosotros la dirigía mientras dos compañeros la seguían por videollamada y anotaban el tiempo, los toques y los errores. Esta vez los participantes no pensaron en voz alta, para poder comparar sus tiempos con los tiempos objetivo que habíamos fijado. Trabajaron con documentos de papel realistas con datos ficticios (una receta y un recibo pagoPA), así que nadie tuvo que inventarse nada.
 
-![Material del test: un facsímil de recibo pagoPA con datos ficticios usado en las sesiones](/assets/nipotyno/pagopa.webp)
+<div class="phases">
+<h3>Una sesión, siete pasos</h3>
+<ol role="list" aria-label="Los siete pasos de una sesión de test">
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">1</span><div><h4>Bienvenida</h4><p>"Estamos probando el diseño, no a ti."</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consenti&shy;miento</h4><p>Consentimiento informado leído juntos y firmado.</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Perfil</h4><p>Edad, hábitos digitales, confianza con los servicios en línea.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Tarea 1 · CUP</h4><p>Pedir una visita al especialista a partir de una receta en papel.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Tarea 2 · pagoPA</h4><p>Pagar un recibo sanitario de 35 € escaneando su código QR.</p></div></div><p class="phases-measure"><strong>Medido por tarea:</strong> <span>tiempo · toques · errores · éxito</span></p></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Dos cuestionarios estándar, uno sobre la usabilidad y otro sobre la experiencia general.</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Entrevista</h4><p>Preguntas abiertas sobre qué resultó difícil y qué dio seguridad.</p></div></div></li>
+</ol>
+<dl class="phases-facts">
+<div><dt>Quién</dt><dd>6 personas mayores, edad media 67</dd></div>
+<div><dt>Dónde</dt><dd>En casa, 4 con el facilitador presente y 2 totalmente en línea</dd></div>
+<div><dt>Cómo</dt><dd>1 facilitador y 2 observadores por videollamada, de 40 a 60 min</dd></div>
+<div><dt>Montaje</dt><dd>Una tableta con las dos pantallas una al lado de la otra</dd></div>
+</dl>
+</div>
 
 | Métrica | Resultado |
 |---|---|

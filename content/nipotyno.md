@@ -86,9 +86,26 @@ This is the high-fidelity prototype we tested. It is in Italian, like the test s
 </details>
 
 ## Test
-We tested with 6 participants in remote sessions. They used realistic paper facsimiles (a prescription, a pagoPA bill and a test card), so nobody had to invent data.
+We tested the high-fidelity prototype with 6 older adults at home: in 4 sessions the facilitator was in the room, and 2 ran fully online. Each session took 40 to 60 minutes. One of us ran it while two teammates followed on a video call and logged time, taps and mistakes. This time participants did not think aloud, so their times could be compared with the target times we had set. They worked from realistic paper documents with fictional data (a prescription and a pagoPA bill), so nobody had to invent anything.
 
-![Test material: a pagoPA bill facsimile with fictitious data used during the sessions](/assets/nipotyno/pagopa.webp)
+<div class="phases">
+<h3>One session, seven steps</h3>
+<ol role="list" aria-label="The seven steps of a test session">
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">1</span><div><h4>Welcome</h4><p>"We are testing the design, not you."</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consent</h4><p>Informed consent read together and signed.</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Background</h4><p>Age, digital habits, confidence with online services.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Task 1 · CUP</h4><p>Book a specialist visit from a paper prescription.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Task 2 · pagoPA</h4><p>Pay a €35 health bill by scanning its QR code.</p></div></div><p class="phases-measure"><strong>Measured per task:</strong> <span>time · taps · mistakes · success</span></p></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Two standard questionnaires, one on usability and one on the overall experience.</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Interview</h4><p>Open questions on what felt hard and what felt safe.</p></div></div></li>
+</ol>
+<dl class="phases-facts">
+<div><dt>Who</dt><dd>6 older adults, average age 67</dd></div>
+<div><dt>Where</dt><dd>At home, 4 with the facilitator there and 2 fully online</dd></div>
+<div><dt>How</dt><dd>1 facilitator and 2 observers on a video call, 40 to 60 min</dd></div>
+<div><dt>Setup</dt><dd>A tablet with the two screens side by side</dd></div>
+</dl>
+</div>
 
 | Metric | Result |
 |---|---|

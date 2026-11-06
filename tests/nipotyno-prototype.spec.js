@@ -54,7 +54,7 @@ test.describe('prototype @ 1280', () => {
     await page.goto(EN.path);
     await page.getByRole('button', { name: EN.load }).click();
     const iframe = await page.locator('.proto iframe').boundingBox();
-    const column = await page.locator('#prototype').boundingBox();
+    const column = await page.locator('section:has(.proto)').boundingBox();
     expect(Math.abs(iframe.width + 6 - column.width)).toBeLessThanOrEqual(1); // 3 px border on each side
     expect(iframe.width / iframe.height).toBeCloseTo(1.6, 1);
   });
@@ -191,4 +191,70 @@ test.describe('prototype without JavaScript', () => {
       await expect(page.locator('iframe')).toHaveCount(0);
     });
   }
+});
+
+// Nipotyno, Test: the schema of the phases (06/11/2026).
+const SCHEMA = [
+  { path: '/nipotyno/', title: 'One session, seven steps', first: '6 older adults at home' },
+  { path: '/es/nipotyno/', title: 'Una sesión, siete pasos', first: '6 personas mayores en su casa' },
+  { path: '/it/nipotyno/', title: 'Una sessione, sette passi', first: '6 anziani a casa loro' },
+];
+test.describe('schema of the test phases', () => {
+  for (const l of SCHEMA) {
+    test(`${l.path}: new text, 7 steps before the metrics, no facsimile`, async ({ page, request }) => {
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.goto(l.path);
+      const test_ = page.locator('section#test');
+      await expect(test_.locator('> p').first()).toContainText(l.first);
+      await expect(test_.locator('.phases h3')).toHaveText(l.title);
+      await expect(test_.locator('.phases ol > li')).toHaveCount(7);
+      await expect(test_.locator('.phases li.is-task')).toHaveCount(2);
+      await expect(test_.locator('.phases-facts > div')).toHaveCount(4);
+      await expect(page.locator('img[src*="pagopa.webp"]')).toHaveCount(0);
+      expect(await test_.locator('.phases').evaluate((el) => !!(el.compareDocumentPosition(el.parentElement.querySelector('table')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
+      expect((await request.get('/assets/nipotyno/pagopa.webp')).headers()['content-type'] ?? '').not.toContain('webp');
+    });
+    for (const [w, cols] of [[1280, 7], [1000, 7], [390, 1]]) {
+      test(`${l.path} @ ${w}: ${cols} column(s), no text out of its card, the dashed box covers nothing, nothing scrolls sideways`, async ({ page }) => {
+        await page.setViewportSize({ width: w, height: 800 });
+        await page.goto(l.path);
+        const r = await page.locator('.phases').evaluate((el) => {
+          const lis = [...el.querySelectorAll('ol > li')];
+          const tops = new Set(lis.map((li) => Math.round(li.getBoundingClientRect().top)));
+          const measure = el.querySelector('.phases-measure').getBoundingClientRect();
+          const facts = el.querySelector('.phases-facts').getBoundingClientRect();
+          const task = el.querySelector('.is-task .phases-card').getBoundingClientRect();
+          const cards = lis.map((li) => li.querySelector('.phases-card'));
+          return {
+            perRow: lis.length / tops.size,
+            overflow: cards.filter((c) => c.scrollWidth > c.clientWidth + 1).length,
+            measureLeft: measure.left, taskLeft: task.left, measureBottom: measure.bottom, factsTop: facts.top,
+            pageWidth: document.documentElement.scrollWidth,
+          };
+        });
+        expect(r.perRow).toBe(cols);
+        expect(r.overflow).toBe(0);
+        expect(r.measureBottom).toBeLessThanOrEqual(r.factsTop);
+        if (cols === 7) expect(Math.abs(r.measureLeft - r.taskLeft)).toBeLessThanOrEqual(1); // under steps 4 and 5
+        expect(r.pageWidth).toBeLessThanOrEqual(w);
+      });
+    }
+  }
+  test('inside the reader of the game: 7 columns, nothing scrolls sideways', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/play/#nipotyno');
+    await page.locator('#field-panel').getByRole('link', { name: /Read/i }).click();
+    const body = page.locator('dialog.reader .reader-body');
+    await expect(body.locator('.phases ol > li')).toHaveCount(7);
+    const r = await body.evaluate((el) => {
+      const lis = [...el.querySelectorAll('.phases ol > li')];
+      return { wide: el.scrollWidth <= el.clientWidth, rows: new Set(lis.map((li) => Math.round(li.getBoundingClientRect().top))).size };
+    });
+    expect(r).toEqual({ wide: true, rows: 1 });
+  });
+  test('Levante and Sensor lab keep their layout (one grid, no wide part)', async ({ page }) => {
+    await page.goto('/levante/');
+    await expect(page.locator('.chapter-rest')).toHaveCount(0);
+  });
 });

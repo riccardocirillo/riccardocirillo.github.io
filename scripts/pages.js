@@ -440,6 +440,8 @@ async function casePage(L, c, i, all) {
   html = sections(html);
   html = html.replace('<section id="tl-dr">', '<section id="tl-dr" class="tldr">').replace('<div data-prototype></div>', prototypeEmbed(t));
   const n = i + 1;
+  // The 7 columns of the Test schema do not fit next to the player card: its section (and what follows) leaves the grid, so the sticky card stops before it.
+  const wideAt = html.includes('class="phases"') ? html.lastIndexOf('<section', html.indexOf('class="phases"')) : html.length;
 
   const main = `      <article class="case chapter wrap wide">
         <p class="print-head">Riccardo Cirillo · ${escape(t.headline.split(' · ')[0])} · ${EMAIL} · ${SITE.replace('https://', '')}${p}/${data.slug}/</p>
@@ -455,9 +457,10 @@ async function casePage(L, c, i, all) {
           </aside>
           <div class="chapter-body">
             ${scoreStrip(L, data)}
-            ${html}
+            ${html.slice(0, wideAt)}
           </div>
         </div>
+        ${wideAt < html.length ? `<div class="chapter-body chapter-rest">${html.slice(wideAt)}</div>` : ''}
         ${chapterNav(L, all[i + 1], n)}
       </article>`;
 

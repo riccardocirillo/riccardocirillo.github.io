@@ -85,9 +85,26 @@ Questo è il prototipo ad alta fedeltà che abbiamo testato. È in italiano, com
 </details>
 
 ## Test
-Abbiamo testato con 6 partecipanti in sessioni da remoto. Hanno usato facsimili cartacei realistici (una ricetta, un bollettino pagoPA e una carta di prova), così nessuno ha dovuto inventarsi i dati.
+Abbiamo testato il prototipo ad alta fedeltà con 6 anziani a casa loro: in 4 sessioni il facilitatore era nella stanza, 2 si sono svolte interamente online. Ogni sessione è durata dai 40 ai 60 minuti. Uno di noi la conduceva mentre due compagni di squadra la seguivano in videochiamata e annotavano tempi, tocchi ed errori. Questa volta i partecipanti non hanno pensato ad alta voce, così i loro tempi si potevano confrontare con i tempi obiettivo che avevamo fissato. Hanno lavorato con documenti cartacei realistici con dati fittizi (una ricetta e un bollettino pagoPA), così nessuno ha dovuto inventarsi nulla.
 
-![Materiale del test: un facsimile di bollettino pagoPA con dati fittizi usato durante le sessioni](/assets/nipotyno/pagopa.webp)
+<div class="phases">
+<h3>Una sessione, sette passi</h3>
+<ol role="list" aria-label="I sette passi di una sessione di test">
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">1</span><div><h4>Benvenuto</h4><p>"Stiamo testando il design, non te."</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consenso</h4><p>Consenso informato letto insieme e firmato.</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Profilo</h4><p>Età, abitudini digitali, sicurezza con i servizi online.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Compito 1 · CUP</h4><p>Prenotare una visita specialistica da una ricetta cartacea.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Compito 2 · pagoPA</h4><p>Pagare un bollettino sanitario da 35 € scansionando il codice QR.</p></div></div><p class="phases-measure"><strong>Misurato per ogni compito:</strong> <span>tempo · tocchi · errori · successo</span></p></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Due questionari standard, uno sull'usabilità e uno sull'esperienza complessiva.</p></div></div></li>
+<li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Intervista</h4><p>Domande aperte su cosa è stato difficile e cosa ha dato sicurezza.</p></div></div></li>
+</ol>
+<dl class="phases-facts">
+<div><dt>Chi</dt><dd>6 anziani, età media 67</dd></div>
+<div><dt>Dove</dt><dd>A casa, 4 con il facilitatore presente e 2 interamente online</dd></div>
+<div><dt>Come</dt><dd>1 facilitatore e 2 osservatori in videochiamata, da 40 a 60 min</dd></div>
+<div><dt>Setup</dt><dd>Un tablet con i due schermi affiancati</dd></div>
+</dl>
+</div>
 
 | Metrica | Risultato |
 |---|---|
