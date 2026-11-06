@@ -59,6 +59,14 @@ Abbiamo trasformato il Mentore in un prototipo ad alta fedeltà a doppio schermo
 
 Un cambiamento è nato direttamente dai test. I partecipanti esitavano davanti ai pulsanti di pagamento solo testuali, quindi li abbiamo sostituiti con icone riconoscibili (banca, carta).
 
+<figure class="compare">
+<div class="compare-grid">
+<div><p class="compare-label">Bassa fedeltà</p><img src="/assets/nipotyno/lofi-payment.webp" alt="Schermata di pagamento a bassa fedeltà: un elenco di metodi di pagamento scritti solo come testo" width="407" height="1310" style="--w: 407; --h: 1310" loading="lazy" decoding="async"></div>
+<div><p class="compare-label">Alta fedeltà</p><img src="/assets/nipotyno/hifi-payment.webp" alt="Schermata di pagamento ad alta fedeltà: lo stesso elenco di metodi, ognuno con un'icona, accanto allo schermo dell'assistente" width="1400" height="1177" style="--w: 1400; --h: 1177" loading="lazy" decoding="async"></div>
+</div>
+<figcaption>Il passaggio del pagamento prima e dopo i test. Nella versione a bassa fedeltà i metodi erano solo testo; in quella ad alta fedeltà ogni metodo ha la sua icona.</figcaption>
+</figure>
+
 ## Test
 Abbiamo testato con 6 partecipanti in sessioni da remoto. Hanno usato facsimili cartacei realistici (una ricetta, un bollettino pagoPA e una carta di prova), così nessuno ha dovuto inventarsi i dati.
 

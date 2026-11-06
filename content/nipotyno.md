@@ -60,6 +60,14 @@ We turned the Mentor into a high-fidelity, dual-screen prototype. The left scree
 
 One change came straight from testing. Participants hesitated on the text-only payment buttons, so we replaced them with icons they could recognise (bank, card).
 
+<figure class="compare">
+<div class="compare-grid">
+<div><p class="compare-label">Low fidelity</p><img src="/assets/nipotyno/lofi-payment.webp" alt="Low-fidelity payment screen: a list of payment methods written as plain text" width="407" height="1310" style="--w: 407; --h: 1310" loading="lazy" decoding="async"></div>
+<div><p class="compare-label">High fidelity</p><img src="/assets/nipotyno/hifi-payment.webp" alt="High-fidelity payment screen: the same list of methods, each with an icon, next to the assistant screen" width="1400" height="1177" style="--w: 1400; --h: 1177" loading="lazy" decoding="async"></div>
+</div>
+<figcaption>The payment step before and after testing. In the low-fidelity version the methods were plain text; in the high-fidelity one each method has its own icon.</figcaption>
+</figure>
+
 ## Test
 We tested with 6 participants in remote sessions. They used realistic paper facsimiles (a prescription, a pagoPA bill and a test card), so nobody had to invent data.
 

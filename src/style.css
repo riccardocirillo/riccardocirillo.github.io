@@ -489,6 +489,14 @@ figure img { border: 1px solid var(--line); background: var(--card); }
   .case figure img { width: min(100%, calc(70vh * var(--w) / var(--h)), calc(var(--w) * 1px)); height: auto; margin-inline: auto; }
 }
 
+/* Before and after: side by side at the same height (the columns follow the images' proportions, 407/1310 and 1400/1177); one under the other on phones. */
+.compare-grid { display: grid; gap: 1.25rem; }
+.compare-label { margin: 0 0 .5rem; font-family: var(--font-mono); font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.compare figcaption { margin-top: .75rem; font-size: .9375rem; color: var(--muted); }
+@media (min-width: 600px) {
+  .compare-grid { grid-template-columns: minmax(0, .3107fr) minmax(0, 1.1895fr); align-items: end; }
+  .case .compare img { width: 100%; }
+}
 .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
 table { border-collapse: collapse; width: 100%; font-size: 1rem; background: var(--card); }
 th, td { padding: .5rem .75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }

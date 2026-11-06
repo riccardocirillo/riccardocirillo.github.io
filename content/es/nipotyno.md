@@ -59,6 +59,14 @@ Convertimos el Mentor en un prototipo de alta fidelidad de doble pantalla. La pa
 
 Un cambio salió directamente de los tests. Los participantes dudaban ante los botones de pago con solo texto, así que los sustituimos por iconos que pudieran reconocer (banco, tarjeta).
 
+<figure class="compare">
+<div class="compare-grid">
+<div><p class="compare-label">Baja fidelidad</p><img src="/assets/nipotyno/lofi-payment.webp" alt="Pantalla de pago de baja fidelidad: una lista de métodos de pago escritos solo como texto" width="407" height="1310" style="--w: 407; --h: 1310" loading="lazy" decoding="async"></div>
+<div><p class="compare-label">Alta fidelidad</p><img src="/assets/nipotyno/hifi-payment.webp" alt="Pantalla de pago de alta fidelidad: la misma lista de métodos, cada uno con un icono, junto a la pantalla del asistente" width="1400" height="1177" style="--w: 1400; --h: 1177" loading="lazy" decoding="async"></div>
+</div>
+<figcaption>El paso del pago antes y después de los tests. En la versión de baja fidelidad los métodos eran solo texto; en la de alta fidelidad cada método tiene su propio icono.</figcaption>
+</figure>
+
 ## Test
 Hicimos el test con 6 participantes en sesiones en remoto. Usaron facsímiles de papel realistas (una receta, un recibo pagoPA y una tarjeta de prueba), así que nadie tuvo que inventarse datos.
 
