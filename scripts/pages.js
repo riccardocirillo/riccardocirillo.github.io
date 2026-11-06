@@ -20,10 +20,6 @@ const SITE = 'https://ricccardo15.github.io';
 const EMAIL = 'riccardo.cirillo.work@gmail.com';
 // Order on the home and on the diamond: 1st, 2nd, 3rd base (F1: three projects; Housing and Lab are in _archive/).
 export const CASES = ['nipotyno', 'levante', 'sensor-lab'];
-// PDF of each case (made after the build by scripts/pdf.js from the page itself, with the print CSS).
-// English keeps the old names; the other languages get a suffix (Riccardo_Cirillo_Nipotyno_ES.pdf). Spaces → _ (Sensor_lab).
-export const pdfName = (slug, lang = 'en') =>
-  `Riccardo_Cirillo_${STOPS.find((s) => s.id === slug).name.replace(/ /g, '_')}${lang === 'en' ? '' : `_${lang.toUpperCase()}`}.pdf`;
 // Folder of each language in the site ('' = the root for English).
 const dirOf = (lang) => (lang === 'en' ? '' : `${lang}/`);
 // Pages Vite must build, for every language: title screen, Story mode (chapter 0), Gameplay, Multiplayer, one page per case.
@@ -416,8 +412,8 @@ function chapterNav(L, next, n) {
         </section>`;
 }
 
-// A case study = one chapter of the Story mode (F4): progress, big number + title, the player card (role, team, when,
-// PDF) next to the key numbers and the text, then "Next chapter ▶" (or the end of the story after chapter 3).
+// A case study = one chapter of the Story mode (F4): progress, big number + title, the player card (role, team, when)
+// next to the key numbers and the text, then "Next chapter ▶" (or the end of the story after chapter 3).
 async function casePage(L, c, i, all) {
   const { data } = c;
   const { t, p } = L;
@@ -437,7 +433,6 @@ async function casePage(L, c, i, all) {
           <aside class="scorecard" aria-labelledby="scorecard-title">
             <h2 id="scorecard-title" class="kicker">${escape(t.playerCard)}</h2>
             ${facts(L, data)}
-            <p class="pdf"><a href="/pdf/${pdfName(data.slug, L.lang)}">${escape(t.downloadPdf)}<span class="visually-hidden">${escape(t.ofThisCase)}</span> <span aria-hidden="true">↓</span></a></p>
           </aside>
           <div class="chapter-body">
             ${scoreStrip(L, data)}

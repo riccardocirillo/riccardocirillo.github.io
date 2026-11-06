@@ -121,10 +121,10 @@ test.describe('Story mode', () => {
     await expect(end.getByRole('link', { name: 'Play the game' })).toHaveAttribute('href', '/play/');
   });
 
-  test('a chapter has the player card (with the PDF) and the key numbers', async ({ page }) => {
+  test('a chapter has the player card (no PDF link) and the key numbers', async ({ page }) => {
     await page.goto('/nipotyno/');
     await expect(page.locator('.scorecard')).toContainText('UX researcher & designer');
-    await expect(page.locator('.scorecard a[href="/pdf/Riccardo_Cirillo_Nipotyno.pdf"]')).toBeVisible();
+    await expect(page.locator('a[href*="/pdf/"]')).toHaveCount(0);
     await expect(page.locator('.score-strip strong')).toHaveText(['13', '6', '78.75']);
     await expect(page.locator('.next-chapter')).toContainText('Levante');
   });

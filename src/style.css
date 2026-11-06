@@ -460,7 +460,6 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 .key-numbers { list-style: none; margin: .5rem 0; padding: 0; display: flex; flex-wrap: wrap; gap: .35rem; }
 .key-numbers li { padding: .15rem .5rem; border: 2px solid var(--ink); font-size: .875rem; font-weight: 700; }
 .card-links { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; }
-.pdf-link { font-weight: 700; }
 .panel h2 { margin: .25rem 0 .5rem; font-size: calc(var(--j) * 2); text-transform: uppercase; color: var(--yellow); }
 .panel h2 .sub { display: block; margin-top: .4rem; font-family: var(--font-body); font-size: 1rem; line-height: 1.35; letter-spacing: 0; text-transform: none; color: var(--ink); }
 .panel p { margin: .5rem 0; font-size: 1rem; }
@@ -504,7 +503,7 @@ th { background: var(--ink); color: var(--bg); }
   }
 }
 
-/* Print = the case-study PDFs (scripts/pdf.js prints each case page with these rules). */
+/* Print: what a visitor gets with the browser's Print command on a case page. */
 .print-head { display: none; }
 @media print {
   @page { size: A4; margin: 14mm 14mm 16mm; }
@@ -664,8 +663,6 @@ th { background: var(--ink); color: var(--bg); }
 .scorecard .facts div { display: block; }
 .scorecard .facts dt { font-family: var(--font-mono); font-size: .8125rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .scorecard .facts dd { font-size: 1rem; line-height: 1.45; }
-.scorecard .pdf { margin: 1.25rem 0 0; }
-.scorecard .pdf a { font-family: var(--font-mono); font-size: .9375rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--red); }
 /* Key numbers on a strip of scoreboard (always dark: yellow 11.4:1 and chalk 16.9:1 on night). */
 .score-strip { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); background: var(--night); border: 4px solid var(--navy); }
 .score-strip li { padding: 1rem 1.25rem; border: 1px solid var(--navy); }

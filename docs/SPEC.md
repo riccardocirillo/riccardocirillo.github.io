@@ -1,5 +1,7 @@
 # SPEC — Riccardo's portfolio (v0.2, 2026-10-20)
 
+> **06/11/2026:** case-study PDFs removed (link, generation, build). Every "PDF" of a case below is history; the CV PDFs stay.
+
 > **v4 · Art pass + continuous game (02/11/2026) — OVERRIDES the Gameplay parts below.** Source of truth: docs/ART_BIBLE.md; plan: docs/PROMPT_V4.md.
 > - **Pixels by hand:** every character is a text grid (art/sprites/*.txt, one character = one palette colour) turned into PNG + JSON by `npm run art` (scripts/art/grid.js): runner (36 frames × 3 uniforms, durations of § 5), coach (1st/3rd), pitcher, 3 teammates, 8 fans. /art-lab/ (dev only) shows them at 8×, animated, with silhouette and greys.
 > - **Night stadium, full screen:** world 704×424 in layers (scripts/art/stadium.js) plus a drawn apron; fix1: the whole 640×360 core (lamps to dugout) always in view under the HUD at the largest whole scale that fits (fractional under 2×, phones held upright 2×), a camera that follows the runner only where the core does not fit (src/game.js, one rAF in src/loop.js), live crowd (src/crowd.js), lit towers, live scoreboard.

@@ -122,19 +122,13 @@ test.describe('languages @ 1280 px', () => {
     });
   }
 
-  test('translated pages: ids without accents, fixed ids the code needs, PDF in the language', async ({ page, request }) => {
+  test('translated pages: ids without accents, fixed ids the code needs', async ({ page }) => {
     await page.goto('/es/nipotyno/');
     await expect(page.locator('section#investigacion')).toHaveCount(1); // "Investigación", not investigaci-n
     await expect(page.locator('section#tl-dr.tldr')).toHaveCount(1);
     const ids = await page.locator('[id]').evaluateAll((els) => els.map((el) => el.id));
     for (const id of ids) expect(id).toMatch(/^[A-Za-z0-9_-]+$/);
 
-    const pdf = page.locator('.scorecard .pdf a');
-    await expect(pdf).toHaveAttribute('href', '/pdf/Riccardo_Cirillo_Nipotyno_ES.pdf');
-    for (const file of ['Riccardo_Cirillo_Nipotyno_ES.pdf', 'Riccardo_Cirillo_Sensor_lab_IT.pdf', 'Riccardo_Cirillo_Sensor_lab.pdf']) {
-      const res = await request.get(`/pdf/${file}`);
-      expect(res.status(), file).toBe(200);
-    }
 
     // chapter 0 comes from the translated About (fixed ids), the scouting report from facts.md, in Italian (F4)
     await page.goto('/it/story/');

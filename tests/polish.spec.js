@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import sharp from 'sharp';
 
-// B7: sound toggle, case PDFs, share previews, reduced motion, page weight.
+// B7: sound toggle, share previews, reduced motion, page weight.
 const cases = { nipotyno: 'Nipotyno', levante: 'Levante', 'sensor-lab': 'Sensor_lab' };
 
 test.describe('sound toggle', () => {
@@ -28,17 +28,11 @@ test.describe('sound toggle', () => {
   });
 });
 
-for (const [slug, name] of Object.entries(cases)) {
-  test(`/${slug}/: Download PDF works and the share preview is 1200×630`, async ({ page, request }) => {
+for (const slug of Object.keys(cases)) {
+  test(`/${slug}/: no case PDF, and the share preview is 1200×630`, async ({ page, request }) => {
     await page.goto(`/${slug}/`);
-    const link = page.getByRole('link', { name: /Download PDF/ });
-    await expect(link).toHaveAttribute('href', `/pdf/Riccardo_Cirillo_${name}.pdf`);
-    const pdf = await request.get(`/pdf/Riccardo_Cirillo_${name}.pdf`);
-    expect(pdf.status()).toBe(200);
-    expect(pdf.headers()['content-type']).toContain('pdf');
-    const body = await pdf.body();
-    expect(body.subarray(0, 4).toString()).toBe('%PDF');
-    expect(body.length).toBeLessThan(2_500_000); // light enough to attach or send
+    await expect(page.locator('a[href*="/pdf/"]')).toHaveCount(0);
+    expect((await request.get(`/pdf/Riccardo_Cirillo_${cases[slug]}.pdf`)).headers()['content-type'] ?? '').not.toContain('pdf');
 
     await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', /case study by Riccardo Cirillo/);
     const og = new URL(await page.locator('meta[property="og:image"]').getAttribute('content')).pathname;
