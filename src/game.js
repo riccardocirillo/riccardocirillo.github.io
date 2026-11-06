@@ -337,7 +337,7 @@ function start() {
     go(nextId, { focus: keyboardUser ? 'panel' : 'none' });
   }
 
-  let readerClosedAt = 0;
+  let readerClosedAt = -Infinity; // never closed yet: a change of address in the first 100 ms of the page must still count
   const reader = createReader({
     dialog: field.querySelector('dialog.reader'),
     onClose() { readerClosedAt = performance.now(); },

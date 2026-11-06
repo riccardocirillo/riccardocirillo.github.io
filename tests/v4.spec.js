@@ -88,6 +88,13 @@ test.describe('v4 game @ 1280×800, reduced motion', () => {
     await expect(page).toHaveURL(/\/play\/#levante$/);
   });
 
+  test('a change of address in the first 100 ms of the page still moves to that base', async ({ page }) => {
+    await page.addInitScript(() => { const real = performance.now.bind(performance); performance.now = () => Math.min(real(), 50); });
+    await page.goto('/play/');
+    await page.goto('/play/#sensor-lab');
+    await expect(preview(page)).toHaveAttribute('data-panel', 'sensor-lab');
+  });
+
   test('/play/#levante opens the game on 2nd base, already reached (1st counts too); NEXT BASE goes on to the finale; state kept for the visit', async ({ page }) => {
     await page.goto('/play/#levante');
     await expect(hud(page)).toHaveText('2nd base · Levante');
