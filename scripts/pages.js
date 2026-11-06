@@ -420,7 +420,7 @@ const prototypeEmbed = (t) => `<div class="proto">
     <button type="button" class="button ghost proto-full">${escape(t.prototype.full)}</button>
   </div>
   <a class="proto-poster" href="${PROTOTYPE_URL}" target="_blank" rel="noopener">
-    <img src="/assets/nipotyno/home_02.webp" alt="" width="1400" height="1176" loading="lazy" decoding="async">
+    <img src="/assets/nipotyno/home_02.webp" alt="${escape(t.prototype.previewAlt)}" width="1400" height="1176" loading="lazy" decoding="async">
     <span class="proto-newtab">${escape(t.prototype.open)} <span aria-hidden="true">↗</span></span>
   </a>
   <template>

@@ -554,7 +554,7 @@ figure img { border: 1px solid var(--line); background: var(--card); }
   .phases ol { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--phases-gap); padding-bottom: 6.25rem; }
   .phases li { display: flex; }
   .phases-card { flex: 1; flex-direction: column; gap: .625rem; padding: .75rem .625rem; min-width: 0; }
-  .phases-measure { position: absolute; top: calc(100% + .875rem); right: 0; width: calc(200% + var(--phases-gap)); margin: 0; }
+  .phases-measure { position: absolute; top: calc(100% + .875rem); right: 0; width: calc(200% + var(--phases-gap)); margin: 0; font-size: .75rem; }
   .phases-facts { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: 0; }
 }
 .table-wrap { overflow-x: auto; margin: 1.5rem 0; }

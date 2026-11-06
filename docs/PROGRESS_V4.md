@@ -74,3 +74,13 @@ Se il contesto si riempie: rileggi questo file e `docs/ART_BIBLE.md`, poi contin
 
 ## Problemi aperti
 - (risolto 03/11) push del ramo v4: riuscito con fix1, il ramo è su GitHub (origin/v4). Nessun merge in main.
+
+## 06/11/2026 · Casi, parte 1 (Nipotyno + PDF)
+- A · PDF dei casi tolti da pagine, lettore, build e test. CV intatti.
+- B · Prima/dopo del pagamento nella sezione Prototype.
+- C · Prototipo hi-fi caricato al clic, con schermo intero sulla stessa pagina, anche dentro il lettore del gioco. Test in tests/nipotyno-prototype.spec.js (con un sito finto al posto di quello vero, così CI non dipende dalla rete).
+- D · Test: nuovo testo, schema delle fasi in HTML, facsimile tolto. Sulla pagina del caso la scheda giocatore sticky si ferma prima della sezione Test.
+- E · Corretto sinistra/destra.
+- Screenshot in docs/screens/2026-11-06/ (non nel repo).
+- [CHECK] con il focus dentro il prototipo Esc non chiude: serve il pulsante Chiudi (limite del browser con un dominio esterno).
+- [CHECK] i 3 punti di testo in CONTENT_STATUS.

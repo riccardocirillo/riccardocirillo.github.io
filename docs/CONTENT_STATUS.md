@@ -6,7 +6,7 @@ Contact sheets of all images: `docs/assets-preview/`.
 
 | File | Status | To check |
 |---|---|---|
-| content/nipotyno.md | ✅ final (~900 words, 8 images) | — |
+| content/nipotyno.md | ✅ updated 06/11/2026 (Prototype and Test sections) | **[CHECK]** 3 points at the end of this file |
 | content/levante.md | ✅ final (7 images; personas AI-generated, labelled) | — |
 | content/sensor-lab.md (+ es/, it/) | Sensor lab: in preparation. Placeholder only (F1, 28/10), the case comes in F7 | **[CHECK]** placeholder text |
 | _archive/content/housing.md, lab.md (+ es/, it/) | 📦 archived 28/10 (F1): not on the site; images in _archive/assets/ | — |
@@ -19,3 +19,7 @@ Contact sheets of all images: `docs/assets-preview/`.
 | src/i18n.js (ES and IT interface: buttons, labels, base names, uniforms, status line, studies) | **[CHECK]** first draft by Claude (Fase 3, 21/10) | same reviewers; names to confirm: Investigador / Ricercatore, "Becario" / "Tirocinante" |
 
 - [CHECK] v4 (02/11/2026): new `teaser:` line in content/es/*.md and content/it/*.md (the game's base preview), cut from each case's own description, no new facts. EN is final.
+- [CHECK] 06/11/2026, Nipotyno, didascalia e alt del prima/dopo: dicono che nel low-fi i metodi erano "plain text", ma nell'immagine lofi-payment.webp ogni metodo ha già un'icona (G, P, IP, K…). Anche il paragrafo "text-only payment buttons" dice lo stesso. Riccardo decide se cambiare il testo o l'immagine.
+- [CHECK] 06/11/2026, Nipotyno, "What I'd change": "in person… Recruiting this age group remotely was the biggest limitation" ora stride con il nuovo testo del Test (4 sessioni su 6 con il facilitatore nella stanza).
+- [CHECK] 06/11/2026, Nipotyno, Ideas: "The phone shows the service, and a mentor on a second screen" descrive il concept; nel prototipo hi-fi il telefono a sinistra è l'assistente e lo schermo a destra è il servizio.
+- [CHECK] 06/11/2026: traduzioni ES/IT nuove di Claude (prima/dopo, Try the prototype, dati di prova, testo del Test, schema delle fasi; "Perfil"/"Profilo" per Background, "Montaje" per Setup).

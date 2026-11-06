@@ -94,7 +94,7 @@ Abbiamo testato il prototipo ad alta fedeltà con 6 anziani a casa loro: in 4 se
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consenso</h4><p>Consenso informato letto insieme e firmato.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Profilo</h4><p>Età, abitudini digitali, sicurezza con i servizi online.</p></div></div></li>
 <li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Compito 1 · CUP</h4><p>Prenotare una visita specialistica da una ricetta cartacea.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Compito 2 · pagoPA</h4><p>Pagare un bollettino sanitario da 35 € scansionando il codice QR.</p></div></div><p class="phases-measure"><strong>Misurato per ogni compito:</strong> <span>tempo · tocchi · errori · successo</span></p></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Compito 2 · pagoPA</h4><p>Pagare un bollettino sanitario da 35&nbsp;€ scansionando il codice QR.</p></div></div><p class="phases-measure"><strong>Misurato per ogni compito:</strong> <span>tempo · tocchi · errori · successo</span></p></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Due questionari standard, uno sull'usabilità e uno sull'esperienza complessiva.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Intervista</h4><p>Domande aperte su cosa è stato difficile e cosa ha dato sicurezza.</p></div></div></li>
 </ol>
