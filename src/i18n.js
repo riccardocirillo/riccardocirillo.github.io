@@ -114,6 +114,7 @@ export const STRINGS = {
     sound: 'Sound',
     card: 'Card',
     close: 'Close',
+    prototype: { load: 'Load the prototype', full: 'Full screen', title: 'Nipotyno high-fidelity prototype', open: 'Open the prototype in a new tab' },
     stadiumMap: 'Stadium map',
     // Cards over the stadium
     homeCardTitle: 'Every point is a part of the portfolio',
@@ -259,6 +260,7 @@ export const STRINGS = {
     sound: 'Sonido',
     card: 'Ficha',
     close: 'Cerrar',
+    prototype: { load: 'Cargar el prototipo', full: 'Pantalla completa', title: 'Prototipo de alta fidelidad de Nipotyno', open: 'Abrir el prototipo en una pestaña nueva' },
     stadiumMap: 'Mapa del estadio',
     homeCardTitle: 'Cada punto es una parte del portfolio',
     homeCardText: 'Batea el lanzamiento para hacer un tour de home run por mis proyectos. También puedes hacer clic o tocar cualquier punto del estadio (o usar las teclas <kbd>←</kbd> <kbd>→</kbd> en las bases). Mi proyecto principal es un buen punto de partida:',
@@ -429,6 +431,7 @@ export const STRINGS = {
     sound: 'Suono',
     card: 'Scheda',
     close: 'Chiudi',
+    prototype: { load: 'Carica il prototipo', full: 'Schermo intero', title: 'Prototipo ad alta fedeltà di Nipotyno', open: 'Apri il prototipo in una nuova scheda' },
     stadiumMap: 'Mappa dello stadio',
     homeCardTitle: 'Ogni punto è una parte del portfolio',
     homeCardText: 'Batti il lancio per un tour fuoricampo dei miei progetti. Puoi anche cliccare o toccare un punto qualsiasi dello stadio (o usare i tasti <kbd>←</kbd> <kbd>→</kbd> sulle basi). Il mio progetto principale è un buon punto di partenza:',

@@ -68,6 +68,23 @@ One change came straight from testing. Participants hesitated on the text-only p
 <figcaption>The payment step before and after testing. In the low-fidelity version the methods were plain text; in the high-fidelity one each method has its own icon.</figcaption>
 </figure>
 
+### Try the prototype
+
+This is the high-fidelity prototype we tested. It is in Italian, like the test sessions. Read the instructions on the left screen, then act on the right one.
+
+<div data-prototype></div>
+
+<details class="proto-data">
+<summary>Test data (fictional)</summary>
+<p>Any values in these formats work.</p>
+<dl>
+<div><dt>CUP · prescription code</dt><dd><code>12345</code> + <code>1234567890</code></dd></div>
+<div><dt>CUP · tax code</dt><dd><code>AAAAAA00A00A000A</code></dd></div>
+<div><dt>pagoPA · email, in both fields</dt><dd><code>mario.rossi@email.it</code></dd></div>
+<div><dt>pagoPA · card: number, expiry, CVV, name</dt><dd><code>1111 2222 3333 4444</code> · <code>12/30</code> · <code>123</code> · <code>MARIO ROSSI</code></dd></div>
+</dl>
+</details>
+
 ## Test
 We tested with 6 participants in remote sessions. They used realistic paper facsimiles (a prescription, a pagoPA bill and a test card), so nobody had to invent data.
 

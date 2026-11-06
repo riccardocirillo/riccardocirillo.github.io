@@ -67,6 +67,23 @@ Un cambiamento è nato direttamente dai test. I partecipanti esitavano davanti a
 <figcaption>Il passaggio del pagamento prima e dopo i test. Nella versione a bassa fedeltà i metodi erano solo testo; in quella ad alta fedeltà ogni metodo ha la sua icona.</figcaption>
 </figure>
 
+### Prova il prototipo
+
+Questo è il prototipo ad alta fedeltà che abbiamo testato. È in italiano, come le sessioni di test. Leggi le istruzioni sullo schermo a sinistra, poi agisci su quello a destra.
+
+<div data-prototype></div>
+
+<details class="proto-data">
+<summary>Dati di prova (fittizi)</summary>
+<p>Va bene qualsiasi valore in questi formati.</p>
+<dl>
+<div><dt>CUP · codice della ricetta</dt><dd><code>12345</code> + <code>1234567890</code></dd></div>
+<div><dt>CUP · codice fiscale</dt><dd><code>AAAAAA00A00A000A</code></dd></div>
+<div><dt>pagoPA · email, in entrambi i campi</dt><dd><code>mario.rossi@email.it</code></dd></div>
+<div><dt>pagoPA · carta: numero, scadenza, CVV, nome</dt><dd><code>1111 2222 3333 4444</code> · <code>12/30</code> · <code>123</code> · <code>MARIO ROSSI</code></dd></div>
+</dl>
+</details>
+
 ## Test
 Abbiamo testato con 6 partecipanti in sessioni da remoto. Hanno usato facsimili cartacei realistici (una ricetta, un bollettino pagoPA e una carta di prova), così nessuno ha dovuto inventarsi i dati.
 

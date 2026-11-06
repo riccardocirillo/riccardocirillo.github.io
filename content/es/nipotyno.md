@@ -67,6 +67,23 @@ Un cambio salió directamente de los tests. Los participantes dudaban ante los b
 <figcaption>El paso del pago antes y después de los tests. En la versión de baja fidelidad los métodos eran solo texto; en la de alta fidelidad cada método tiene su propio icono.</figcaption>
 </figure>
 
+### Prueba el prototipo
+
+Este es el prototipo de alta fidelidad que probamos. Está en italiano, como las sesiones de test. Lee las instrucciones en la pantalla izquierda y luego actúa en la derecha.
+
+<div data-prototype></div>
+
+<details class="proto-data">
+<summary>Datos de prueba (ficticios)</summary>
+<p>Sirve cualquier valor con estos formatos.</p>
+<dl>
+<div><dt>CUP · código de la receta</dt><dd><code>12345</code> + <code>1234567890</code></dd></div>
+<div><dt>CUP · código fiscal</dt><dd><code>AAAAAA00A00A000A</code></dd></div>
+<div><dt>pagoPA · email, en los dos campos</dt><dd><code>mario.rossi@email.it</code></dd></div>
+<div><dt>pagoPA · tarjeta: número, caducidad, CVV, nombre</dt><dd><code>1111 2222 3333 4444</code> · <code>12/30</code> · <code>123</code> · <code>MARIO ROSSI</code></dd></div>
+</dl>
+</details>
+
 ## Test
 Hicimos el test con 6 participantes en sesiones en remoto. Usaron facsímiles de papel realistas (una receta, un recibo pagoPA y una tarjeta de prueba), así que nadie tuvo que inventarse datos.
 

@@ -412,6 +412,25 @@ function chapterNav(L, next, n) {
         </section>`;
 }
 
+// "Try the prototype" of Nipotyno: <div data-prototype></div> in the case's text becomes this block (src/prototype.js).
+const PROTOTYPE_URL = 'https://hi-fiprotohci.vercel.app/';
+const prototypeEmbed = (t) => `<div class="proto">
+  <div class="proto-actions" hidden>
+    <button type="button" class="button proto-load">${escape(t.prototype.load)}</button>
+    <button type="button" class="button ghost proto-full">${escape(t.prototype.full)}</button>
+  </div>
+  <a class="proto-poster" href="${PROTOTYPE_URL}" target="_blank" rel="noopener">
+    <img src="/assets/nipotyno/home_02.webp" alt="" width="1400" height="1176" loading="lazy" decoding="async">
+    <span class="proto-newtab">${escape(t.prototype.open)} <span aria-hidden="true">↗</span></span>
+  </a>
+  <template>
+    <dialog class="proto-stage" data-theme="night" role="group" aria-label="${escape(t.prototype.title)}">
+      <div class="proto-bar"><button type="button" class="button proto-close">${escape(t.close)}</button></div>
+      <div class="proto-box"><iframe src="${PROTOTYPE_URL}" title="${escape(t.prototype.title)}" allow="fullscreen"></iframe></div>
+    </dialog>
+  </template>
+</div>`;
+
 // A case study = one chapter of the Story mode (F4): progress, big number + title, the player card (role, team, when)
 // next to the key numbers and the text, then "Next chapter ▶" (or the end of the story after chapter 3).
 async function casePage(L, c, i, all) {
@@ -419,7 +438,7 @@ async function casePage(L, c, i, all) {
   const { t, p } = L;
   let html = figures(await markdown(c.body, t));
   html = sections(html);
-  html = html.replace('<section id="tl-dr">', '<section id="tl-dr" class="tldr">');
+  html = html.replace('<section id="tl-dr">', '<section id="tl-dr" class="tldr">').replace('<div data-prototype></div>', prototypeEmbed(t));
   const n = i + 1;
 
   const main = `      <article class="case chapter wrap wide">
@@ -450,6 +469,7 @@ async function casePage(L, c, i, all) {
     imageAlt: `${shortName(c)}, ${t.caseBy} (${L.stop(data.slug).label})`,
     main,
     mode: 'story',
+    ...(html.includes('class="proto"') ? { scripts: '<script type="module" src="/src/prototype.js"></script>' } : {}),
   });
 }
 
