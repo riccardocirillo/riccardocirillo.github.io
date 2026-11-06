@@ -48,7 +48,7 @@ What they needed was a second pair of eyes that confirms each step.
 We built both as low-fidelity Figma prototypes and tested them with 6 older adults, who thought aloud as they worked. The Mentor won. It led to fewer mistakes, better efficiency and a SUS of 95.0, and the participants who struggled most preferred it. The more confident users liked the Gym better.
 
 ## Prototype
-We turned the Mentor into a high-fidelity, dual-screen prototype. The left screen is the service. The right screen is the assistant, which gives short, friendly instructions like "Tap the white boxes to fill them in".
+We turned the Mentor into a high-fidelity, dual-screen prototype. The left screen is the assistant, which gives short, friendly instructions like "Tap the white boxes to fill them in". The right screen is the service, where you tap and type.
 
 ![Onboarding: the assistant introduces itself and lets the user enlarge the text](/assets/nipotyno/home_02.webp)
 

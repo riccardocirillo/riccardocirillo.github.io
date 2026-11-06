@@ -47,7 +47,7 @@ Lo que necesitaban era un segundo par de ojos que confirme cada paso.
 Construimos los dos como prototipos de baja fidelidad en Figma y los probamos con 6 personas mayores, que pensaban en voz alta mientras los usaban. Ganó el Mentor. Tuvo menos errores, más eficiencia y un SUS de 95,0, y lo prefirieron quienes más dificultades tenían. Los usuarios con más confianza preferían el Gym.
 
 ## Prototipo
-Convertimos el Mentor en un prototipo de alta fidelidad de doble pantalla. La pantalla izquierda es el servicio. La derecha es el asistente, que da instrucciones cortas y amables como "Toca los recuadros blancos para rellenarlos".
+Convertimos el Mentor en un prototipo de alta fidelidad de doble pantalla. La pantalla izquierda es el asistente, que da instrucciones cortas y amables como "Toca los recuadros blancos para rellenarlos". La derecha es el servicio, donde se toca y se escribe.
 
 ![Bienvenida: el asistente se presenta y permite agrandar el texto](/assets/nipotyno/home_02.webp)
 

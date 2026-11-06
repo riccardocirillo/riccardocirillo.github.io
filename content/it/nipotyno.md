@@ -47,7 +47,7 @@ Serviva loro un secondo paio d'occhi che confermi ogni passaggio.
 Li abbiamo costruiti entrambi come prototipi a bassa fedeltà in Figma e testati con 6 anziani, che pensavano ad alta voce mentre li usavano. Ha vinto il Mentore. Ha portato a meno errori, più efficienza e un SUS di 95,0, ed era il preferito di chi aveva più difficoltà. Gli utenti più sicuri preferivano la Gym.
 
 ## Prototipo
-Abbiamo trasformato il Mentore in un prototipo ad alta fedeltà a doppio schermo. Lo schermo a sinistra è il servizio. Quello a destra è l'assistente, che dà istruzioni brevi e gentili come "Tocca i riquadri bianchi per compilarli".
+Abbiamo trasformato il Mentore in un prototipo ad alta fedeltà a doppio schermo. Lo schermo a sinistra è l'assistente, che dà istruzioni brevi e gentili come "Tocca i riquadri bianchi per compilarli". Quello a destra è il servizio, dove si tocca e si scrive.
 
 ![Benvenuto: l'assistente si presenta e permette di ingrandire il testo](/assets/nipotyno/home_02.webp)
 
