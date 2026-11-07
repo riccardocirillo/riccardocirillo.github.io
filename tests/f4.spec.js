@@ -69,11 +69,24 @@ test.describe('title screen menu', () => {
     await expect(page.locator('.title-menu a:focus')).toHaveCount(0);
   });
 
+  test('with motion: lights, cards and cursor animate with opacity and transform only, and all of them end within 5 s', async ({ page }) => {
+    await page.goto('/');
+    const animations = await page.evaluate(() => document.getAnimations().map((a) => ({
+      name: a.animationName,
+      props: [...new Set(a.effect.getKeyframes().flatMap((k) => Object.keys(k)))].filter((p) => !['offset', 'computedOffset', 'easing', 'composite'].includes(p)),
+      end: a.effect.getComputedTiming().endTime,
+    })));
+    expect(animations.map((a) => a.name).sort()).toEqual(expect.arrayContaining(['cursor-pulse', 'lights-up', 'pick-in']));
+    for (const a of animations) {
+      for (const p of a.props) expect(['opacity', 'transform'], `${a.name}: ${p}`).toContain(p);
+      expect(a.end, a.name).toBeLessThanOrEqual(5000);
+    }
+  });
+
   test('reduced motion: nothing moves on the title screen', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
-    await page.waitForTimeout(200);
-    expect(await page.evaluate(() => document.getAnimations().filter((a) => a.playState === 'running').length)).toBe(0);
+    expect(await page.evaluate(() => document.getAnimations().length)).toBe(0);
   });
 });
 

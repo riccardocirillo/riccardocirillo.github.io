@@ -689,6 +689,20 @@ th { background: var(--ink); color: var(--bg); }
   .pick-no { width: 2.75rem; height: 2.75rem; font-size: calc(var(--j) * 1.5); }
 }
 
+/* Three small moves on the title screen, once, at opening: the stadium lights come up, the Quick picks arrive one after
+   the other (no fade: the text keeps full contrast), the ▶ cursor pulses three times and stops (under 5 s, WCAG 2.2.2).
+   Only opacity and transform, no layout shift, nothing waits. With reduced motion none of this exists. */
+@media (prefers-reduced-motion: no-preference) {
+  .title-screen:not(.lost) .title-stadium { animation: lights-up .9s steps(4, jump-none) both; }
+  @keyframes lights-up { from { opacity: .35; } to { opacity: 1; } }
+  .pick { animation: pick-in .28s ease-out both; }
+  .picks > li:nth-child(2) .pick { animation-delay: .08s; }
+  .picks > li:nth-child(3) .pick { animation-delay: .16s; }
+  @keyframes pick-in { from { transform: translateY(12px); } to { transform: none; } }
+  .title-menu:not(:hover):not(:focus-within) [data-first]::before, .menu-item:hover::before, .menu-item:focus-visible::before { animation: cursor-pulse 1.6s ease-in-out 3; }
+  @keyframes cursor-pulse { 50% { opacity: .4; } }
+}
+
 /* --- Story mode: chapters (paper) --- */
 .chapter { padding-block: 2rem 1rem; max-width: 72rem; }
 .chapter-progress { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; margin: 0 0 1.5rem; font-family: var(--font-mono); font-size: .875rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
