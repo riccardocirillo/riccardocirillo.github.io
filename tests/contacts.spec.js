@@ -58,6 +58,15 @@ test.describe('without JavaScript', () => {
   });
 });
 
+test('no separator dot at the start or end of a line in the contacts', async ({ page }) => {
+  for (const width of [390, 1280]) {
+    await page.setViewportSize({ width, height: 800 });
+    await page.goto('/multiplayer/');
+    await expect(page.locator('.ticket .contact-row')).not.toContainText('·');
+    await expect(page.locator('footer .contact-row > a')).toHaveCount(2);
+  }
+});
+
 test.describe('LinkedIn', () => {
   for (const [path, label] of [
     ['/multiplayer/', 'LinkedIn profile (opens in a new tab)'],

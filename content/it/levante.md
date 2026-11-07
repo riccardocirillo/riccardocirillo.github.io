@@ -3,12 +3,12 @@
 title: "Levante — Sapere in poche ore se il mare è sicuro"
 slug: levante
 base: "Seconda base"
-description: "Service e dashboard design per una boa con edge AI che rileva i batteri nelle acque di balneazione. Il concept punta a ridurre il tempo di conferma da ~48 a ~3 ore. EIT Digital Summer School 2026."
-teaser: "Service e dashboard design per una boa con edge AI che rileva i batteri nelle acque di balneazione."
+description: "Service e dashboard design per una boa con edge AI che prevede il rischio di contaminazione nelle acque di balneazione. Il concept punta a ridurre il tempo di conferma da 24–48 a circa 3 ore. EIT Digital Summer School 2026."
+teaser: "Service e dashboard design per una boa con edge AI che prevede il rischio di contaminazione nelle acque di balneazione."
 og_image: /assets/levante/dashboard.webp
 cover: /assets/levante/buoy-0.webp
 tldr: "Oggi servono 24–48 ore per confermare che l'acqua di balneazione è contaminata. In una EIT Digital Summer School di due settimane, il nostro team internazionale di 6 ha progettato Levante: una boa sensore a energia solare con edge AI e un servizio di monitoraggio. Ho studiato le norme e co-creato le personas e le journey map. Ho anche progettato la dashboard di monitoraggio."
-stats: "2 settimane · team internazionale di 6 · EIT Digital Summer School"
+stats: "2 settimane · team internazionale di 6 · EIT Digital Summer School"
 role: "UX e service designer: ho progettato la dashboard di monitoraggio (team di 6)"
 team: "Team internazionale di 6"
 context: "EIT Digital Summer School 2026 · ISEN Méditerranée, Francia · Challenge 4 \"The Invisible Contamination\""

@@ -32,7 +32,7 @@ CUP (*Centro Unico di Prenotazione*, el sistema regional para pedir citas médic
 
 ## Investigación
 Entrevistamos a 13 personas y observamos a 5 de ellas haciendo tareas reales. Encontramos tres patrones de comportamiento:
-- En un "solución híbrida", la gente mezcla papel, llamadas y una persona que ayuda para sacar adelante una tarea digital.
+- En una "solución híbrida", la gente mezcla papel, llamadas y una persona que ayuda para sacar adelante una tarea digital.
 - Con un "silo de memoria", memorizan una secuencia exacta de toques, y cualquier cambio la rompe.
 - En la "búsqueda de un refugio seguro", buscan a una persona o un lugar conocido que confirme cada paso.
 

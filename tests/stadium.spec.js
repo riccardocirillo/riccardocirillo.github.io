@@ -35,7 +35,7 @@ test.describe('stadium @ 1280×800', () => {
     await link.click();
     await expect(card(page)).toHaveAttribute('data-panel', 'home');
     await expect(card(page).locator('a[href^="mailto:"]')).toBeVisible();
-    await expect(card(page).getByRole('link', { name: 'CV en español (PDF)' })).toHaveAttribute('lang', 'es');
+    await expect(card(page).getByRole('link', { name: /^CV en español/ })).toHaveAttribute('lang', 'es');
     await expect(card(page).getByRole('link', { name: /Multiplayer/ })).toHaveAttribute('href', '/multiplayer/');
     await page.getByRole('button', { name: 'Close' }).click();
     await expect(page.locator('#field-panel')).toBeHidden();

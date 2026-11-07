@@ -135,7 +135,9 @@ abbr { text-decoration: none; }
 .site-footer { margin-top: 4rem; padding-block: 2rem; border-top: 2px solid var(--line); font-size: 1rem; }
 .site-footer p { margin: .25rem 0; overflow-wrap: anywhere; }
 
-.nowrap { white-space: nowrap; } /* a separator goes to the next line with what it introduces, never stays alone at the end of a line */
+.nowrap { white-space: nowrap; }
+/* Email, LinkedIn and CV: one group that wraps without separators, so no dot stays alone at the start or end of a line. */
+.contact-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: .25rem 1rem; }
 /* The email copies on click (src/contact.js): a small "copy" tag instead of the underline says it is an action. */
 .email-link.can-copy { text-decoration: none; }
 .copy-tag { display: inline-block; margin-left: .5em; padding: 0 .35em; border: 1px solid currentColor; font-family: var(--font-mono); font-size: .75rem; font-weight: 700; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; vertical-align: middle; }
@@ -541,7 +543,7 @@ figcaption { margin-top: .5rem; font-size: .9375rem; line-height: 1.4; color: va
 .phases-card p { margin: 0; font-size: .9375rem; line-height: 1.4; color: inherit; }
 .is-task .phases-card { background: var(--navy); color: #fff; box-shadow: 5px 5px 0 var(--red-fill); }
 .is-task .phases-no { border-color: #fff; }
-.phases-measure { margin: .25rem 0 0; padding: .5rem .25rem; border: 3px dashed var(--red-fill); font-family: var(--font-mono); font-size: .8125rem; line-height: 1.4; text-align: center; color: var(--red); }
+.phases-measure { max-width: none; margin: .25rem 0 0; padding: .5rem .25rem; border: 3px dashed var(--red-fill); font-family: var(--font-mono); font-size: .8125rem; line-height: 1.4; text-align: center; color: var(--red); }
 .phases-measure strong, .phases-measure span { display: block; }
 .phases-facts { display: grid; gap: .75rem; margin: 1.5rem 0 0; }
 .phases-facts div { display: block; padding-top: .5rem; border-top: 3px solid var(--navy); }
@@ -982,6 +984,7 @@ dialog.reader::backdrop { background: #0b0f1e; }
 .reader-bottom { border-top: 2px solid var(--ink); background: var(--card); }
 .reader-body { overflow: auto; overscroll-behavior: contain; padding: 1rem 0 3rem; }
 .reader-body:focus { outline: none; }
+.reader-body .chapter-nav { display: none; } /* the reader has its own way on and back; these links would leave the game */
 .reader-loading { padding: 2rem 1rem; text-align: center; font-family: var(--font-mono); }
 .reader .button { min-height: 44px; }
 
@@ -1083,6 +1086,7 @@ dialog.reader::backdrop { background: #0b0f1e; }
 .title-bar .lang-switch li + li::before { padding-inline: .35em; }
 .title-screen { --tj: calc(var(--tf) * 1.1667); /* the Jersey 10 step, as --j */ display: grid; align-content: center; min-height: calc(100dvh - var(--tf) * 3.75 - 4px); padding-block: 1em 1.5em; font-size: var(--tf); }
 .title-grid { gap: 2em; }
+.title-page .site-footer { margin-top: 0; } /* the night of the stadium goes straight into the footer */
 .logo { font-size: calc(var(--tj) * 4); }
 .role { margin: 1em 0 .5em; font-size: 1.375em; }
 .role-sub { margin: 0 0 1.5em; font-size: 1em; }

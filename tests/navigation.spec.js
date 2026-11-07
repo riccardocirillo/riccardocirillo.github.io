@@ -84,6 +84,28 @@ test.describe('the way back', () => {
   });
 });
 
+test('the reader of the game hides the chapter links: they would leave the game', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/play/#levante');
+  await page.locator('#field-panel').getByRole('link', { name: /Read/i }).click();
+  await expect(page.locator('dialog.reader h1')).toBeVisible();
+  await expect(page.locator('dialog.reader .chapter-nav')).toBeHidden();
+  await expect(page.locator('dialog.reader [data-action="reader-next"]')).toBeVisible();
+});
+
+test('keyboard: at the finale the focus lands on it, not on the page behind', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/play/');
+  await page.getByRole('button', { name: 'Swing!' }).click();
+  for (let i = 0; i < 3; i += 1) await page.locator('#field-panel [data-panel]:visible [data-action="next-base"]').click();
+  await expect(page.locator('#finale')).toBeFocused();
+});
+
+test('the CV buttons say PDF once to screen readers', async ({ page }) => {
+  await page.goto('/multiplayer/');
+  await expect(page.locator('.ticket').getByRole('link', { name: 'CV · English (PDF, opens in a new tab)' })).toBeVisible();
+});
+
 test('the title screen has no menu hint, in any language', async ({ page }) => {
   for (const home of ['/', '/es/', '/it/']) {
     await page.goto(home);

@@ -203,7 +203,7 @@ export const STRINGS = {
     playerCard: 'Ficha del jugador',
     endTitle: 'Fin de la historia',
     endText: 'Gracias por leer. Busco prácticas de UX research y diseño a partir de febrero de 2027. Si tu equipo tiene una plaza, escríbeme.',
-    playTheGame: 'Jugar al juego',
+    playTheGame: 'Jugar',
     mpSub: 'Contacto y CV. ¿Buscas un compañero de equipo a partir de febrero de 2027?',
     admitOne: 'Entrada · Entrevista',
     scoutingReport: 'Informe del ojeador',
@@ -447,7 +447,7 @@ export const STRINGS = {
     aboutMe: 'Chi sono',
     contact: 'Contatti e CV',
     // v4 [CHECK]
-    v4: { exit: 'Esci', exitLabel: 'Esci alla schermata del titolo', read: 'Leggi', nextBase: 'Prossima base', close: 'Chiudi', backTo: 'Torna a {base}', backToGame: 'Torna al gioco', playerProfile: 'Profilo giocatore', homeRunAbout: 'Home run · Chi sono', readerLabel: 'Caso di studio: {name}', loading: 'Caricamento…', dragToClose: 'Trascina giù per chiudere' },
+    v4: { exit: 'Esci', exitLabel: 'Esci alla schermata del titolo', read: 'Leggi', nextBase: 'Prossima base', close: 'Chiudi', backTo: 'Torna a {base}', backToGame: 'Torna al gioco', playerProfile: 'Profilo giocatore', homeRunAbout: 'Fuoricampo · Chi sono', readerLabel: 'Caso di studio: {name}', loading: 'Caricamento…', dragToClose: 'Trascina giù per chiudere' },
     game: {
       atBat: 'In battuta. Batti per colpire il lancio.',
       tourEnded: 'Tour finito. Modalità libera.',

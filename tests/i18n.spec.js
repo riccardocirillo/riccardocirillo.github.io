@@ -114,6 +114,8 @@ test.describe('languages @ 1280 px', () => {
       const card = page.locator('#field-panel [data-panel="levante"]');
       await card.getByRole('link', { name: new RegExp(`^${words.read}`) }).click();
       await expect(page).toHaveURL(new RegExp(`/${lang}/levante/$`));
+      await expect(page.locator('dialog.reader .next-chapter')).toBeHidden(); // 07/11: the reader has its own Next base
+      await page.goto(`/${lang}/levante/`);
       await page.locator('.next-chapter').click();
       await expect(page).toHaveURL(new RegExp(`/${lang}/sensor-lab/$`));
       await expect(page.locator('.next-chapter')).toHaveCount(0); // the last chapter ends the story
