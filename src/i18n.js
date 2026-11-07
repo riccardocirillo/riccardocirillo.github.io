@@ -9,7 +9,7 @@ export const PREFIX = { en: '', es: '/es', it: '/it' };
 export const LOCALE = { en: 'en_GB', es: 'es_ES', it: 'it_IT' };
 // The language switcher: short label + the language's name in its own language.
 export const LANG_NAMES = { en: 'English', es: 'Español', it: 'Italiano' };
-// The CV that goes with each language (there is no Italian CV: Italian visitors get the English one).
+// The CV that goes with each language (the Italian CV is not on the site: Italian visitors get the English one).
 export const CV_LANG = { en: 'en', es: 'es', it: 'en' };
 
 export const fill = (text, values) => text.replace(/\{(\w+)\}/g, (_, key) => values[key]);
@@ -211,7 +211,7 @@ export const STRINGS = {
     meta: {
       story: ['Modo historia · Riccardo Cirillo', 'Quién soy y cómo diseño, y después mis tres casos de estudio de UX en orden.'],
       play: ['Gameplay · Riccardo Cirillo', 'Un pequeño juego de béisbol en pixel art: batea, recorre las bases y abre mis proyectos de UX.'],
-      multiplayer: ['Contacto y CV · Riccardo Cirillo', 'Email y CV (inglés, español) de Riccardo Cirillo, becario de UX Research & Design disponible desde febrero de 2027.'],
+      multiplayer: ['Contacto y CV · Riccardo Cirillo', 'Email y CV (inglés, español) de Riccardo Cirillo, que busca prácticas de UX Research & Design desde febrero de 2027.'],
     },
     navLabel: 'Principal',
     langLabel: 'Idioma',
@@ -221,11 +221,11 @@ export const STRINGS = {
     copy: 'copiar',
     copied: 'Email copiado',
     linkedinLabel: 'Perfil de LinkedIn (se abre en una pestaña nueva)',
-    headline: 'Becario de UX Research & Design · disponible desde febrero de 2027',
+    headline: 'Prácticas de UX Research & Design · disponible desde febrero de 2027',
     availableFrom: 'Desde febrero de 2027',
     ogLine: 'UX Research & Design · 2027',
     homeTitle: 'Riccardo Cirillo · UX Research & Design',
-    homeDescription: 'Riccardo Cirillo, becario de UX Research & Design disponible desde febrero de 2027. Casos de estudio, CV y contacto.',
+    homeDescription: 'Riccardo Cirillo busca prácticas de UX Research & Design desde febrero de 2027. Casos de estudio, CV y contacto.',
     homeImageAlt: 'Campo de béisbol en pixel art bajo el título Riccardo Cirillo, UX Research & Design, 2027',
     facts: { role: 'Mi rol', team: 'Equipo', context: 'Contexto', when: 'Cuándo', tools: 'Métodos y herramientas' },
     otherCases: 'Otros casos de estudio',

@@ -34,7 +34,7 @@ Busco **prácticas de UX research y diseño a partir de febrero de 2027**, compa
 Juego al béisbol en un equipo. Es un juego lento de pequeñas decisiones tomadas en grupo, y para mí el diseño se parece. Por eso este portfolio es un estadio, con un proyecto en cada base.
 
 ## Herramientas {#toolbox}
-Entrevistas · contextual inquiry · codificación cualitativa · personas · journey maps · Figma · tests de usabilidad (SUS, UEQ) · evaluación heurística · WCAG 2.2 · HTML/CSS/JS · React · Arduino
+Entrevistas · contextual inquiry · codificación cualitativa · personas · journey maps · Figma · pruebas de usabilidad (SUS, UEQ) · evaluación heurística · WCAG 2.2 · HTML/CSS/JS · React · Arduino
 
 ## Contacto {#contact}
 riccardo.cirillo.work@gmail.com · CV: [English](/cv/CV_Riccardo_Cirillo_EN.pdf) · [Español](/cv/CV_Riccardo_Cirillo_ES.pdf)

@@ -10,7 +10,7 @@ for (const { width, height } of [{ width: 1280, height: 800 }, { width: 390, hei
     await page.goto('/404.html');
     await expect(page.locator('body')).toHaveAttribute('data-theme', 'night');
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Lost ball');
-    const links = page.locator('.lost-links a');
+    const links = page.locator('.lost-links li:not([hidden]) a'); // the "previous page" link shows only when coming from the site
     expect(await links.evaluateAll((as) => as.map((a) => a.getAttribute('href')))).toEqual(['/', '/story/', '/multiplayer/']);
     for (const link of await links.all()) await expect(link).toBeInViewport();
     await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex');

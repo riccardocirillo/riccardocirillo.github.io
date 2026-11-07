@@ -135,6 +135,7 @@ abbr { text-decoration: none; }
 .site-footer { margin-top: 4rem; padding-block: 2rem; border-top: 2px solid var(--line); font-size: 1rem; }
 .site-footer p { margin: .25rem 0; overflow-wrap: anywhere; }
 
+.nowrap { white-space: nowrap; } /* a separator goes to the next line with what it introduces, never stays alone at the end of a line */
 /* The email copies on click (src/contact.js): a small "copy" tag instead of the underline says it is an action. */
 .email-link.can-copy { text-decoration: none; }
 .copy-tag { display: inline-block; margin-left: .5em; padding: 0 .35em; border: 1px solid currentColor; font-family: var(--font-mono); font-size: .75rem; font-weight: 700; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; vertical-align: middle; }
@@ -616,16 +617,26 @@ th { background: var(--ink); color: var(--bg); }
 .modes a[aria-current]:hover { color: var(--night); }
 .modes a:not([aria-current]):hover { border-color: var(--yellow); }
 .site-header a:focus-visible { outline-color: var(--yellow); }
-/* Phones: ◀ Title screen · EN ES IT · CV on the first line, the three modes under it. */
-@media (max-width: 699px) {
-  .site-header .bar { gap: .25rem .75rem; }
-  .modes { order: 2; width: 100%; padding-bottom: .25rem; }
-  .modes ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .375rem; }
-  .modes a { justify-content: center; width: 100%; padding: 0 .25rem; font-size: .75rem; letter-spacing: .02em; text-align: center; line-height: 1.2; }
-  .mode-bar .to-title, .mode-bar .lang-switch a, .mode-bar .cv-top { font-size: .8125rem; letter-spacing: .04em; }
+/* Up to 1000 px the text of the bar gets smaller, so it stays on one line (in every language). */
+@media (max-width: 999px) {
+  .mode-bar .bar { gap: .25rem .5rem; }
+  .mode-bar .to-title, .mode-bar .modes a, .mode-bar .lang-switch a, .mode-bar .cv-top { font-size: .8125rem; letter-spacing: .03em; }
+  .mode-bar .modes a { padding: 0 .5rem; }
+  .mode-bar .modes ul { gap: .25rem; }
   .mode-bar .lang-switch a { min-width: 1.5rem; }
   .mode-bar .lang-switch li + li::before { padding-inline: .15rem; }
-  .mode-bar .to-title { margin-right: auto; }
+  .to-title { margin-right: 0; }
+}
+/* Narrower: ◀ Title screen · EN ES IT · CV on the first line, the three modes evenly under it. Never a third line, never the CV alone. */
+@media (max-width: 799px) {
+  .modes { order: 2; width: 100%; padding-bottom: .25rem; }
+  .modes ul, .mode-bar .modes ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .375rem; }
+  .modes a, .mode-bar .modes a { justify-content: center; width: 100%; padding: 0 .25rem; text-align: center; line-height: 1.2; }
+  .mode-bar .to-title { flex: 1 1 0; min-width: 0; margin-right: 0; line-height: 1.15; } /* a long name wraps inside its own box, it never pushes the CV to another line */
+}
+@media (max-width: 699px) {
+  .site-header .bar { gap: .25rem .75rem; }
+  .mode-bar .modes a { font-size: .75rem; letter-spacing: .02em; }
   .title-bar .brand { display: none; } /* the name is the logo right under it */
   .title-bar .lang-switch { margin-right: auto; }
 }
@@ -720,6 +731,8 @@ th { background: var(--ink); color: var(--bg); }
   .chapter h1 { font-size: calc(var(--j) * 3); }
 }
 .chapter-grid { display: grid; gap: 2rem; }
+/* One column: never wider than the text column on a laptop (39rem, about 624 px). */
+@media (max-width: 999px) { .case.chapter.wrap.wide { max-width: 41rem; } }
 @media (min-width: 1000px) {
   .chapter-grid { grid-template-columns: 20rem minmax(0, 1fr); align-items: start; gap: 3rem; }
   .scorecard { position: sticky; top: 1rem; }
@@ -736,7 +749,10 @@ th { background: var(--ink); color: var(--bg); }
 .score-strip strong { display: block; font-family: var(--font-display); font-size: calc(var(--j) * 2); font-weight: 400; line-height: 1; color: var(--yellow); }
 .score-strip strong.is-text { font-size: calc(var(--j) * 1.5); line-height: 1.1; } /* a whole phrase, not a number: "EIT Digital Summer School" */
 .score-strip span { display: block; margin-top: .5rem; font-family: var(--font-mono); font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; color: #f4f1e6; }
-.chapter-body > section:first-of-type h2, .chapter-body > .tldr h2 { margin-top: 0; }
+/* The same 3rem above every section title, whatever comes before it (a figure, a table, a list). */
+.chapter-body > section > h2 { margin-top: 0; }
+.chapter-body > section > :last-child { margin-bottom: 0; }
+.chapter-body > section + section { margin-top: 3rem; }
 /* The way on: ◀ Previous chapter and one big Next chapter ▶ */
 .chapter-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem 2rem; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--ink); }
 .to-title-link, .prev-chapter { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; font-family: var(--font-mono); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; }
@@ -770,7 +786,6 @@ th { background: var(--ink); color: var(--bg); }
 .ticket h2.kicker { margin: 0 0 .75rem; font-family: var(--font-mono); font-size: .875rem; color: var(--red); }
 .ticket-email { margin: 0 0 1.5rem; font-size: clamp(1rem, 4.2vw, 1.375rem); font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
 .ticket-email a { color: var(--red); }
-.ticket-email > span { margin-inline: .25em; }
 .ticket-stub { display: grid; place-items: center; overflow: hidden; border-left: 3px dashed var(--ink); background: var(--card-dark); }
 .ticket-stub span { writing-mode: vertical-rl; font-family: var(--font-display); font-size: calc(var(--j) * 2); color: var(--red); }
 .scouting { padding: 1.75rem; border: 4px solid var(--navy); box-shadow: 6px 6px 0 var(--navy); }
@@ -1085,7 +1100,9 @@ dialog.reader::backdrop { background: #0b0f1e; }
 .pick-line { margin-top: .5em; font-size: 1em; }
 .pick-stats { margin-top: .5em; font-size: .8125em; }
 @media (min-width: 700px) {
-  .title-bar .bar, .title-screen .title-grid { width: min(88vw, 2400px); max-width: none; padding-inline: 0; }
+  .title-bar .bar, .title-screen .title-grid, .title-page .site-footer .wrap { width: min(88vw, 2400px); max-width: none; padding-inline: 0; }
+  .title-screen .lost-body { width: min(88vw, 2400px); max-width: none; margin-inline: auto; padding-inline: 0; }
+  .lost-body > * { max-width: 40rem; }
   .logo { font-size: calc(var(--tj) * 5.5); }
 }
 @media (min-width: 1000px) {

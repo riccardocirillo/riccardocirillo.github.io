@@ -13,7 +13,7 @@ role: "Investigador y diseñador UX (equipo de 4)"
 team: "Riccardo Cirillo, Fabio Vito Papapicco, Andrea Ramaglia Bianchino, Ilaria Salami"
 context: "HCI Project, MSc Human-Computer Interaction and Design, Universidad Politécnica de Madrid"
 duration: "feb – jun 2026"
-tools: "Entrevistas, observación, personas, modelo de tareas, Figma, tests con pensamiento en voz alta, SUS, UEQ"
+tools: "Entrevistas, observación, personas, modelo de tareas, Figma, pruebas con pensamiento en voz alta, SUS, UEQ"
 ---
 
 ## En resumen {#tl-dr}
@@ -21,8 +21,8 @@ En Italia se empuja a las personas mayores a pedir citas médicas (CUP) y pagar 
 
 ## Mi rol
 - En la investigación, hice con el equipo las 13 entrevistas y las 5 observaciones, y las convertimos en personas y en un modelo de tareas.
-- En la fase de baja fidelidad hice el diseño visual de los dos prototipos en Figma. Moderé 2 de las 6 sesiones de test, hice de "ordenador" (Mago de Oz) en otras 2 y analicé los datos de 2 participantes. También escribí los capítulos de introducción y método.
-- Para el prototipo de alta fidelidad construí el flujo de reserva CUP en Figma y escribí el protocolo del test (guion de bienvenida, proceso, consentimiento informado). Moderé 2 sesiones, observé otras 2 e hice el análisis cuantitativo de errores, tiempo y acciones.
+- En la fase de baja fidelidad hice el diseño visual de los dos prototipos en Figma. Facilité 2 de las 6 sesiones de prueba, hice de "ordenador" (Mago de Oz) en otras 2 y analicé los datos de 2 participantes. También escribí los capítulos de introducción y método.
+- Para el prototipo de alta fidelidad construí el flujo de reserva CUP en Figma y escribí el protocolo de la prueba (guion de bienvenida, proceso, consentimiento informado). Facilité 2 sesiones, observé otras 2 e hice el análisis cuantitativo de errores, tiempo y acciones.
 - Con el equipo, escribí el plan de negocio del concepto en la asignatura Entrepreneurship and Business Modelling.
 
 ## El problema
@@ -32,7 +32,7 @@ CUP (*Centro Unico di Prenotazione*, el sistema regional para pedir citas médic
 
 ## Investigación
 Entrevistamos a 13 personas y observamos a 5 de ellas haciendo tareas reales. Encontramos tres patrones de comportamiento:
-- En un "apaño híbrido", la gente mezcla papel, llamadas y una persona que ayuda para sacar adelante una tarea digital.
+- En un "solución híbrida", la gente mezcla papel, llamadas y una persona que ayuda para sacar adelante una tarea digital.
 - Con un "silo de memoria", memorizan una secuencia exacta de toques, y cualquier cambio la rompe.
 - En la "búsqueda de un refugio seguro", buscan a una persona o un lugar conocido que confirme cada paso.
 
@@ -53,7 +53,7 @@ Un cambio salió directamente de las pruebas. En las primeras sesiones de baja f
 
 ### Prueba el prototipo
 
-Este es el prototipo de alta fidelidad que probamos. Está en italiano, como las sesiones de test. Lee las instrucciones en la pantalla izquierda y luego actúa en la derecha.
+Este es el prototipo de alta fidelidad que probamos. Está en italiano, como las sesiones de prueba. Lee las instrucciones en la pantalla izquierda y luego actúa en la derecha.
 
 <div data-prototype></div>
 
@@ -80,16 +80,16 @@ Dos momentos del prototipo, para quien prefiera no abrirlo.
 
 </div>
 
-## Test
+## Pruebas {#test}
 Probamos el prototipo de alta fidelidad con 6 personas en su casa. Cada sesión duró de 40 a 60 minutos. Uno de nosotros la dirigía mientras los demás anotaban el tiempo, los toques y los errores. Esta vez los participantes no pensaron en voz alta, para poder comparar sus tiempos con los tiempos objetivo que habíamos fijado. Trabajaron con documentos de papel realistas con datos ficticios (una receta y un recibo pagoPA), así que nadie tuvo que inventarse nada.
 
 <div class="phases">
 <h3>Una sesión, siete pasos</h3>
-<ol role="list" aria-label="Los siete pasos de una sesión de test">
+<ol role="list" aria-label="Los siete pasos de una sesión de prueba">
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">1</span><div><h4>Bienvenida</h4><p>"Estamos probando el diseño, no a ti."</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consenti&shy;miento</h4><p>Consentimiento informado leído juntos y firmado.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Perfil</h4><p>Edad, hábitos digitales, confianza con los servicios en línea.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Tarea 1&nbsp;· CUP</h4><p>Pedir una visita al especialista a partir de una receta en papel.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Tarea 1&nbsp;· CUP</h4><p>Pedir cita con el especialista a partir de una receta en papel.</p></div></div></li>
 <li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Tarea 2&nbsp;· pagoPA</h4><p>Pagar un recibo sanitario de 35&nbsp;€ escaneando su código QR.</p></div></div><p class="phases-measure"><strong>Medido por tarea:</strong> <span>tiempo · toques · errores · éxito</span></p></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Dos cuestionarios estándar, uno sobre la usabilidad y otro sobre la experiencia general.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Entrevista</h4><p>Preguntas abiertas sobre qué resultó difícil y qué dio seguridad.</p></div></div></li>
@@ -98,7 +98,7 @@ Probamos el prototipo de alta fidelidad con 6 personas en su casa. Cada sesión 
 <div><dt>Quién</dt><dd>6 adultos de 53 a 82 años, media de 67</dd></div>
 <div><dt>Dónde</dt><dd>En casa</dd></div>
 <div><dt>Cómo</dt><dd>Uno de nosotros dirigía la sesión y los demás anotaban el tiempo, los toques y los errores; de 40 a 60 min</dd></div>
-<div><dt>Montaje</dt><dd>Una tableta con las dos pantallas una al lado de la otra</dd></div>
+<div><dt>Configuración</dt><dd>Una tableta con las dos pantallas una al lado de la otra</dd></div>
 </dl>
 </div>
 
@@ -112,10 +112,10 @@ Probamos el prototipo de alta fidelidad con 6 personas en su casa. Cada sesión 
 El SUS bajó de 95,0 a 78,75 porque aquí había que introducir datos realistas, como el código fiscal, y el grupo incluía a usuarios con menos confianza.
 
 ## Resultado
-El concepto funcionó en condiciones de test realistas. Una de las personas participantes dijo que la experiencia le hacía sentirse independiente de la familia y de las oficinas públicas, que era el objetivo del proyecto.
+El concepto funcionó en condiciones de prueba realistas. Una de las personas participantes dijo que la experiencia le hacía sentirse independiente de la familia y de las oficinas públicas, que era el objetivo del proyecto.
 
 ## Qué cambiaría
 - Mostraría el formato antes de que aparezca el error. Los campos del formulario, sobre todo el *codice fiscale* (código fiscal), causaron 8 de los errores de los dos participantes de más edad.
-- Todo error debería tener arreglo. Un email equivocado bloqueó a un participante, y el moderador tuvo que intervenir.
+- Todo error debería tener arreglo. Un email equivocado bloqueó a un participante, y el facilitador tuvo que intervenir.
 - Los métodos de pago tienen que distinguirse mejor: 2 de 6 participantes eligieron primero el equivocado.
 - La próxima vez probaría con más personas de más de 70 años. Solo 2 de nuestros 6 participantes los tenían, y reclutar a esta franja de edad fue la mayor limitación del estudio.

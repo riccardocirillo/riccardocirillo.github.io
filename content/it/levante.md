@@ -3,11 +3,11 @@
 title: "Levante — Sapere in poche ore se il mare è sicuro"
 slug: levante
 base: "Seconda base"
-description: "Service e dashboard design per una boa con IA edge che rileva i batteri nelle acque di balneazione. Il concept punta a ridurre il tempo di conferma da ~48 a ~3 ore. EIT Digital Summer School 2026."
-teaser: "Service e dashboard design per una boa con IA edge che rileva i batteri nelle acque di balneazione."
+description: "Service e dashboard design per una boa con edge AI che rileva i batteri nelle acque di balneazione. Il concept punta a ridurre il tempo di conferma da ~48 a ~3 ore. EIT Digital Summer School 2026."
+teaser: "Service e dashboard design per una boa con edge AI che rileva i batteri nelle acque di balneazione."
 og_image: /assets/levante/dashboard.webp
 cover: /assets/levante/buoy-0.webp
-tldr: "Oggi servono 24–48 ore per confermare che l'acqua di balneazione è contaminata. In una EIT Digital Summer School di due settimane, il nostro team internazionale di 6 ha progettato Levante: una boa sensore a energia solare con IA edge e un servizio di monitoraggio. Ho studiato le norme e co-creato le personas e le journey map. Ho anche progettato la dashboard di monitoraggio."
+tldr: "Oggi servono 24–48 ore per confermare che l'acqua di balneazione è contaminata. In una EIT Digital Summer School di due settimane, il nostro team internazionale di 6 ha progettato Levante: una boa sensore a energia solare con edge AI e un servizio di monitoraggio. Ho studiato le norme e co-creato le personas e le journey map. Ho anche progettato la dashboard di monitoraggio."
 stats: "2 settimane · team internazionale di 6 · EIT Digital Summer School"
 role: "UX e service designer: ho progettato la dashboard di monitoraggio (team di 6)"
 team: "Team internazionale di 6"
@@ -45,7 +45,7 @@ Abbiamo costruito queste personas a partire dalla ricerca. I loro ritratti sono 
 ![Persona: Gabriella, responsabile di laboratorio che ha bisogno di risultati affidabili e più rapidi (ritratto generato con IA)](/assets/levante/persona-gabriela.webp)
 
 ## Idee
-Abbiamo progettato un servizio intorno al test di laboratorio. I sensori su una boa misurano torbidità, temperatura, conducibilità e pioggia, e un modello di IA edge stima il rischio sul posto. Quando il rischio è alto, una squadra sul campo controlla l'acqua con la qPCR e lo stato della spiaggia viene aggiornato.
+Abbiamo progettato un servizio intorno al test di laboratorio. I sensori su una boa misurano torbidità, temperatura, conducibilità e pioggia, e un modello di edge AI stima il rischio sul posto. Quando il rischio è alto, una squadra sul campo controlla l'acqua con la qPCR e lo stato della spiaggia viene aggiornato.
 
 ![Flusso del servizio: raccolta dati, rilevazione del rischio, allerta, verifica sul campo, stato della spiaggia aggiornato](/assets/levante/architecture.webp)
 

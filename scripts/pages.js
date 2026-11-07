@@ -229,7 +229,7 @@ const cvTop = (L) => {
 // (src/contact.js, which also shows the "copy" tag); without JS it stays a plain mailto.
 const emailLink = (t) => `<a class="email-link" href="mailto:${EMAIL}" data-copy>${EMAIL}<span class="copy-tag" hidden>${escape(t.copy)}</span></a>`;
 const linkedinLink = (t) => `<a href="${LINKEDIN}" target="_blank" rel="me noopener" aria-label="${escape(t.linkedinLabel)}">LinkedIn</a>`;
-const contactLinks = (t) => `${emailLink(t)} <span aria-hidden="true">·</span> ${linkedinLink(t)}`;
+const contactLinks = (t) => `${emailLink(t)} <span class="nowrap"><span aria-hidden="true">·</span> ${linkedinLink(t)}</span>`;
 
 // EN · ES · IT, like a scoreboard: each one leads to the same page in that language.
 // The choice is remembered (a click saves it); only "/" sends a visitor who chose ES or IT to their language.
@@ -330,7 +330,7 @@ ${main}
     <footer class="site-footer" data-theme="night">
       <div class="wrap wide">
         <p><strong>Riccardo Cirillo</strong> · ${escape(t.headline)}</p>
-        <p>${contactLinks(t)} · CV: ${cvLink(L, 'en', CV.en.short)} · ${cvLink(L, 'es', CV.es.short)}</p>
+        <p>${contactLinks(t)} <span class="nowrap">· CV: ${cvLink(L, 'en', CV.en.short)} · ${cvLink(L, 'es', CV.es.short)}</span></p>
       </div>
     </footer>
     <p class="copy-toast" role="status" aria-live="polite" data-copied="${escape(t.copied)}"></p>
