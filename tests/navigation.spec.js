@@ -69,7 +69,7 @@ test.describe('the way back', () => {
   test('Gameplay: the pause menu leads back to the page the visitor came from', async ({ page }) => {
     await page.goto('/levante/');
     await page.locator('.mode-bar').getByRole('link', { name: 'Gameplay' }).click();
-    await page.keyboard.press('Escape');
+    await page.locator('.hud-pause').click(); // visible only once the game has loaded
     const back = page.locator('dialog.pause [data-back]');
     await expect(back).toBeVisible();
     await back.click();
@@ -78,7 +78,8 @@ test.describe('the way back', () => {
 
   test('Gameplay opened directly: no such item', async ({ page }) => {
     await page.goto('/play/');
-    await page.keyboard.press('Escape');
+    await page.locator('.hud-pause').click();
+    await expect(page.locator('dialog.pause')).toHaveJSProperty('open', true);
     await expect(page.locator('dialog.pause [data-back]')).toBeHidden();
   });
 });
