@@ -120,7 +120,11 @@ function sections(html, className = '') {
 }
 
 // Paragraphs that contain only an image become <figure>, with the alt text as a visible caption (aria-hidden: read once, as the alt).
-const figures = (html) => html.replace(/<p>(<img [^>]*alt="([^"]*)"[^>]*>)<\/p>/g, '<figure>$1<figcaption aria-hidden="true">$2</figcaption></figure>');
+// A persona card is full of small text: on phones it scrolls sideways in its own box (src/style.css), so it can be focused and says so.
+const figures = (html, t) => html.replace(/<p>(<img [^>]*alt="([^"]*)"[^>]*>)<\/p>/g, (_, img, alt) => {
+  const body = img.includes('/persona-') ? `<div class="wide-image" tabindex="0" role="group" aria-label="${escape(t.swipeHint)}">${img}</div><p class="wide-hint">${escape(t.swipeHint)}</p>` : img;
+  return `<figure>${body}<figcaption aria-hidden="true">${alt}</figcaption></figure>`;
+});
 
 // --- Open Graph images ------------------------------------------------------
 
@@ -450,7 +454,7 @@ const prototypeEmbed = (t) => `<div class="proto">
 async function casePage(L, c, i, all, about) {
   const { data } = c;
   const { t, p } = L;
-  let html = figures(await markdown(c.body, t));
+  let html = figures(await markdown(c.body, t), t);
   html = sections(html);
   html = html.replace('<section id="tl-dr">', '<section id="tl-dr" class="tldr">').replace('<div data-prototype></div>', prototypeEmbed(t));
   const n = i + 1;

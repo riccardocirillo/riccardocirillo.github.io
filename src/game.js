@@ -137,7 +137,7 @@ function start() {
     const point = looking ?? pos;
     const s = cam.s;
     const cardOpen = !panel.hidden;
-    const phone = cam.w < 700;
+    const phone = cam.w < 700 && cam.h > 500; // the sheet at the bottom; a short landscape screen has the panel on the right
     const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
     let tx = cam.restX, ty = cam.restY;
     if (!cam.fitX) tx = clamp((cardOpen && !phone ? cam.w * 0.3 : cam.w * 0.5) - point.x * s, cam.w - WORLD.width * s, 0);

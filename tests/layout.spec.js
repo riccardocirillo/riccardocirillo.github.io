@@ -63,3 +63,77 @@ for (const [path, must, mustNot] of [
     for (const word of mustNot) expect(text, word).not.toContain(word);
   });
 }
+
+// Revision of 07/11/2026: the game on small screens, the personas on phones, Multiplayer on wide screens.
+const SMALL = [[844, 390], [667, 375], [768, 1024], [390, 844], [320, 568]];
+for (const [width, height] of SMALL) {
+  test(`game @ ${width}×${height}: READ, the finale's title and buttons are on the first screen`, async ({ page }) => {
+    await page.setViewportSize({ width, height });
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto('/es/play/');
+    await page.locator('[data-action="swing"]').click();
+    const next = () => page.locator('#field-panel [data-panel]:visible [data-action="next-base"]');
+    await expect(page.locator('#field-panel [data-panel="nipotyno"]')).toBeVisible();
+    for (const el of [page.locator('#field-panel [data-panel="nipotyno"] [data-action="read"]'), next()]) await expect(el).toBeInViewport({ ratio: 1 });
+    await next().click();
+    await next().click();
+    await next().click();
+    const title = page.locator('.finale-title');
+    await expect(title).toBeInViewport({ ratio: 1 });
+    for (const button of await page.locator('.finale-actions a, .finale-actions button').all()) await expect(button).toBeInViewport({ ratio: 1 });
+    const t = await title.boundingBox();
+    const bar = await page.locator('.finale-actions').boundingBox();
+    expect(t.y + t.height, 'the buttons do not cover the title').toBeLessThanOrEqual(bar.y);
+    expect(bar.y + bar.height, 'the buttons end on screen').toBeLessThanOrEqual(height + 1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  });
+}
+
+test('game @ 844×390: the hint does not cover the batter, the reader leaves room for the text', async ({ page }) => {
+  await page.setViewportSize({ width: 844, height: 390 });
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/play/');
+  const hint = await page.locator('.game-bar').boundingBox();
+  const runner = await page.locator('.runner').boundingBox();
+  expect(hint.y + hint.height <= runner.y || hint.x + hint.width <= runner.x || runner.x + runner.width <= hint.x).toBe(true);
+  await page.goto('/play/#levante');
+  await page.locator('#field-panel').getByRole('link', { name: /Read/i }).click();
+  await expect(page.locator('dialog.reader h1')).toBeVisible();
+  expect(await page.locator('.reader-body').evaluate((el) => el.clientHeight)).toBeGreaterThanOrEqual(300);
+});
+
+for (const path of ['/levante/', '/es/levante/', '/it/levante/']) {
+  test(`${path} @ 390: the personas scroll in their own box at a readable size, the page does not`, async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(path);
+    await expect(page.locator('.wide-image')).toHaveCount(2);
+    await expect(page.locator('.wide-hint').first()).toBeVisible();
+    const box = page.locator('.wide-image').first();
+    expect((await box.locator('img').boundingBox()).width).toBeGreaterThanOrEqual(700);
+    expect(await box.evaluate((el) => el.scrollWidth > el.clientWidth)).toBe(true);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+    await box.focus();
+    await page.keyboard.press('ArrowRight');
+    await expect.poll(() => box.evaluate((el) => el.scrollLeft)).toBeGreaterThan(0);
+  });
+}
+
+test('/levante/ @ 1280: the personas fit the column, no scrolling and no hint', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/levante/');
+  await expect(page.locator('.wide-hint').first()).toBeHidden();
+  expect(await page.locator('.wide-image').first().evaluate((el) => el.scrollWidth <= el.clientWidth)).toBe(true);
+});
+
+for (const path of ['/multiplayer/', '/es/multiplayer/', '/it/multiplayer/']) {
+  test(`${path} @ 1280: the ticket goes across the page, no void under it`, async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto(path);
+    const ticket = await page.locator('.ticket').boundingBox();
+    const report = await page.locator('.scouting').boundingBox();
+    expect(report.y).toBeGreaterThanOrEqual(ticket.y + ticket.height);
+    expect(report.y - (ticket.y + ticket.height)).toBeLessThanOrEqual(48);
+    expect(Math.abs(ticket.width - report.width)).toBeLessThanOrEqual(1);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(1280);
+  });
+}

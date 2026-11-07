@@ -92,6 +92,7 @@ export const STRINGS = {
     caseBy: 'case study by Riccardo Cirillo',
     ogCaseBy: 'Case study by Riccardo Cirillo',
     resultsTable: 'Results table',
+    swipeHint: 'Swipe sideways to read it all',
     // Lobby
     selectPlayer: 'Select your player',
     stats: ['countries', 'languages', 'SUS · Nipotyno'],
@@ -237,6 +238,7 @@ export const STRINGS = {
     caseBy: 'caso de estudio de Riccardo Cirillo',
     ogCaseBy: 'Caso de estudio de Riccardo Cirillo',
     resultsTable: 'Tabla de resultados',
+    swipeHint: 'Desliza de lado para leerla entera',
     selectPlayer: 'Elige tu jugador',
     stats: ['países', 'idiomas', 'SUS · Nipotyno'],
     startHere: 'Empieza aquí · Caso principal',
@@ -399,6 +401,7 @@ export const STRINGS = {
     caseBy: 'caso studio di Riccardo Cirillo',
     ogCaseBy: 'Caso studio di Riccardo Cirillo',
     resultsTable: 'Tabella dei risultati',
+    swipeHint: 'Scorri di lato per leggerla tutta',
     selectPlayer: 'Scegli il giocatore',
     stats: ['paesi', 'lingue', 'SUS · Nipotyno'],
     startHere: 'Inizia da qui · Caso principale',
