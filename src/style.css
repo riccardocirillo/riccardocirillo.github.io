@@ -718,9 +718,10 @@ th { background: var(--ink); color: var(--bg); }
 .scorecard .facts dt { font-family: var(--font-mono); font-size: .8125rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 .scorecard .facts dd { font-size: 1rem; line-height: 1.45; }
 /* Key numbers on a strip of scoreboard (always dark: yellow 11.4:1 and chalk 16.9:1 on night). */
-.score-strip { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); background: var(--night); border: 4px solid var(--navy); }
-.score-strip li { padding: 1rem 1.25rem; border: 1px solid var(--navy); }
+.score-strip { list-style: none; margin: 0 0 2rem; padding: 0; display: flex; flex-wrap: wrap; background: var(--night); border: 4px solid var(--navy); }
+.score-strip li { flex: 1 1 10rem; padding: 1rem 1.25rem; border: 1px solid var(--navy); }
 .score-strip strong { display: block; font-family: var(--font-display); font-size: calc(var(--j) * 2); font-weight: 400; line-height: 1; color: var(--yellow); }
+.score-strip strong.is-text { font-size: calc(var(--j) * 1.5); line-height: 1.1; } /* a whole phrase, not a number: "EIT Digital Summer School" */
 .score-strip span { display: block; margin-top: .5rem; font-family: var(--font-mono); font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; color: #f4f1e6; }
 .chapter-body > section:first-of-type h2, .chapter-body > .tldr h2 { margin-top: 0; }
 /* The way on: ◀ Previous chapter and one big Next chapter ▶ */
@@ -914,9 +915,10 @@ dialog.pause h2 { margin: 0 0 1.25rem; font-size: calc(var(--j) * 3); text-align
 }
 .preview h2 { margin: .2rem 0 .4rem; font-size: calc(var(--j) * 2.5); line-height: 1; color: var(--yellow); text-transform: none; text-shadow: 2px 2px 0 var(--red-fill); }
 .preview-teaser { margin: .25rem 0 .75rem; font-size: 1.0625rem; line-height: 1.45; }
-.preview-stats { list-style: none; clear: both; margin: 0 0 .9rem; padding: .6rem .75rem; display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem; background: var(--night); }
-.preview-stats li { display: flex; flex-direction: column; }
+.preview-stats { list-style: none; clear: both; margin: 0 0 .9rem; padding: .6rem .75rem; display: flex; flex-wrap: wrap; gap: .5rem; background: var(--night); }
+.preview-stats li { flex: 1 1 4.5rem; display: flex; flex-direction: column; }
 .preview-stats strong { font-family: var(--font-display); font-size: calc(var(--j) * 1.5); font-weight: 400; line-height: 1; color: var(--yellow); }
+.preview-stats strong.is-text { font-size: var(--j); line-height: 1.1; }
 .preview-stats span { font-size: .8125rem; color: var(--ink); }
 .preview-actions { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin: 0; }
 .preview-actions .button { justify-content: center; min-height: 48px; font-family: var(--font-display); font-size: calc(var(--j) * 1.25); text-transform: uppercase; letter-spacing: .04em; }

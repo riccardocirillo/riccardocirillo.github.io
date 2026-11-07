@@ -377,11 +377,11 @@ function facts(L, data) {
 }
 
 // Key numbers ("13 interviews · 6 testers · SUS 78.75") → big number + small label, for the scoreboard strip.
-// "SUS 78.75" → 78.75 / SUS; "~48 h → ~3 h (concept)" → ~48 h → ~3 h / (concept); "team of 6" stays whole (no dangling "of").
+// "SUS 78.75" → 78.75 / SUS; "2 weeks" → 2 / weeks; "team of 6" stays whole (no dangling "of").
 function statParts(stat) {
-  let m = stat.match(/^(~?[\d.,/]+(?:\s?h)?(?:\s?→\s?~?[\d.,/]+(?:\s?h)?)?)\s*(.*)$/);
+  let m = stat.match(/^([\d.,/]+)\s*(.*)$/);
   if (m) return [m[1], m[2]];
-  m = stat.match(/^(.*?)\s+(~?[\d.,/]+)$/);
+  m = stat.match(/^(.*?)\s+([\d.,/]+)$/);
   if (m && !/\b(of|de|di|da)$/.test(m[1])) return [m[2], m[1]];
   return [stat, ''];
 }
@@ -389,7 +389,7 @@ const hasNumbers = (data) => /\d/.test(data.stats ?? '');
 const scoreStrip = (L, data) => (hasNumbers(data)
   ? `<ul class="score-strip" aria-label="${escape(L.t.keyNumbers)}">${data.stats.split(' · ').map((s) => {
     const [big, small] = statParts(s);
-    return `<li><strong>${escape(big)}</strong>${small ? ` <span>${escape(small)}</span>` : ''}</li>`;
+    return `<li><strong${small ? '' : ' class="is-text"'}>${escape(big)}</strong>${small ? ` <span>${escape(small)}</span>` : ''}</li>`;
   }).join('')}</ul>`
   : '');
 
@@ -550,7 +550,7 @@ async function ballpark(L, cases, about, aboutParts) {
       const cover = covers[data.slug];
       const numbers = hasNumbers(data) ? `<ul class="key-numbers" aria-label="${escape(t.keyNumbers)}">${data.stats.split(' · ').map((n) => `<li>${escape(n)}</li>`).join('')}</ul>` : '';
       const no = String(cases.findIndex((c) => c.data.slug === data.slug) + 1).padStart(2, '0');
-      const stats = hasNumbers(data) ? `<ul class="preview-stats" aria-label="${escape(t.keyNumbers)}">${data.stats.split(' · ').map((n) => { const [big, small] = statParts(n); return `<li><strong>${escape(big)}</strong> <span>${escape(small)}</span></li>`; }).join('')}</ul>` : '';
+      const stats = hasNumbers(data) ? `<ul class="preview-stats" aria-label="${escape(t.keyNumbers)}">${data.stats.split(' · ').map((n) => { const [big, small] = statParts(n); return `<li><strong${small ? '' : ' class="is-text"'}>${escape(big)}</strong>${small ? ` <span>${escape(small)}</span>` : ''}</li>`; }).join('')}</ul>` : '';
       const meta = [data.role, data.duration].filter(Boolean).map(escape).join(' · ');
       return `          <article class="panel-card preview-card" data-panel="${data.slug}" hidden>
             <img class="panel-cover" src="${cover.src}" alt="" width="${cover.width}" height="${cover.height}" loading="lazy" decoding="async">

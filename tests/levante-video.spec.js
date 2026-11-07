@@ -12,13 +12,14 @@ for (const path of ['/levante/', '/es/levante/', '/it/levante/']) {
     await expect(video).toHaveJSProperty('loop', true);
     await expect(video).toHaveJSProperty('muted', true);
     await expect(video).toHaveAttribute('aria-label', /Tidewatch/);
-    await expect(video).toHaveAttribute('poster', '/assets/levante/dashboard.webp');
+    await expect(video).toHaveAttribute('poster', '/assets/levante/dashboard-poster.webp');
     await expect(page.locator('figure img[src$="/dashboard.webp"]')).toHaveCount(0);
     await expect(page.locator('figure img[src$="/buoy-0.webp"]')).toHaveCount(1);
     expect(asked).toEqual([]);
     const res = await request.get('/assets/levante/dashboard.mp4');
     expect(res.status()).toBe(200);
-    expect((await res.body()).length).toBeLessThan(4_000_000);
+    expect((await res.body()).length).toBeLessThan(1_000_000);
+    expect((await request.get('/assets/levante/dashboard-poster.webp')).status()).toBe(200);
   });
 }
 
@@ -41,6 +42,15 @@ test('it starts once, when it comes into view', async ({ page }) => {
 
 test('with reduced motion it stays on the poster', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  await spyOnPlay(page);
+  await page.goto('/levante/');
+  await page.locator('figure.case-video video').scrollIntoViewIfNeeded();
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => window.plays)).toBe(0);
+});
+
+test('with the data saver on it stays on the poster', async ({ page }) => {
+  await page.addInitScript(() => Object.defineProperty(navigator, 'connection', { value: { saveData: true } }));
   await spyOnPlay(page);
   await page.goto('/levante/');
   await page.locator('figure.case-video video').scrollIntoViewIfNeeded();
