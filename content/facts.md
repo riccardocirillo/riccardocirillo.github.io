@@ -12,5 +12,5 @@
 - Languages: Italian (native) · English (B2 – IELTS Academic 6.0) · Spanish (B2)
 - Nipotyno: HCI Project UPM, team of 4, 13 interviews + 5 observations, 2 lo-fi concepts, dual-screen hi-fi prototype, 6 test participants, 6/6 completed both tasks (one with help from the facilitator), SUS 78.75, UEQ Good/Excellent
 - Levante: EIT Digital Summer School 2026 (2 weeks), ISEN Méditerranée (France), international team of 6, Riccardo designed the monitoring dashboard; ~3 h confirmation time with on-site qPCR is the concept's target, not a measured result
-- Sensor lab: in preparation
+- Sensor lab: in progress. Multisensory Interactive Systems course, University of Trento: lab exercises with Arduino (force, flex and proximity sensors, RGB LED), Teensy (accelerometer, low-pass filter) [CHECK: Pure Data; group final project just starting]
 - CV files: CV_Riccardo_Cirillo_EN.pdf, CV_Riccardo_Cirillo_ES.pdf (in ~/Desktop/INFO INTERSHIP/1_CV_e_lettere)

@@ -1,5 +1,5 @@
 // Placeholder cover of Sensor lab (F1): the dugout chalkboard with the name, a microcontroller board pinned to it
-// and "IN PREPARATION". F7 replaces it with the real pictures of the exercises.
+// and "IN PROGRESS". F7 replaces it with the real pictures of the exercises.
 // 160×120 in the site palette, saved 4× with nearest neighbour as public/assets/sensor-lab/cover.webp (640×480 = 4:3, like the cards).
 // All original.
 import { mkdir } from 'node:fs/promises';
@@ -61,11 +61,11 @@ export async function sensorLabCover() {
   c.rect(12, 92, 136, 1, 'black');
   c.rect(30, 87, 5, 2, 'white');
 
-  // SENSOR LAB, underlined; the board; IN PREPARATION.
+  // SENSOR LAB, underlined; the board; IN PROGRESS.
   chalk(c, 'SENSOR LAB', Math.round((W - width('SENSOR LAB', 2)) / 2), 20, 2, 'white');
   c.rect(30, 36, 100, 1, 'yellow');
   board(c, 44, 43);
-  chalk(c, 'IN PREPARATION', Math.round((W - width('IN PREPARATION', 1)) / 2), 77, 1, 'yellow');
+  chalk(c, 'IN PROGRESS', Math.round((W - width('IN PROGRESS', 1)) / 2), 77, 1, 'yellow');
 
   // Bench, rail and floor.
   c.rect(8, 98, 144, 4, 'red');

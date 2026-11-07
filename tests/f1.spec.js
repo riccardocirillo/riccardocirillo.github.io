@@ -44,6 +44,6 @@ test('the three projects are on the site, in the right order, in every language'
   const res = await page.goto('/sensor-lab/');
   expect(res.status()).toBe(200);
   await expect(page.locator('h1')).toContainText('Sensor lab');
-  await expect(page.locator('main')).toContainText('Case study in preparation');
+  await expect(page.locator('main')).toContainText('This case study is in progress');
   await expect(page.locator('.chapter-progress')).toContainText('Chapter 3 of 3'); // F4: the last chapter of the Story mode
 });

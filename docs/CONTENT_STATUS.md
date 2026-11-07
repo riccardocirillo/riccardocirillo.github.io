@@ -8,7 +8,7 @@ Contact sheets of all images: `docs/assets-preview/`.
 |---|---|---|
 | content/nipotyno.md | ✅ updated 07/11/2026 (audit: texts A–F, SUS, age; few screens with captions) | — |
 | content/levante.md | ✅ final (7 images; personas AI-generated, labelled) | — |
-| content/sensor-lab.md (+ es/, it/) | Sensor lab: in preparation. Placeholder only (F1, 28/10), the case comes in F7 | **[CHECK]** placeholder text |
+| content/sensor-lab.md (+ es/, it/) | Sensor lab: in progress. Short text of 07/11; the full case comes later | **[CHECK]** Pure Data and "group final project just starting": from Riccardo's brief, not in facts.md or the CV |
 | _archive/content/housing.md, lab.md (+ es/, it/) | 📦 archived 28/10 (F1): not on the site; images in _archive/assets/ | — |
 | `stats:` in each case's frontmatter | ✅ key numbers for the stadium cards, confirmed by Riccardo 21/10 (Nipotyno: "13 interviews · 6 testers · SUS 78.75", avoiding the open "6/6" question) | — |
 | content/about.md | ✅ final (motto by Riccardo) | — |
