@@ -15,8 +15,6 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
 
   test('Swing! → home run → tour with Next base / Back to the last card → take another swing', async ({ page }) => {
     await page.goto('/play/');
-    await expect(bar(page, 'pick')).toBeVisible(); // F5: the uniform first
-    await page.getByRole('button', { name: /^Skip/ }).click();
     await expect(bar(page, 'bat')).toBeVisible();
     // "Home run!" shows for only 0.6 s with reduced motion: record that it appeared instead of racing to see it
     await page.evaluate(() => {
@@ -63,7 +61,6 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
 
   test('the diamond fills up as the bases are visited; status and counter agree', async ({ page }) => {
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).click();
     const visited = page.locator('.hud-diamonds i.is-visited');
     await expect(visited).toHaveCount(1);
@@ -78,13 +75,11 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
 
   test('Space and a click on the field also swing', async ({ page }) => {
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click();
     await page.evaluate(() => document.activeElement?.blur()); // focus on the page, not on a control (v4: the title is for screen readers only)
     await page.keyboard.press('Space');
     await expect(count(page)).toHaveText('1st base · Nipotyno');
 
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click();
     await page.locator('.stage').click({ position: { x: 300, y: 200 } }); // the stands: no base there (the HUD covers the top)
     await expect(count(page)).toHaveText('1st base · Nipotyno');
   });
@@ -92,7 +87,6 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
   test('after the tour one browser Back press leaves the page (the address is replaced, not added to)', async ({ page }) => {
     await page.goto('/levante/');
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
     await nextButton(page).click();
@@ -115,7 +109,6 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
 
   test('a link to another anchor in the middle of the tour ends it (hash that is not a base)', async ({ page }) => {
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
     await page.locator('.skip').focus();
@@ -128,7 +121,6 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
 
   test('clicking a base, ✕ Close or "Exit tour" leaves the tour; deep links skip the at-bat', async ({ page }) => {
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
     await page.locator('.base[data-stop="sensor-lab"]').click();
@@ -139,7 +131,6 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await expect(page.locator('.tour-nav')).toHaveCount(0);
 
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
     await panel(page).locator('..').getByRole('button', { name: 'Close' }).click(); // v4: ✕ Close on the preview leaves the tour
@@ -148,7 +139,6 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await expect(page.locator('.tour-nav')).toHaveCount(0);
 
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
     await page.getByRole('button', { name: 'Close' }).click(); // F5: Esc opens the pause menu; ✕ Close closes the card
@@ -158,16 +148,15 @@ test.describe('game @ 1280 px, reduced motion (no pitch, no zoom)', () => {
     await page.goto('/play/#levante');
     await expect(bar(page, 'free')).toHaveJSProperty('hidden', false); // (under the preview the bar itself is hidden, v4)
     await expect(page.getByRole('button', { name: 'Swing!' })).toBeHidden();
-    await expect(page.locator('.uniform-pick')).toBeHidden();
     await expect(panel(page)).toHaveAttribute('data-panel', 'levante');
   });
 
-  test('F5: the uniform first (focus on it), then the at-bat; the stage is on the first screen', async ({ page }) => {
+  test('07/11: straight to the at-bat, no uniform choice, no focus jump; the stage is on the first screen', async ({ page }) => {
     await page.goto('/play/');
-    await expect(page.locator('.uniform-pick')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Researcher' })).toHaveAttribute('aria-pressed', 'true');
-    await page.getByRole('button', { name: /^Skip/ }).click();
-    await expect(page.getByRole('button', { name: 'Swing!' })).toBeFocused();
+    await expect(page.getByRole('button', { name: 'Swing!' })).toBeVisible();
+    await expect(page.locator('.uniform-pick, [data-uniform], [data-action="skip-uniform"]')).toHaveCount(0);
+    await expect(page.locator('body')).toBeFocused();
+    expect(await page.locator('.runner').evaluate((el) => getComputedStyle(el).backgroundPositionY)).toBe('0px'); // Researcher, row 0
     await expect(page.locator('.stage')).toBeInViewport();
   });
 });
@@ -179,7 +168,6 @@ test.describe('game @ 1280 px with motion', () => {
   test('high five on 1st base (the moment); Next works during it; nothing moves on by itself', async ({ page }) => {
     test.setTimeout(75_000);
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click(); // F5: the uniform comes first (skippable)
 
     await page.getByRole('button', { name: 'Swing!' }).click();
     await expect(page.locator('.banner')).toBeVisible({ timeout: 10_000 });
@@ -209,7 +197,6 @@ test.describe('game @ 390 px (touch)', () => {
   test('tap Swing! → tour on the phone: the card has its own Next, no sideways scroll', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).tap(); // F5: the uniform comes first (skippable)
     await page.getByRole('button', { name: 'Swing!' }).tap();
     await expect(count(page)).toHaveText('1st base · Nipotyno');
     await nextButton(page).tap();

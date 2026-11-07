@@ -11,7 +11,6 @@ import { fileURLToPath } from 'node:url';
 import { Marked } from 'marked';
 import sharp from 'sharp';
 import { FIELD, STOPS, SPOTS, CREW, DUGOUT, TOWERS, SCOREBOARD, APRON, ON_DECK, ROOF_LINE } from '../src/field-map.js';
-import { UNIFORMS } from '../src/uniforms.js';
 import { PALETTE } from '../src/palette.js';
 import { pixelText } from './art/title.js';
 import { LANGS, PREFIX, LOCALE, LANG_NAMES, CV_LANG, STRINGS, fill } from '../src/i18n.js';
@@ -190,7 +189,7 @@ async function ogCase(L, slug, src) {
 // --- Layout -----------------------------------------------------------------
 
 // Everything that changes with the language of the page: L.t = the strings, L.p = the address prefix ('', '/es', '/it'),
-// the bases and points with their translated labels, the uniforms with their translated skills.
+// the bases and points with their translated labels.
 function context(lang) {
   const t = STRINGS[lang];
   const point = (q) => ({ ...q, ...(t.points?.[q.id] ?? {}) });
@@ -201,7 +200,6 @@ function context(lang) {
     p: PREFIX[lang],
     stops,
     stop: (id) => stops.find((s) => s.id === id),
-    uniforms: UNIFORMS.map((u) => ({ ...u, ...(t.uniforms?.[u.id] ?? {}) })),
     // A piece of content/facts.md (English) in this language. A missing translation stops the build.
     tr(piece) {
       if (lang === 'en') return piece;
@@ -565,7 +563,6 @@ async function ballpark(L, cases, about, aboutParts) {
 
   ];
 
-  const tiles = L.uniforms.map((u) => `                  <li><button class="uniform-tile" type="button" data-uniform="${u.id}" aria-pressed="false"><span class="portrait" style="--row: ${u.row}" aria-hidden="true"></span> <span class="tile-name">${escape(u.label)}</span></button></li>`);
   const langs = LANGS.map((lang) => `<a href="${PREFIX[lang]}/play/" hreflang="${lang}" lang="${lang}" data-lang="${lang}" data-home${lang === L.lang ? ' aria-current="page"' : ''}>${lang.toUpperCase()}<span class="visually-hidden"> ${LANG_NAMES[lang]}</span></a>`);
   const pauseItem = (tag, attrs, name, sub = '') => `            <li><${tag} class="pause-item" ${attrs}><span class="pause-name">${escape(name)}</span>${sub ? ` <span class="pause-sub">${sub}</span>` : ''}</${tag}></li>`;
 
@@ -608,13 +605,6 @@ ${points.join('\n')}
               <p class="banner" aria-hidden="true" hidden>${escape(t.homeRun)}</p>
             </div>
             <div class="game-bar" hidden>
-              <section class="uniform-pick bar-row" data-mode="pick" aria-labelledby="pick-title" hidden>
-                <h2 id="pick-title">${escape(t.chooseUniform)}</h2>
-                <ul class="uniform-tiles">
-${tiles.join('\n')}
-                </ul>
-                <button class="link pick-skip" type="button" data-action="skip-uniform">${escape(t.skipUniform)} <span aria-hidden="true">▶</span></button>
-              </section>
               <div class="bar-row" data-mode="bat">
                 <p class="bar-hint"><strong>${escape(t.orClick)}</strong><span class="no-touch"> ${t.pressSpace}</span></p>
               </div>

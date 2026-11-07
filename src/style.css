@@ -155,7 +155,7 @@ h3 { font-size: 1.25rem; }
 .batter {
   background-image: url("/game/runner.png");
   background-repeat: no-repeat;
-  background-position: 0 calc(var(--uniform-row, 0) * var(--step));
+  background-position: 0 0;
   background-size: calc(var(--frames) * var(--cell) * var(--s) * 1px) calc(var(--rows) * var(--cell) * var(--s) * 1px);
 }
 
@@ -328,7 +328,7 @@ h3 { font-size: 1.25rem; }
 }
 .runner, .batter {
   background-image: url("/game/runner.png");
-  background-position: 0 calc(var(--uniform-row, 0) * var(--step));
+  background-position: 0 0; /* row 0 of the sheet: the Researcher uniform */
   background-size: calc(var(--frames) * var(--cell) * var(--s) * 1px) calc(var(--rows) * var(--cell) * var(--s) * 1px);
   background-repeat: no-repeat;
 }
@@ -442,8 +442,7 @@ button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
 @media (hover: none) and (pointer: coarse) {
   .no-touch { display: none; }
 }
-/* A new panel card slides in a little (no fade: the text keeps full contrast at every moment);
-   the start-screen batter swings when the uniform changes (src/uniform.js). */
+/* A new panel card slides in a little (no fade: the text keeps full contrast at every moment). */
 .panel-card { animation: slide-in .25s ease-out; }
 @keyframes slide-in { from { transform: translateY(6px); } to { transform: none; } }
 .panel-cover { width: 100%; max-height: 7rem; object-fit: cover; object-position: top; margin-bottom: .75rem; border: 1px solid var(--line); }
@@ -807,25 +806,6 @@ th { background: var(--ink); color: var(--bg); }
   .hud-sound .sound-word { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
 
-/* Choose your uniform: the first step of the game, one row under the field (it covers no base): three small tiles, Skip. */
-.uniform-pick { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1rem; padding: .6rem .75rem; border: 2px solid var(--yellow); background: var(--card); box-shadow: 4px 4px 0 #000; }
-.uniform-pick h2 { margin: 0; font-size: calc(var(--j) * 1.5); line-height: 1; text-transform: uppercase; color: var(--yellow); }
-.uniform-tiles { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
-.uniform-tile { position: relative; display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .25rem .75rem .25rem .3rem; border: 2px solid var(--line); background: var(--night); color: var(--ink); font: inherit; font-size: .9375rem; font-weight: 700; cursor: pointer; }
-.uniform-tile:hover, .uniform-tile[aria-pressed="true"] { border-color: var(--yellow); }
-.uniform-tile[aria-pressed="true"] .tile-name::before { content: "▶ " / ""; color: var(--yellow); }
-.uniform-tile:focus-visible { outline: 3px solid var(--yellow); outline-offset: 2px; }
-/* Portrait: the head of the 48 px frame (a 40×30 window at 1.5×) */
-.portrait { width: 40px; height: 30px; border: 1px solid var(--line); background: url("/game/runner.png") -446px calc(var(--row) * -72px) / 2592px 216px no-repeat, #1b2a4a; image-rendering: pixelated; }
-.pick-skip { display: inline-flex; align-items: center; gap: .35em; min-height: 44px; margin-left: auto; color: var(--ink); }
-@media (max-width: 699px) {
-  .uniform-pick { gap: .4rem .5rem; padding: .5rem; }
-  .uniform-pick h2 { width: 100%; font-size: var(--j); }
-  .uniform-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; gap: .35rem; }
-  .uniform-tile { flex-direction: column; gap: .15rem; padding: .25rem; font-size: .8125rem; }
-  .pick-skip { margin-left: 0; }
-}
-
 /* The game card: little text (F5). */
 .panel-email { font-weight: 700; overflow-wrap: anywhere; }
 .game-over h2 { color: var(--yellow); }
@@ -1057,29 +1037,6 @@ dialog.reader::backdrop { background: #0b0f1e; }
   .preview .kicker { white-space: nowrap; font-size: .8125rem; }
 }
 
-/* --- fix1 · the uniform bar never covers the runner (on deck, in front of the dugout) or the teammates (§ 6, § 7).
-   Landscape screens: a compact card in the bottom right corner, on the right-field grass under 1st base (clear of the
-   Home plate label). Phones held upright: on the outfield grass under the wall (--band-top from src/game.js).
-   Short landscape screens (phones held sideways): a narrow card on the right, the tiles as small columns. --- */
-.is-game .field[data-mode="pick"] .game-bar { left: auto; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); width: min(26rem, calc(100vw - 32px)); max-width: none; transform: none; }
-.is-game .uniform-pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .5rem .75rem; }
-.is-game .uniform-pick h2 { width: auto; }
-.is-game .pick-skip { grid-column: 2; grid-row: 1; margin: 0; }
-.is-game .uniform-tiles { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: auto; gap: .4rem; }
-.is-game .uniform-tile { width: 100%; padding-right: .5rem; font-size: .875rem; white-space: nowrap; }
-.is-game .uniform-tile[aria-pressed="true"] .tile-name { color: var(--yellow); }
-.is-game .uniform-tile[aria-pressed="true"] .tile-name::before { content: none; } /* the yellow frame says it: the name stays on one line */
-@media (max-aspect-ratio: 3/2) {
-  .is-game .uniform-pick { gap: .25rem .5rem; padding: .4rem .5rem .5rem; }
-  .is-game .uniform-pick h2 { font-size: var(--j); }
-  .is-game .uniform-tile { flex-direction: column; justify-content: center; gap: .15rem; padding: .25rem; font-size: .8125rem; }
-}
-@media (max-aspect-ratio: 5/6) {
-  .is-game .field[data-mode="pick"] .game-bar { top: var(--band-top, 40%); right: 12px; bottom: auto; left: 12px; width: auto; }
-}
-@media (max-aspect-ratio: 3/2) and (min-aspect-ratio: 5/6), (max-height: 500px) and (orientation: landscape) {
-  .is-game .field[data-mode="pick"] .game-bar { right: 12px; bottom: 12px; width: min(17rem, 33vw); }
-}
 @media (max-height: 500px) and (orientation: landscape) {
   .is-game .hud { padding-block: .25rem; } /* the stadium needs the height */
 }

@@ -49,7 +49,7 @@ Questo file è la fonte di verità per la v4. Se contraddice `docs/archive/PROMP
   - protezione bianca sul gomito davanti;
   - scarpe scure.
 - Posa di battuta (dalla foto in battuta): gambe larghe, ginocchia piegate, peso in avanti, mazza alta dietro la testa.
-- Le 3 divise sono scambi di palette con accessorio: Researcher navy + lente, Designer rosso + matita, Maker grigio + chiave. Restano gli id di `src/uniforms.js`.
+- Le 3 divise sono scambi di palette con accessorio: Researcher navy + lente, Designer rosso + matita, Maker grigio + chiave. Restano gli id di `src/uniforms.js`. **07/11/2026:** nel gioco si parte sempre con Researcher, la scelta non c'è più; le altre righe restano nel foglio.
 - Animazioni: vedi § 5.
 
 ## 4. Crew e pubblico

@@ -1,6 +1,5 @@
 // The game (/play/, F5). Optional: without this file the bases are plain links and a sentence links the case pages.
 // Modes:
-// - pick (first visit): choose a uniform (3 small tiles) or skip
 // - bat: the pitcher throws, the visitor swings (click/tap the field, Space, "Swing!") → home run → tour
 // - tour: src/tour.js — one project per base, nothing moves on by itself ("Next base" / "◀ Back" in the card)
 // - free: click/tap a base or ← → and the runner runs there · "Play again" starts again
@@ -8,12 +7,11 @@
 // Resume · Read this project · Switch to Story mode · Multiplayer · Title screen, then language, sound and motion.
 // Every base opens its card over the stadium (a drawer on desktop, under the stage on phones); ✕ Close closes it.
 // The address shows the base (/play/#nipotyno) and is only REPLACED, never added to: one Back press leaves the page.
-// Deep links skip the uniform and the at-bat. With reduced motion: no pitch and no zoom (the tour is the same, still).
-import { FIELD, WORLD, CORE, APRON, FIELD_TOP, STOPS, RING, CREW, ON_DECK, TOUR } from './field-map.js';
+// Deep links skip the at-bat. The runner always wears the Researcher uniform (row 0 of public/game/runner.png). With reduced motion: no pitch and no zoom (the tour is the same, still).
+import { FIELD, WORLD, CORE, APRON, STOPS, RING, CREW, ON_DECK, TOUR } from './field-map.js';
 import { every } from './loop.js';
 import { createCrowd } from './crowd.js';
 import { createReader } from './reader.js';
-import { UNIFORMS } from './uniforms.js';
 import { atBat } from './batting.js';
 import { sound } from './sound.js';
 import { createTour } from './tour.js';
@@ -26,7 +24,7 @@ if (stage) start();
 // The visitor's choices in this browser (storage may be blocked: then nothing is remembered).
 function load(key) { try { return localStorage.getItem(key); } catch { return null; } }
 function save(key, value) { try { localStorage.setItem(key, value); } catch { /* ignore */ } }
-// The state of this visit (v4, ART_BIBLE § 6): bases visited and uniform, in sessionStorage (may be blocked too).
+// The state of this visit (v4, ART_BIBLE § 6): bases visited, in sessionStorage (may be blocked too).
 function loadSession() { try { return JSON.parse(sessionStorage.getItem('game') ?? '{}'); } catch { return {}; } }
 function saveSession(state) { try { sessionStorage.setItem('game', JSON.stringify(state)); } catch { /* ignore */ } }
 
@@ -38,7 +36,6 @@ function start() {
   const byId = Object.fromEntries(STOPS.map((s) => [s.id, s]));
   const world = stage.querySelector('.world');
   const swingBox = stage.querySelector('.swing-box');
-  const pick = field.querySelector('.uniform-pick');
   const wide = matchMedia('(min-width: 1000px)'); // the card is a drawer over the stage from here up
   const crewAt = Object.fromEntries(CREW.map((m) => [m.id, m]));
   const crew = Object.fromEntries([...stage.querySelectorAll('[data-crew]')].map((el) => [el.dataset.crew, el]));
@@ -134,13 +131,10 @@ function start() {
     cam.restY = Math.round(cam.fitY ? cam.top + (room - CORE.h * s) / 2 - CORE.y * s : cam.top - CORE.y * s);
     field.style.setProperty('--fs', s);
     field.style.setProperty('--hud-h', `${cam.top}px`);
-    // phones held upright: the uniform bar sits on the outfield grass, between the wall and 2nd base (src/style.css)
-    field.style.setProperty('--band-top', `${cam.restY + (FIELD_TOP + 6) * s}px`);
     aim(true);
   }
   function aim(snap = false) {
-    // while the uniform is chosen (phones): the runner on deck and home plate, where he is going, both in the picture
-    const point = looking ?? (mode === 'pick' ? { x: (pos.x * 2 + byId.home.x) / 3, y: pos.y } : pos);
+    const point = looking ?? pos;
     const s = cam.s;
     const cardOpen = !panel.hidden;
     const phone = cam.w < 700;
@@ -190,7 +184,7 @@ function start() {
   const showBase = (text) => { hudBase.textContent = text; };
   function arrive(id) {
     if (isProject(id)) visited.add(id);
-    saveSession({ visited: [...visited], uniform: load('uniform') });
+    saveSession({ visited: [...visited] });
     paintVisited(id);
     hud.querySelector('.hud-diamonds').title = fill(T.visited, { n: visited.size });
     showBase(id === 'home' && mode === 'bat' ? `${textOf('home', 'label')} · ${T.atBatBase}` : `${textOf(id, 'label')} · ${nameOf(id)}`);
@@ -348,9 +342,8 @@ function start() {
     if (mode === 'bat' && next !== 'bat') batting.stop();
     if (mode === 'tour' && next !== 'tour') tour.stop();
     mode = next;
-    field.dataset.mode = next; // CSS: where the bottom bar sits (the uniform bar never covers the runner or the teammates)
+    field.dataset.mode = next;
     panel.dataset.mode = next; // CSS: in the tour the "Read the case study" link is the quiet button
-    pick.hidden = next !== 'pick';
     swingBox.hidden = next !== 'bat';
     for (const [name, row] of Object.entries(rows)) row.hidden = name !== next;
   }
@@ -359,44 +352,6 @@ function start() {
   function refocus(target) {
     const active = document.activeElement;
     if (active === document.body || ((bar.contains(active) || stage.contains(active)) && active.closest('[hidden]'))) target.focus({ preventScroll: true });
-  }
-
-  // --- Uniform: the first step, can be skipped (the runner's row of public/game/runner.png) -----------
-
-  const tiles = [...pick.querySelectorAll('[data-uniform]')];
-  const dress = (id) => {
-    const uniform = UNIFORMS.find((u) => u.id === id) ?? UNIFORMS[0];
-    field.style.setProperty('--uniform-row', uniform.row);
-    return uniform;
-  };
-  function wear(id) {
-    const uniform = dress(id);
-    for (const tile of tiles) tile.setAttribute('aria-pressed', String(tile.dataset.uniform === uniform.id));
-    return uniform.id;
-  }
-  wear(load('uniform'));
-  // fix1: pointing at a tile (or focusing it) dresses the runner waiting on deck; leaving the tiles puts the chosen one back.
-  for (const tile of tiles) {
-    tile.addEventListener('pointerenter', () => dress(tile.dataset.uniform));
-    tile.addEventListener('focus', () => dress(tile.dataset.uniform));
-  }
-  const tileList = pick.querySelector('.uniform-tiles');
-  tileList.addEventListener('pointerleave', () => { if (!tileList.contains(document.activeElement)) dress(load('uniform')); });
-  tileList.addEventListener('focusout', (event) => { if (!tileList.contains(event.relatedTarget)) dress(load('uniform')); });
-
-  // No focus jump on load: a keyboard visitor starts from the top of the page (skip link, ⏸ Pause, then the tiles).
-  // The runner waits on deck, in front of the dugout, fully in view while the visitor chooses.
-  function choose() {
-    pos = { ...ON_DECK };
-    place(pos);
-    setMode('pick');
-    showBase(`${textOf('home', 'label')} · ${T.atBatBase}`);
-  }
-
-  function playBall(uniformId) {
-    if (uniformId) save('uniform', wear(uniformId));
-    entrance();
-    swingButton.focus({ preventScroll: true });
   }
 
   // --- At bat ---------------------------------------------------------------
@@ -413,8 +368,10 @@ function start() {
   }
 
   // The runner walks from the on-deck spot in front of the dugout to home plate, then the pitches start.
+  // No focus jump on load: a keyboard visitor starts from the top of the page (skip link, Exit, Pause, then Swing!).
   function entrance() {
     batting.stop();
+    showBase(`${textOf('home', 'label')} · ${T.atBatBase}`);
     current = 'dugout'; // not a stop (no link, no card): only where the runner comes from
     pos = { ...ON_DECK };
     place(pos);
@@ -520,10 +477,7 @@ function start() {
   field.addEventListener('click', (event) => {
     sound.wake();
     const action = event.target.closest('[data-action]')?.dataset.action;
-    const uniform = event.target.closest('[data-uniform]')?.dataset.uniform;
-    if (uniform) playBall(uniform);
-    else if (action === 'skip-uniform') playBall(null);
-    else if (action === 'swing') swing();
+    if (action === 'swing') swing();
     else if (action === 'pause') openPause();
     else if (action === 'resume') closePause();
     else if (action === 'next-base') nextBase();
@@ -590,7 +544,7 @@ function start() {
   window.addEventListener('popstate', () => {
     if (reader.open || performance.now() - readerClosedAt < 100) return; // Back closed the reader: stay where we are
     const id = location.hash.slice(1);
-    if (!id) { if (mode !== 'bat' && mode !== 'pick') { setMode('free'); runTo('home', { animate: false }); } return; }
+    if (!id) { if (mode !== 'bat') { setMode('free'); runTo('home', { animate: false }); } return; }
     if (!byId[id]) { if (mode === 'tour') setMode('free'); return; } // other anchors are not bases
     setMode('free');
     runTo(id, { animate: false });
@@ -606,7 +560,7 @@ function start() {
     setMode('free');
     panel.focus({ preventScroll: true });
   } else {
-    choose();
+    entrance();
   }
   fit();
   paintVisited(isProject(current) ? current : null);

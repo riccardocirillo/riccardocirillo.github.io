@@ -10,7 +10,7 @@
 // drawPlayer() is shared with scripts/art/crew.js (coaches, teammates, pitcher).
 import { writeFile } from 'node:fs/promises';
 import { canvas } from './canvas.js';
-import { UNIFORMS } from '../../src/uniforms.js';
+import { UNIFORMS } from './uniforms.js';
 
 export const SIZE = 48;
 

@@ -6,7 +6,6 @@ import { STOPS } from '../src/field-map.js';
 // under the stage on phones); ✕ Close closes it and the focus goes back to the point. Without JS: plain links.
 const card = (page) => page.locator('#field-panel [data-panel]:visible');
 const enter = async (page) => { await page.goto('/play/'); };
-const skip = (page) => page.getByRole('button', { name: /^Skip/ });
 const overlap = (a, b) => !(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
 
 test.describe('stadium @ 1280×800', () => {
@@ -15,7 +14,6 @@ test.describe('stadium @ 1280×800', () => {
 
   test('/play/ shows the whole stage on the first screen, the card is closed, Swing! sits under home plate and covers no label', async ({ page }) => {
     await enter(page);
-    await skip(page).click();
     await expect(page.locator('.stage')).toBeInViewport({ ratio: 1 });
     await expect(page.locator('#field-panel')).toBeHidden();
     const stage = await page.locator('.stage').boundingBox();
@@ -80,7 +78,6 @@ test.describe('stadium @ 390×844 (phone)', () => {
 
   test('Swing! is inside the stage and covers no point', async ({ page }) => {
     await enter(page);
-    await skip(page).tap();
     const swing = await page.locator('.swing-box').boundingBox();
     const stage = await page.locator('.stage').boundingBox();
     expect(swing.x >= stage.x && swing.x + swing.width <= stage.x + stage.width).toBe(true);

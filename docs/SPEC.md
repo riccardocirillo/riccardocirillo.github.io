@@ -1,5 +1,7 @@
 # SPEC — Riccardo's portfolio (v0.2, 2026-10-20)
 
+> **07/11/2026:** no uniform choice in the game: it always starts with the Researcher uniform (the other rows stay in runner.png; src/uniforms.js is archived). Every "uniform" of a step below is history.
+>
 > **06/11/2026:** case-study PDFs removed (link, generation, build). Every "PDF" of a case below is history; the CV PDFs stay.
 
 > **v4 · Art pass + continuous game (02/11/2026) — OVERRIDES the Gameplay parts below.** Source of truth: docs/ART_BIBLE.md; plan: docs/PROMPT_V4.md.

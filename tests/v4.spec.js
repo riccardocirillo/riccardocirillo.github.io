@@ -13,7 +13,6 @@ const axe = async (page, what) => {
 };
 async function play(page) {
   await page.goto('/play/');
-  await page.getByRole('button', { name: /^Skip/ }).click();
   await page.getByRole('button', { name: 'Swing!' }).click();
   await expect(hud(page)).toHaveText('1st base · Nipotyno', { timeout: 15_000 });
 }
@@ -109,10 +108,8 @@ test.describe('v4 game @ 1280×800, reduced motion', () => {
     await expect(page.locator('.hud-diamonds i.is-visited')).toHaveCount(3);
   });
 
-  test('axe on every screen: uniform, at bat, preview, pause menu', async ({ page }) => {
+  test('axe on every screen: at bat, preview, pause menu', async ({ page }) => {
     await page.goto('/play/');
-    await axe(page, 'uniform');
-    await page.getByRole('button', { name: /^Skip/ }).click();
     await axe(page, 'at bat');
     await page.goto('/play/#nipotyno');
     await axe(page, 'preview');
@@ -136,7 +133,6 @@ test.describe('v4 game @ 1280×800 with motion', () => {
 
   test('never stuck: a second press skips the home run and the run, the 1st base preview comes within 2.5 s', async ({ page }) => {
     await page.goto('/play/');
-    await page.getByRole('button', { name: /^Skip/ }).click();
     await expect(page.locator('.runner')).not.toHaveClass(/is-walking/, { timeout: 5_000 });
     const t0 = Date.now();
     await page.getByRole('button', { name: 'Swing!' }).click();
@@ -154,7 +150,6 @@ test.describe('v4 game @ 1280×800 with motion', () => {
     page.on('pageerror', (e) => errors.push(String(e)));
     await page.goto('/play/');
     await expect(page.locator('.stage')).toHaveClass(/lights-on/);
-    await page.getByRole('button', { name: /^Skip/ }).click();
     await page.evaluate(() => {
       window.__seen = new Set();
       const note = () => { for (const c of ['is-impact', 'is-flash', 'is-shake', 'is-homerun']) if (document.querySelector('.stage').classList.contains(c)) window.__seen.add(c); if (document.querySelector('.scoreboard').classList.contains('is-home-run')) window.__seen.add('scoreboard'); };

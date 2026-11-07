@@ -3,7 +3,7 @@ import sharp from 'sharp';
 import { WORLD, CORE, TOWERS, SCOREBOARD, STOPS, DUGOUT, ON_DECK, CREW } from '../src/field-map.js';
 
 // fix1 (after Riccardo tried v4): 1 the title screen grows with the screen, 2 the whole stadium is in view when the game
-// starts, 3 the runner waits fully in view in front of the dugout while the uniform is chosen.
+// starts, 3 the runner walks from the dugout to home plate.
 
 const overlap = (a, b) => !(a.x + a.width <= b.x || b.x + b.width <= a.x || a.y + a.height <= b.y || b.y + b.height <= a.y);
 const inside = (box, w, h, top = 0) => box.x >= -0.5 && box.y >= top - 0.5 && box.x + box.width <= w + 0.5 && box.y + box.height <= h + 0.5;
@@ -113,51 +113,25 @@ test('fix1 · the camera on a wide screen does not follow the runner: the stadiu
   await page.setViewportSize({ width: 1470, height: 956 });
   await page.goto('/play/');
   const before = await page.locator('.layer-field').boundingBox();
-  await page.getByRole('button', { name: /^Skip/ }).click();
   await page.waitForTimeout(600);
   expect(await page.locator('.layer-field').boundingBox()).toEqual(before);
 });
 
-// --- 3 · The runner on deck, in front of the dugout -----------------------------------------------------------------
-for (const [width, height] of [...desk, [390, 844]]) {
-  test(`fix1 · choosing the uniform @ ${width}×${height}: the runner is whole on screen, clear of the roof, the teammates and the bar`, async ({ page }) => {
-    await page.setViewportSize({ width, height });
-    await page.goto('/play/');
-    await expect(page.locator('.uniform-pick')).toBeVisible();
-    const runner = await page.locator('.runner').boundingBox();
-    expect(inside(runner, width, height), 'on screen').toBe(true);
-    expect(overlap(runner, await page.locator('.layer-roof').boundingBox()), 'roof').toBe(false);
-    const bar = await page.locator('.game-bar').boundingBox();
-    expect(overlap(runner, bar), 'bar').toBe(false);
-    for (const id of ['mateA', 'mateB', 'mateC']) {
-      const mate = await page.locator(`[data-crew="${id}"]`).boundingBox();
-      expect(overlap(runner, mate), id).toBe(false);
-      expect(overlap(mate, bar), `bar over ${id}`).toBe(false);
-    }
-  });
-}
-
-test('fix1 · on deck: hovering a uniform dresses the runner there, choosing one sends him to home plate', async ({ page }) => {
+// --- 3 · 07/11: no uniform choice any more: the runner walks from the dugout to home plate at once ---------------------
+test('fix1 · on arrival the runner stands on home plate, and the pitches start', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.goto('/play/');
-  const row = () => page.locator('.field').evaluate((el) => el.style.getPropertyValue('--uniform-row'));
-  expect(await row()).toBe('0');
-  await page.locator('[data-uniform="designer"]').hover();
-  expect(await row()).toBe('1');
-  await page.mouse.move(5, 300);
-  expect(await row()).toBe('0'); // leaving the tiles: back to the chosen one
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.locator('[data-uniform="maker"]').click();
+  await page.goto('/play/');
   const home = STOPS.find((s) => s.id === 'home');
   await expect(page.locator('.runner')).toHaveCSS('--fy', String(home.y));
-  expect(await row()).toBe('2');
 });
 
 test('fix1 · drawing order: players sorted by their feet, the roof covers only who stands behind it, shadows under everyone', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto('/play/');
   const z = (sel) => page.locator(sel).evaluate((el) => Number(getComputedStyle(el).zIndex));
-  expect(await z('.runner')).toBe(100 + ON_DECK.y);
+  expect(await z('.runner')).toBeGreaterThanOrEqual(100 + STOPS.find((s) => s.id === 'home').y); // he walks from the dugout, in front of the roof line
+  expect(await z('.runner')).toBeLessThanOrEqual(100 + ON_DECK.y);
   for (const m of CREW) expect(await z(`[data-crew="${m.id}"]`), m.id).toBe(100 + m.y);
   expect(await z('.layer-roof')).toBe(100 + DUGOUT.y - 28);
   expect(await z('.runner')).toBeGreaterThan(await z('.layer-roof'));

@@ -1,11 +1,10 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-// F5 (v3): /play/ is the game, full page: HUD on top, the uniform as the first step, a pause menu (Esc / ⏸) that leads to the
+// F5 (v3): /play/ is the game, full page: HUD on top, a pause menu (Esc / ⏸) that leads to the
 // other modes, little text in the cards, "Game over? Never." at the end. Without JS: a sentence with plain links.
 const pause = (page) => page.locator('dialog.pause');
 const hudBase = (page) => page.locator('.hud-base');
-const skip = (page) => page.getByRole('button', { name: /^Skip/ });
 
 test.describe('/play/ @ 1280 px', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
@@ -30,9 +29,8 @@ test.describe('/play/ @ 1280 px', () => {
 
   test('Esc opens the pause menu (focus on Resume) and closes it (focus back); ⏸ opens it too', async ({ page }) => {
     await page.goto('/play/');
-    await skip(page).click();
     const swing = page.getByRole('button', { name: 'Swing!' });
-    await expect(swing).toBeFocused();
+    await swing.focus();
     await page.keyboard.press('Escape');
     await expect(pause(page)).toBeVisible();
     await expect(page.getByRole('dialog', { name: 'Paused' })).toBeVisible();
@@ -71,9 +69,9 @@ test.describe('/play/ @ 1280 px', () => {
 
     await page.goto('/play/#levante');
     await page.keyboard.press('Escape');
-    const items = pause(page).locator('.pause-menu .pause-item');
+    const items = pause(page).locator('.pause-menu li:not([hidden]) .pause-item');
     await expect(items).toHaveCount(5);
-    await expect(pause(page).locator('.pause-name')).toHaveText(['Resume', 'Read this project', 'Switch to Story mode', 'Multiplayer', 'Title screen']);
+    await expect(pause(page).locator('.pause-menu li:not([hidden]) .pause-name')).toHaveText(['Resume', 'Read this project', 'Switch to Story mode', 'Multiplayer', 'Title screen']);
     await expect(pause(page).getByRole('link', { name: /Read this project/ })).toHaveAttribute('href', '/levante/');
     await expect(pause(page).getByRole('link', { name: /Read this project/ })).toContainText('Levante, full case study');
     await expect(pause(page).getByRole('link', { name: /Switch to Story mode/ })).toHaveAttribute('href', '/story/');
@@ -104,26 +102,11 @@ test.describe('/play/ @ 1280 px', () => {
     await expect(page.locator('.hud-sound')).toHaveAttribute('aria-pressed', 'true');
   });
 
-  test('uniform: Maker dresses the runner (row 2 of the sheet) and is remembered; Skip keeps the uniform', async ({ page }) => {
+  test('the whole game with the keyboard: swing, Next base, arrows, the end', async ({ page }) => {
     await page.goto('/play/');
-    await page.getByRole('button', { name: 'Maker' }).click();
-    await expect(page.locator('.uniform-pick')).toBeHidden();
-    expect(await page.locator('.runner').evaluate((el) => getComputedStyle(el).backgroundPositionY)).toBe(`${-48 * 2 * 2}px`);
-    await page.reload();
-    await expect(page.getByRole('button', { name: 'Maker' })).toHaveAttribute('aria-pressed', 'true');
-    await skip(page).click();
-    expect(await page.locator('.runner').evaluate((el) => getComputedStyle(el).backgroundPositionY)).toBe(`${-48 * 2 * 2}px`);
-  });
-
-  test('the whole game with the keyboard: uniform, swing, Next base, arrows, the end', async ({ page }) => {
-    await page.goto('/play/');
-    // from the top of the page: skip link, ⏸ Pause, Sound, then the bases and the tiles; no focus jump on load
+    // from the top of the page: skip link, ✕ Exit, ⏸ Pause…; no focus jump on load
     await expect(page.locator('body')).toBeFocused();
-    await page.getByRole('button', { name: 'Researcher' }).focus();
-    await page.keyboard.press('Tab');
-    await expect(page.getByRole('button', { name: 'Designer' })).toBeFocused();
-    await page.keyboard.press('Enter'); // Designer
-    await expect(page.getByRole('button', { name: 'Swing!' })).toBeFocused();
+    await page.getByRole('button', { name: 'Swing!' }).focus();
     await page.keyboard.press('Enter');
     await expect(hudBase(page)).toHaveText('1st base · Nipotyno');
     // v4: keyboard visitors land on READ ▶; Tab → NEXT BASE →, Enter
@@ -162,7 +145,6 @@ test.describe('/play/ with motion', () => {
 
   test('"Reduce motion" in the pause menu: no pitch, no zoom, nothing keeps moving', async ({ page }) => {
     await page.goto('/play/');
-    await skip(page).click();
     await page.keyboard.press('Escape');
     const motion = pause(page).getByRole('button', { name: /Reduce motion/ });
     await expect(motion).toHaveAttribute('aria-pressed', 'false');
@@ -188,7 +170,6 @@ test.describe('screenshots of /play/ with and without the pause menu', () => {
       await page.goto('/play/');
       await page.evaluate(() => document.fonts.ready);
       await page.screenshot({ path: `tests/screenshots/v3/f5-play-${width}.png` });
-      await skip(page).click();
       await page.getByRole('button', { name: 'Swing!' }).click();
       await expect(hudBase(page)).toHaveText('1st base · Nipotyno');
       await page.screenshot({ path: `tests/screenshots/v3/f5-play-tour-${width}.png` });

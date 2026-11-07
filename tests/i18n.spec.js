@@ -102,7 +102,6 @@ test.describe('languages @ 1280 px', () => {
         expect(text, english).not.toContain(english);
       }
 
-      await page.locator('[data-action="skip-uniform"]').click(); // F5: the uniform comes first
       await page.getByRole('button', { name: words.swing }).click();
       await expect(page.locator('.hud-base')).toHaveText(words.count);
       await expect(page).toHaveURL(new RegExp(`/${lang}/play/#nipotyno$`));
@@ -149,7 +148,6 @@ for (const { width, height } of [{ width: 1280, height: 800 }, { width: 390, hei
     for (const home of ['/es/', '/it/']) {
       test(`${home}: Swing! covers no point`, async ({ page }) => {
         await page.goto(`${home}play/`);
-        await page.locator('[data-action="skip-uniform"]').click();
         const swing = await page.locator('.swing-box').boundingBox();
         for (const base of await page.locator('.stage .base').all()) expect(overlap(swing, await base.boundingBox()), await base.getAttribute('href')).toBe(false);
       });
