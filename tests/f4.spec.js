@@ -69,18 +69,31 @@ test.describe('title screen menu', () => {
     await expect(page.locator('.title-menu a:focus')).toHaveCount(0);
   });
 
-  test('with motion: lights, cards and cursor animate with opacity and transform only, and all of them end within 5 s', async ({ page }) => {
+  test('with motion: lights, cards, name and cursor animate with opacity and transform only, and all of them end within 5 s', async ({ page }) => {
     await page.goto('/');
     const animations = await page.evaluate(() => document.getAnimations().map((a) => ({
       name: a.animationName,
       props: [...new Set(a.effect.getKeyframes().flatMap((k) => Object.keys(k)))].filter((p) => !['offset', 'computedOffset', 'easing', 'composite'].includes(p)),
       end: a.effect.getComputedTiming().endTime,
     })));
-    expect(animations.map((a) => a.name).sort()).toEqual(expect.arrayContaining(['cursor-pulse', 'lights-up', 'pick-in']));
+    expect(animations.map((a) => a.name).sort()).toEqual(expect.arrayContaining(['card-in', 'cursor-pulse', 'lights-up', 'logo-breathe']));
     for (const a of animations) {
       for (const p of a.props) expect(['opacity', 'transform'], `${a.name}: ${p}`).toContain(p);
       expect(a.end, a.name).toBeLessThanOrEqual(5000);
     }
+  });
+
+  test('the Quick picks enter one after the other, with the same move as the player card of the finale', async ({ page }) => {
+    await page.goto('/');
+    const picks = await page.locator('.pick').evaluateAll((els) => els.map((el) => { const s = getComputedStyle(el); return [s.animationName, s.animationDuration, s.animationDelay]; }));
+    expect(picks).toEqual([['card-in', '0.3s', '0s'], ['card-in', '0.3s', '0.15s'], ['card-in', '0.3s', '0.3s']]);
+  });
+
+  test('the breathing name is on the title screen only', async ({ page }) => {
+    await page.goto('/');
+    expect(await page.locator('.logo').evaluate((el) => getComputedStyle(el).animationName)).toBe('logo-breathe');
+    await page.goto('/404.html');
+    expect(await page.locator('.logo').evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
   });
 
   test('reduced motion: nothing moves on the title screen', async ({ page }) => {
