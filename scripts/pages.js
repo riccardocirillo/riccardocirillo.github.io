@@ -18,6 +18,7 @@ import { LANGS, PREFIX, LOCALE, LANG_NAMES, CV_LANG, STRINGS, fill } from '../sr
 
 const SITE = 'https://ricccardo15.github.io';
 const EMAIL = 'riccardo.cirillo.work@gmail.com';
+const LINKEDIN = 'https://www.linkedin.com/in/riccardocirillo';
 // Order on the home and on the diamond: 1st, 2nd, 3rd base (F1: three projects; Housing and Lab are in _archive/).
 export const CASES = ['nipotyno', 'levante', 'sensor-lab'];
 // Folder of each language in the site ('' = the root for English).
@@ -226,6 +227,12 @@ const cvTop = (L) => {
   return cvLink(L, lang, `CV <abbr title="${CV[lang].short}">${lang.toUpperCase()}</abbr> <span aria-hidden="true">↓</span>`, 'cv-top');
 };
 
+// The contacts, the same in the footer, the game's card and the Multiplayer ticket. A click on the email copies it
+// (src/contact.js, which also shows the "copy" tag); without JS it stays a plain mailto.
+const emailLink = (t) => `<a class="email-link" href="mailto:${EMAIL}" data-copy>${EMAIL}<span class="copy-tag" hidden>${escape(t.copy)}</span></a>`;
+const linkedinLink = (t) => `<a href="${LINKEDIN}" target="_blank" rel="me noopener" aria-label="${escape(t.linkedinLabel)}">LinkedIn</a>`;
+const contactLinks = (t) => `${emailLink(t)} <span aria-hidden="true">·</span> ${linkedinLink(t)}`;
+
 // EN · ES · IT, like a scoreboard: each one leads to the same page in that language.
 // The choice is remembered (a click saves it); only "/" sends a visitor who chose ES or IT to their language.
 function langSwitch(L, key) {
@@ -313,6 +320,7 @@ function layout(L, { title, description, key, image, imageAlt, main, bodyClass =
     <meta name="twitter:card" content="summary_large_image">
     ${PRELOAD}
     <link rel="stylesheet" href="/src/style.css">
+    <script type="module" src="/src/contact.js"></script>
     ${scripts}
   </head>
   <body data-theme="${theme}"${bodyClass ? ` class="${bodyClass}"` : ''}>
@@ -324,9 +332,10 @@ ${main}
     <footer class="site-footer" data-theme="night">
       <div class="wrap wide">
         <p><strong>Riccardo Cirillo</strong> · ${escape(t.headline)}</p>
-        <p><a href="mailto:${EMAIL}">${EMAIL}</a> · CV: ${cvLink(L, 'en', CV.en.short)} · ${cvLink(L, 'es', CV.es.short)}</p>
+        <p>${contactLinks(t)} · CV: ${cvLink(L, 'en', CV.en.short)} · ${cvLink(L, 'es', CV.es.short)}</p>
       </div>
     </footer>
+    <p class="copy-toast" role="status" aria-live="polite" data-copied="${escape(t.copied)}"></p>
     ${LANG_SCRIPT}
   </body>
 </html>
@@ -534,7 +543,7 @@ async function ballpark(L, cases, about, aboutParts) {
     `          <article class="panel-card" data-panel="home" hidden>
             <p class="kicker">${kicker('home')}</p>
             <h2>${escape(t.modes.multiplayer.name)}</h2>
-            <p class="panel-email"><a href="mailto:${EMAIL}">${EMAIL}</a></p>
+            <p class="panel-email">${contactLinks(t)}</p>
             <ul class="actions">
               ${cvOrder(L).map((lang, i) => `<li>${cvLink(L, lang, CV[lang].button, i ? 'button ghost' : 'button')}</li>`).join('\n              ')}
             </ul>
@@ -746,7 +755,7 @@ function storyPage(L, about, aboutParts, cases) {
 
 // --- Multiplayer (F4) ------------------------------------------------------------------
 // Contact & CV: a ticket with the email (real text, clickable) and the two CVs, and a "scouting report" with the facts of
-// content/facts.md (no new data; no LinkedIn until there is a URL). The portrait is the batter of the game.
+// content/facts.md (no new data). The portrait is the batter of the game.
 function multiplayerPage(L, f) {
   const { t } = L;
   const [position] = t.headline.split(' · ');
@@ -766,7 +775,7 @@ function multiplayerPage(L, f) {
           <section class="ticket" aria-labelledby="ticket-title">
             <div class="ticket-main">
               <h2 id="ticket-title" class="kicker">${escape(t.admitOne)}</h2>
-              <p class="ticket-email"><a href="mailto:${EMAIL}">${EMAIL}</a></p>
+              <p class="ticket-email">${contactLinks(t)}</p>
               <ul class="actions">
                 ${cvOrder(L).map((lang, i) => `<li>${cvLink(L, lang, CV[lang].button, i ? 'button ghost' : 'button')}</li>`).join('\n                ')}
               </ul>

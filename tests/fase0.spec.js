@@ -18,9 +18,9 @@ test.describe('0.3 accessibility', () => {
   test('one single live region (the status in the game bar): the card panel announces nothing twice', async ({ page }) => {
     await page.goto('/play/');
     // v4 (ART_BIBLE § 8): the base preview is an <aside> announced with aria-live="polite"; the status stays the only role=status
-    await expect(page.locator('[aria-live]')).toHaveCount(1);
+    await expect(page.locator('#field [aria-live]')).toHaveCount(1); // outside the game there is only the "Email copied" message
     await expect(page.locator('#field-panel')).toHaveAttribute('aria-live', 'polite');
-    await expect(page.locator('[role="status"]')).toHaveCount(1);
+    await expect(page.locator('#field [role="status"]')).toHaveCount(1);
   });
 
   test('free mode announces the base once the runner arrives', async ({ page }) => {
@@ -34,11 +34,11 @@ test.describe('0.3 accessibility', () => {
 test.describe('0.6 status line (F4: in the scouting report of Multiplayer)', () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
-  test('the pieces of the line are in the scouting report, from content/facts.md; no LinkedIn link yet', async ({ page }) => {
+  test('the pieces of the line are in the scouting report, from content/facts.md, next to the LinkedIn link', async ({ page }) => {
     await page.goto('/multiplayer/');
     const report = page.locator('.scouting');
     for (const piece of STATUS.split(' · ')) await expect(report).toContainText(piece);
-    await expect(page.locator('a[href*="linkedin"]')).toHaveCount(0);
+    await expect(page.locator('.ticket a[href*="linkedin"]')).toHaveCount(1);
   });
 
   test('the report fits on a phone without sideways scroll', async ({ page }) => {

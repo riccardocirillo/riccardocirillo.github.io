@@ -3,6 +3,7 @@
 - Name: Riccardo Cirillo
 - Headline: UX Research & Design intern · available from February 2027
 - Email: riccardo.cirillo.work@gmail.com
+- LinkedIn: https://www.linkedin.com/in/riccardocirillo
 - Status: EU citizen with Spanish NIE · Available from February 2027
 - Education: EIT Digital Master School – Human-Computer Interaction and Design (double degree)
   - University of Trento – MSc in Computer Science, 09/2026 – 10/2027 (expected)

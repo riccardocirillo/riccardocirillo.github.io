@@ -135,6 +135,12 @@ abbr { text-decoration: none; }
 .site-footer { margin-top: 4rem; padding-block: 2rem; border-top: 2px solid var(--line); font-size: 1rem; }
 .site-footer p { margin: .25rem 0; overflow-wrap: anywhere; }
 
+/* The email copies on click (src/contact.js): a small "copy" tag instead of the underline says it is an action. */
+.email-link.can-copy { text-decoration: none; }
+.copy-tag { display: inline-block; margin-left: .5em; padding: 0 .35em; border: 1px solid currentColor; font-family: var(--font-mono); font-size: .75rem; font-weight: 700; line-height: 1.5; letter-spacing: .06em; text-transform: uppercase; vertical-align: middle; }
+.copy-toast { position: fixed; left: 50%; bottom: 1.5rem; z-index: 1000; margin: 0; padding: .5rem 1rem; transform: translateX(-50%); border: 2px solid var(--yellow); background: var(--night); color: #f4f1e6; font-family: var(--font-mono); font-size: .9375rem; font-weight: 700; box-shadow: 4px 4px 0 #000; pointer-events: none; white-space: nowrap; }
+.copy-toast:empty { opacity: 0; padding: 0; border: 0; box-shadow: none; } /* stays in the page: a live region must exist before its text arrives */
+
 /* --- Shared bits --- */
 h1, h2, h3 { line-height: 1.2; color: var(--ink); }
 /* Jersey 10 at whole multiples of its pixel step: crisp, never blurry in between. */
@@ -577,7 +583,7 @@ th { background: var(--ink); color: var(--bg); }
 @media print {
   @page { size: A4; margin: 14mm 14mm 16mm; }
   body, body[data-theme] { background: #fff; font-size: 10.5pt; line-height: 1.45; }
-  .site-header, .skip, .chapter-progress, .chapter-nav, .story-end, .chapter-no { display: none; }
+  .site-header, .skip, .chapter-progress, .chapter-nav, .story-end, .chapter-no, .copy-toast, .copy-tag { display: none; }
   .print-head { display: block; margin: 0 0 6mm; padding-bottom: 2mm; border-bottom: 1px solid var(--line); font-size: 9pt; color: var(--muted); }
   .wrap, .case { max-width: none; padding: 0; }
   .site-footer { margin-top: 8mm; padding: 3mm 0 0; background: none; color: #1b2a4a; border-top: 1px solid #d9ccb3; font-size: 9pt; }
@@ -768,6 +774,7 @@ th { background: var(--ink); color: var(--bg); }
 .ticket h2.kicker { margin: 0 0 .75rem; font-family: var(--font-mono); font-size: .875rem; color: var(--red); }
 .ticket-email { margin: 0 0 1.5rem; font-size: clamp(1rem, 4.2vw, 1.375rem); font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
 .ticket-email a { color: var(--red); }
+.ticket-email > span { margin-inline: .25em; }
 .ticket-stub { display: grid; place-items: center; overflow: hidden; border-left: 3px dashed var(--ink); background: var(--card-dark); }
 .ticket-stub span { writing-mode: vertical-rl; font-family: var(--font-display); font-size: calc(var(--j) * 2); color: var(--red); }
 .scouting { padding: 1.75rem; border: 4px solid var(--navy); box-shadow: 6px 6px 0 var(--navy); }

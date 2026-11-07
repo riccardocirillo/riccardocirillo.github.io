@@ -130,16 +130,15 @@ test.describe('Story mode', () => {
 });
 
 test.describe('Multiplayer', () => {
-  test('ticket with the email and both CVs; scouting report from facts.md; no LinkedIn yet', async ({ page }) => {
+  test('ticket with the email and both CVs; scouting report from facts.md', async ({ page }) => {
     await page.goto('/multiplayer/');
     await expect(page.locator('h1')).toHaveText('Multiplayer');
     await expect(page.locator('.mp-sub')).toHaveText('Contact & CV. Looking for a teammate from February 2027?');
-    await expect(page.locator('.ticket a[href="mailto:riccardo.cirillo.work@gmail.com"]')).toHaveText('riccardo.cirillo.work@gmail.com');
+    await expect(page.locator('.ticket a[href="mailto:riccardo.cirillo.work@gmail.com"]')).toContainText('riccardo.cirillo.work@gmail.com');
     await expect(page.locator('.ticket a[href$="_EN.pdf"]')).toBeVisible();
     await expect(page.locator('.ticket a[href$="_ES.pdf"]')).toHaveAttribute('lang', 'es');
     await expect(page.locator('.scout-rows dt')).toHaveText(['Position', 'Available', 'Status', 'Languages', 'Education']);
     await expect(page.locator('.scout-rows')).toContainText('University of Trento');
-    await expect(page.locator('a[href*="linkedin"]')).toHaveCount(0);
   });
 });
 
