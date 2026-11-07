@@ -69,31 +69,36 @@ test.describe('title screen menu', () => {
     await expect(page.locator('.title-menu a:focus')).toHaveCount(0);
   });
 
-  test('with motion: lights, cards, name and cursor animate with opacity and transform only, and all of them end within 5 s', async ({ page }) => {
+  test('with motion: only opacity and transform; everything ends within 5 s', async ({ page }) => {
     await page.goto('/');
     const animations = await page.evaluate(() => document.getAnimations().map((a) => ({
       name: a.animationName,
       props: [...new Set(a.effect.getKeyframes().flatMap((k) => Object.keys(k)))].filter((p) => !['offset', 'computedOffset', 'easing', 'composite'].includes(p)),
       end: a.effect.getComputedTiming().endTime,
     })));
-    expect(animations.map((a) => a.name).sort()).toEqual(expect.arrayContaining(['card-in', 'cursor-pulse', 'lights-up', 'logo-breathe']));
+    expect(animations.map((a) => a.name)).toEqual(expect.arrayContaining(['cursor-pulse', 'lights-up', 'pick-ram']));
     for (const a of animations) {
       for (const p of a.props) expect(['opacity', 'transform'], `${a.name}: ${p}`).toContain(p);
       expect(a.end, a.name).toBeLessThanOrEqual(5000);
     }
   });
 
-  test('the Quick picks enter one after the other, with the same move as the player card of the finale', async ({ page }) => {
+  test('the Quick picks enter from the right edge, one after the other, and end in place', async ({ page }) => {
     await page.goto('/');
-    const picks = await page.locator('.pick').evaluateAll((els) => els.map((el) => { const s = getComputedStyle(el); return [s.animationName, s.animationDuration, s.animationDelay]; }));
-    expect(picks).toEqual([['card-in', '0.3s', '0s'], ['card-in', '0.3s', '0.15s'], ['card-in', '0.3s', '0.3s']]);
+    const picks = await page.locator('.pick').evaluateAll((els) => els.map((el) => { const s = getComputedStyle(el); return [s.animationName, s.animationDelay]; }));
+    expect(picks).toEqual([['pick-ram', '0s'], ['pick-ram', '0.25s'], ['pick-ram', '0.5s']]);
+    const first = await page.evaluate(() => document.querySelector('.pick').getAnimations()[0].effect.getKeyframes()[0].transform);
+    expect(first).toBe('translate(1280px)'); // 100vw: the whole width of the screen
+    await page.waitForTimeout(2400);
+    expect(await page.locator('.pick').evaluateAll((els) => els.map((el) => getComputedStyle(el).transform))).toEqual(['none', 'none', 'none']);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   });
 
-  test('the breathing name is on the title screen only', async ({ page }) => {
+  test('the name stays still', async ({ page }) => {
     await page.goto('/');
-    expect(await page.locator('.logo').evaluate((el) => getComputedStyle(el).animationName)).toBe('logo-breathe');
-    await page.goto('/404.html');
+    await expect(page.getByRole('heading', { level: 1, name: 'Riccardo Cirillo', exact: true })).toBeVisible();
     expect(await page.locator('.logo').evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
+    await expect(page.locator('.logo .l')).toHaveCount(0);
   });
 
   test('reduced motion: nothing moves on the title screen', async ({ page }) => {
