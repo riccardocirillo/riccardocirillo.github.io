@@ -49,7 +49,6 @@ test.describe('title screen menu', () => {
 
   test('keyboard: ↑ ↓ move inside the menu (and wrap), Enter opens the mode; the ▶ cursor follows the focus', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('.menu-hint')).toBeVisible();
     const items = page.locator('.title-menu a');
     await items.nth(0).focus();
     await page.keyboard.press('ArrowDown');
@@ -113,8 +112,8 @@ test.describe('Story mode', () => {
       await expect(page).toHaveURL(new RegExp(`/${slug}/$`));
       await expect(page.locator('.chapter-progress')).toContainText(`Chapter ${i + 1} of 3`);
       await expect(page.locator('.bars i.is-done')).toHaveCount(i + 1);
-      await expect(page.locator('.to-title-link')).toHaveAttribute('href', '/');
     }
+    await expect(page.locator('.to-title-link')).toHaveAttribute('href', '/'); // the last chapter has no next: the Title screen
     const end = page.locator('.story-end');
     await expect(end.getByRole('heading')).toHaveText("That's the story");
     await expect(end.getByRole('link', { name: /Multiplayer/ })).toHaveAttribute('href', '/multiplayer/');
@@ -176,7 +175,6 @@ test.describe('without JavaScript', () => {
 
   test('everything is reachable with plain links: menu, Quick picks, chapters, old #anchors land on a visible link', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('.menu-hint')).toBeHidden();
     await page.getByRole('link', { name: /^Story mode/ }).click();
     await expect(page).toHaveURL(/\/story\/$/);
     for (const slug of CASES) {

@@ -219,7 +219,7 @@ const CV = {
   es: { href: '/cv/CV_Riccardo_Cirillo_ES.pdf', short: 'Español', button: 'CV en español (PDF)' },
 };
 const cvOrder = (L) => (CV_LANG[L.lang] === 'es' ? ['es', 'en'] : ['en', 'es']);
-const cvLink = (L, lang, text, cls) => `<a${cls ? ` class="${cls}"` : ''} href="${CV[lang].href}"${langAttr(L, lang)}>${text}</a>`;
+const cvLink = (L, lang, text, cls) => `<a${cls ? ` class="${cls}"` : ''} href="${CV[lang].href}" target="_blank" rel="noopener"${langAttr(L, lang)}>${text}<span class="visually-hidden" lang="${L.lang}"> ${escape(L.t.pdfNewTab)}</span></a>`;
 // "CV ↓" in the bars on top: the CV of the page's language (EN for EN and IT, ES for ES).
 const cvTop = (L) => {
   const lang = CV_LANG[L.lang];
@@ -391,26 +391,33 @@ function progress(L, n) {
   return `<p class="chapter-progress"><span>${escape(label)}</span> <span class="bars" aria-hidden="true">${bars}</span></p>`;
 }
 
-// The bottom of every Story page: "◀ Title screen" and one big "Next chapter ▶"; after chapter 3, the end of the story.
-function chapterNav(L, next, n) {
+// The bottom of every Story page: "◀ Previous chapter: name" and "Next chapter ▶". prev / next = { href, name }; where one
+// is missing (no previous on the warm-up, no next on the last chapter) that side is the Title screen.
+function chapterNav(L, prev, next, n) {
   const { t, p } = L;
-  const back = `<a class="to-title-link" href="${p}/"><span aria-hidden="true">◀</span> ${escape(t.titleScreen)}</a>`;
-  if (next) {
-    return `<nav class="chapter-nav" aria-label="${escape(t.modes.story.name)}">
-          ${back}
-          <a class="next-chapter" href="${p}/${next.data.slug}/" rel="next"><span class="next-label">${escape(t.nextChapter)} · ${escape(fill(t.nOfTotal, { n: n + 1, total: CASES.length }))}</span> <span class="next-name">${escape(shortName(next))} <span aria-hidden="true">▶</span></span></a>
-        </nav>`;
-  }
-  return `<section class="story-end" aria-labelledby="story-end-title">
+  const toTitle = (text) => `<a class="to-title-link" href="${p}/">${text}</a>`;
+  const left = prev
+    ? `<a class="prev-chapter" href="${prev.href}" rel="prev"><span aria-hidden="true">◀</span> <span>${escape(t.previousChapter)}: ${escape(prev.name)}</span></a>`
+    : toTitle(`<span aria-hidden="true">◀</span> ${escape(t.titleScreen)}`);
+  const right = next
+    ? `<a class="next-chapter" href="${next.href}" rel="next"><span class="next-label">${escape(t.nextChapter)} · ${escape(fill(t.nOfTotal, { n: n + 1, total: CASES.length }))}</span> <span class="next-name">${escape(next.name)} <span aria-hidden="true">▶</span></span></a>`
+    : toTitle(`${escape(t.titleScreen)} <span aria-hidden="true">▶</span>`);
+  const end = next ? '' : `<section class="story-end" aria-labelledby="story-end-title">
           <h2 id="story-end-title">${escape(t.endTitle)}</h2>
           <p>${escape(t.endText)}</p>
           <ul class="actions">
             <li><a class="button" href="${modeHref(L, 'multiplayer')}">${escape(t.modes.multiplayer.name)}: ${escape(t.modes.multiplayer.short)}</a></li>
             <li><a class="button ghost" href="${modeHref(L, 'play')}">${escape(t.playTheGame)}</a></li>
           </ul>
-          <p>${back}</p>
         </section>`;
+  return `${end}
+        <nav class="chapter-nav" aria-label="${escape(t.modes.story.name)}">
+          ${left}
+          ${right}
+        </nav>`;
 }
+const chapterLink = (L, c) => ({ href: `${L.p}/${c.data.slug}/`, name: shortName(c) });
+const warmUpTitle = (about) => about.body.match(/^## (.*?)\s*\{#hi-im-riccardo\}/m)?.[1];
 
 // "Try the prototype" of Nipotyno: <div data-prototype></div> in the case's text becomes this block (src/prototype.js).
 const PROTOTYPE_URL = 'https://hi-fiprotohci.vercel.app/';
@@ -433,7 +440,7 @@ const prototypeEmbed = (t) => `<div class="proto">
 
 // A case study = one chapter of the Story mode (F4): progress, big number + title, the player card (role, team, when)
 // next to the key numbers and the text, then "Next chapter ▶" (or the end of the story after chapter 3).
-async function casePage(L, c, i, all) {
+async function casePage(L, c, i, all, about) {
   const { data } = c;
   const { t, p } = L;
   let html = figures(await markdown(c.body, t));
@@ -461,7 +468,7 @@ async function casePage(L, c, i, all) {
           </div>
         </div>
         ${wideAt < html.length ? `<div class="chapter-body chapter-rest">${html.slice(wideAt)}</div>` : ''}
-        ${chapterNav(L, all[i + 1], n)}
+        ${chapterNav(L, i ? chapterLink(L, all[i - 1]) : { href: modeHref(L, 'story'), name: warmUpTitle(about) }, all[i + 1] && chapterLink(L, all[i + 1]), n)}
       </article>`;
 
   return layout(L, {
@@ -654,6 +661,7 @@ ${pauseItem('a', `href="${prefix}/nipotyno/" data-read-this`, t.readThis, `<span
 ${pauseItem('a', `href="${modeHref(L, 'story')}"`, t.switchStory, escape(t.switchStorySub))}
 ${pauseItem('a', `href="${modeHref(L, 'multiplayer')}"`, t.modes.multiplayer.name, escape(t.modes.multiplayer.desc))}
 ${pauseItem('a', `href="${prefix}/"`, t.titleScreen)}
+${pauseItem('a', 'href="/" data-back', t.previousPage)}
           </ul>
           <div class="pause-tools">
             <nav class="pause-langs" aria-label="${escape(t.langLabel)}">${langs.join(' <span aria-hidden="true">·</span> ')}</nav>
@@ -696,7 +704,6 @@ function titlePage(L, cases) {
 ${menu.join('\n')}
               </ul>
             </nav>
-            <p class="menu-hint" hidden>${t.menuHint}</p>
           </section>
           <section class="quick-picks" id="work" aria-labelledby="picks-title">
             <h2 id="picks-title">${escape(t.quickPicks)}</h2>
@@ -715,7 +722,7 @@ const NIGHT = '/game/stadium.png'; // v4: the night stadium, flattened (scripts/
 function storyPage(L, about, aboutParts, cases) {
   const { t } = L;
   const principles = aboutParts.find((part) => part.includes('id="how-i-design"')).match(/<ol>[\s\S]*<\/ol>/)[0];
-  const hello = about.body.match(/^## (.*?)\s*\{#hi-im-riccardo\}/m)?.[1];
+  const hello = warmUpTitle(about);
   return `      <article class="story-zero chapter wrap wide">
         ${progress(L, 0)}
         <header class="chapter-head">
@@ -733,7 +740,7 @@ function storyPage(L, about, aboutParts, cases) {
             ${principles}
           </section>
         </div>
-        ${chapterNav(L, cases[0], 0)}
+        ${chapterNav(L, null, chapterLink(L, cases[0]), 0)}
       </article>`;
 }
 
@@ -794,12 +801,14 @@ function notFoundPage(L, og) {
           <h1 class="logo">${escape(t.lostBall)}</h1>
           <p class="role">${escape(t.lostText)}</p>
           <ul class="lost-links">
+            <li data-back hidden><a class="menu-item" href="/"><span class="menu-name"><span aria-hidden="true">◀</span> ${escape(t.previousPage)}</span></a></li>
             <li><a class="menu-item" href="/"><span class="menu-name">${escape(t.titleScreen)}</span></a></li>
             <li><a class="menu-item" href="/story/"><span class="menu-name">${escape(t.modes.story.name)}</span> <span class="menu-desc">${escape(t.modes.story.desc)}</span></a></li>
             <li><a class="menu-item" href="/multiplayer/"><span class="menu-name">${escape(t.modes.multiplayer.name)}</span> <span class="menu-desc">${escape(t.modes.multiplayer.desc)}</span></a></li>
           </ul>
         </div>
-      </div>`;
+      </div>
+      <script>(() => { try { const from = new URL(document.referrer); if (from.origin !== location.origin) return; const back = document.querySelector('[data-back]'); back.querySelector('a').href = from.href; back.hidden = false; } catch {} })();</script>`;
   return layout(L, {
     title: `${t.lostBall} · Riccardo Cirillo`, description: t.lostText, key: '/', image: og, imageAlt: t.homeImageAlt,
     main, theme: 'night', bodyClass: 'title-page', index: false,
@@ -846,7 +855,7 @@ export async function generate() {
     await page('multiplayer/', layout(L, {
       ...shared, title: t.meta.multiplayer[0], description: t.meta.multiplayer[1], key: '/multiplayer/', main: multiplayerPage(L, f), mode: 'multiplayer',
     }));
-    for (const [i, c] of cases.entries()) await page(`${c.data.slug}/`, await casePage(L, c, i, cases));
+    for (const [i, c] of cases.entries()) await page(`${c.data.slug}/`, await casePage(L, c, i, cases, about));
   }
   await writeFile(root('404.html'), notFoundPage(context('en'), await ogHome(context('en'))));
   console.log(`✓ pages generated: ${PAGES.join(', ')}`);

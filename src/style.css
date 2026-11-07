@@ -686,11 +686,6 @@ th { background: var(--ink); color: var(--bg); }
   content: "▶" / ""; position: absolute; left: 1.15rem; top: 1.05rem; /* / "": the cursor is not read as part of the link's name */ color: var(--yellow); font-size: 1.25rem; line-height: 1;
 }
 .menu-item:focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
-.menu-hint { display: inline-block; position: relative; margin: 1.25rem 0 0; padding: .25rem .5rem; background: var(--night); font-family: var(--font-mono); font-size: .875rem; letter-spacing: .04em; color: var(--muted); }
-.menu-hint kbd { border-color: var(--line); background: var(--card); color: var(--ink); }
-@media (hover: none) and (pointer: coarse) {
-  .menu-hint { display: none !important; } /* no arrow keys on a touch screen */
-}
 /* Quick picks: the three projects, numbered in the order of the Story mode. */
 .quick-picks h2 { margin: .5rem 0 1rem; color: var(--yellow); text-transform: uppercase; }
 .picks { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
@@ -740,9 +735,10 @@ th { background: var(--ink); color: var(--bg); }
 .score-strip strong { display: block; font-family: var(--font-display); font-size: calc(var(--j) * 2); font-weight: 400; line-height: 1; color: var(--yellow); }
 .score-strip span { display: block; margin-top: .5rem; font-family: var(--font-mono); font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; color: #f4f1e6; }
 .chapter-body > section:first-of-type h2, .chapter-body > .tldr h2 { margin-top: 0; }
-/* The way on: ◀ Title screen and one big Next chapter ▶ */
+/* The way on: ◀ Previous chapter and one big Next chapter ▶ */
 .chapter-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.5rem 2rem; margin-top: 3rem; padding-top: 2rem; border-top: 2px solid var(--ink); }
-.to-title-link { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; font-family: var(--font-mono); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; }
+.to-title-link, .prev-chapter { display: inline-flex; align-items: center; gap: .4em; min-height: 44px; font-family: var(--font-mono); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; }
+.prev-chapter:hover, .to-title-link:hover { text-decoration: underline; }
 .next-chapter { display: inline-grid; gap: .35rem; padding: 1rem 1.5rem; background: var(--red-fill); color: #fff; text-decoration: none; box-shadow: 6px 6px 0 var(--ink); }
 .next-chapter:hover { background: var(--ink); color: var(--bg); }
 .next-label { font-family: var(--font-mono); font-size: .8125rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
@@ -1118,7 +1114,6 @@ dialog.reader::backdrop { background: #0b0f1e; }
 .menu-name { font-size: calc(var(--tj) * 2); }
 .menu-desc { margin-top: .5em; font-size: 1em; }
 .title-menu:not(:hover):not(:focus-within) [data-first]::before, .menu-item:hover::before, .menu-item:focus-visible::before { left: .9em; top: calc(50% - 1.2em); font-size: 1.25em; }
-.menu-hint { margin: 1em 0 0; padding: .25em .5em; font-size: .875em; }
 .quick-picks h2 { margin: 0 0 .5em; font-size: calc(var(--tj) * 2); }
 .picks { gap: 1em; }
 .pick { gap: 1em 1.5em; padding: 1.5em; }

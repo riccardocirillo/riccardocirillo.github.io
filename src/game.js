@@ -462,6 +462,11 @@ function start() {
   // --- Pause menu (a modal <dialog>: the page behind it is inert) ---------------------------
 
   const readThis = dialog.querySelector('[data-read-this]');
+  // "Back to the previous page": only when the visitor came from another page of this site (not from the game in another language).
+  const backLink = dialog.querySelector('[data-back]');
+  const cameFrom = (() => { try { const u = new URL(document.referrer); return u.origin === location.origin && !u.pathname.endsWith('/play/') ? u.href : null; } catch { return null; } })();
+  backLink.closest('li').hidden = !cameFrom;
+  if (cameFrom) backLink.href = cameFrom;
   let beforePause = null;
   function openPause() {
     if (dialog.open) return;

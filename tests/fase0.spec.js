@@ -59,12 +59,12 @@ test.describe('0.5 covers', () => {
 
 test.describe('0.7 case pages', () => {
   for (const slug of Object.keys(cases)) {
-    test(`/${slug}/: F4, the mode bar leads back to the title screen and to the game; the bottom leads back too`, async ({ page }) => {
+    test(`/${slug}/: F4, the mode bar leads back to the title screen and to the game; the bottom leads to the previous chapter`, async ({ page }) => {
       await page.goto(`/${slug}/`);
       await expect(page.locator('.mode-bar .to-title')).toHaveAttribute('href', '/');
       await expect(page.locator('.mode-bar').getByRole('link', { name: 'Gameplay' })).toHaveAttribute('href', '/play/');
       await expect(page.locator('.mode-bar').getByRole('link', { name: 'Story mode' })).toHaveAttribute('aria-current', 'true');
-      await expect(page.locator('.to-title-link')).toHaveAttribute('href', '/');
+      await expect(page.locator('.chapter-nav a').first()).toHaveAttribute('rel', 'prev');
     });
   }
 
