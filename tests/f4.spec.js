@@ -224,7 +224,7 @@ test.describe('without JavaScript', () => {
 test('the new pages have Open Graph tags', async ({ page, request }) => {
   for (const path of ['/story/', '/play/', '/multiplayer/', '/es/story/', '/it/multiplayer/']) {
     await page.goto(path);
-    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `https://ricccardo15.github.io${path}`);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `https://riccardocirillo.github.io${path}`);
     for (const prop of ['og:title', 'og:description', 'og:image', 'og:image:alt']) await expect(page.locator(`meta[property="${prop}"]`), prop).toHaveAttribute('content', /.+/);
     const og = await page.locator('meta[property="og:image"]').getAttribute('content');
     expect((await request.get(new URL(og).pathname)).status(), og).toBe(200);

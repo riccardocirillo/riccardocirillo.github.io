@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 // Fase 3: English on /, Spanish on /es/, Italian on /it/. Real static pages in each language, a switcher that keeps
 // the same page, the right CV, a remembered choice that only "/" follows, and a game with no English left in it.
-const SITE = 'https://ricccardo15.github.io';
+const SITE = 'https://riccardocirillo.github.io';
 const LANGS = { en: '', es: '/es', it: '/it' };
 
 test.describe('languages @ 1280 px', () => {

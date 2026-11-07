@@ -15,7 +15,7 @@ import { PALETTE } from '../src/palette.js';
 import { pixelText } from './art/title.js';
 import { LANGS, PREFIX, LOCALE, LANG_NAMES, CV_LANG, STRINGS, fill } from '../src/i18n.js';
 
-const SITE = 'https://ricccardo15.github.io';
+const SITE = 'https://riccardocirillo.github.io';
 const EMAIL = 'riccardo.cirillo.work@gmail.com';
 const LINKEDIN = 'https://www.linkedin.com/in/riccardocirillo';
 // Order on the home and on the diamond: 1st, 2nd, 3rd base (F1: three projects; Housing and Lab are in _archive/).

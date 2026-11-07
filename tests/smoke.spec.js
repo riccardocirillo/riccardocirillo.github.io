@@ -72,7 +72,7 @@ for (const path of pages.filter((p) => CASES.some((c) => p.endsWith(`/${c}/`))))
     for (const prop of ['og:title', 'og:description', 'og:url', 'og:image']) {
       await expect(page.locator(`meta[property="${prop}"]`), prop).toHaveAttribute('content', /.+/);
     }
-    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `https://ricccardo15.github.io${path}`);
+    await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', `https://riccardocirillo.github.io${path}`);
     const og = await page.locator('meta[property="og:image"]').getAttribute('content');
     expect((await request.get(new URL(og).pathname)).status(), og).toBe(200);
 
