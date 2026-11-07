@@ -86,7 +86,7 @@ test.describe('0.7 case pages', () => {
           column: document.querySelector('.case').getBoundingClientRect().width,
         };
       });
-      expect(result.count).toBeGreaterThanOrEqual(6);
+      expect(result.count).toBeGreaterThanOrEqual(3); // 07/11: the prototype leads, few screens
       expect(result.tallest).toBeLessThanOrEqual(height * 0.7 + 1);
       expect(result.widest).toBeLessThanOrEqual(result.column + 1);
       expect(Math.abs(result.after - before)).toBeLessThanOrEqual(2); // same layout before and after the load

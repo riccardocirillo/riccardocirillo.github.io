@@ -49,6 +49,15 @@ test.describe('prototype @ 1280', () => {
     });
   }
 
+  test('the buttons sit in a bar under the preview, covering nothing', async ({ page }) => {
+    await stub(page);
+    await page.goto(EN.path);
+    await page.locator('.proto').scrollIntoViewIfNeeded();
+    const poster = await page.locator('.proto-poster').boundingBox();
+    const actions = await page.locator('.proto-actions').boundingBox();
+    expect(actions.y).toBeGreaterThanOrEqual(poster.y + poster.height);
+  });
+
   test('the iframe is as wide as the column, 16:10', async ({ page }) => {
     await stub(page);
     await page.goto(EN.path);
@@ -195,9 +204,9 @@ test.describe('prototype without JavaScript', () => {
 
 // Nipotyno, Test: the schema of the phases (06/11/2026).
 const SCHEMA = [
-  { path: '/nipotyno/', title: 'One session, seven steps', first: '6 older adults at home' },
-  { path: '/es/nipotyno/', title: 'Una sesión, siete pasos', first: '6 personas mayores en su casa' },
-  { path: '/it/nipotyno/', title: 'Una sessione, sette passi', first: '6 anziani a casa loro' },
+  { path: '/nipotyno/', title: 'One session, seven steps', first: '6 people at home' },
+  { path: '/es/nipotyno/', title: 'Una sesión, siete pasos', first: '6 personas en su casa' },
+  { path: '/it/nipotyno/', title: 'Una sessione, sette passi', first: '6 persone a casa loro' },
 ];
 test.describe('schema of the test phases', () => {
   for (const l of SCHEMA) {
@@ -214,7 +223,7 @@ test.describe('schema of the test phases', () => {
       expect(await test_.locator('.phases').evaluate((el) => !!(el.compareDocumentPosition(el.parentElement.querySelector('table')) & Node.DOCUMENT_POSITION_FOLLOWING))).toBe(true);
       expect((await request.get('/assets/nipotyno/pagopa.webp')).headers()['content-type'] ?? '').not.toContain('webp');
     });
-    for (const [w, cols] of [[1280, 7], [1000, 7], [390, 1]]) {
+    for (const [w, cols] of [[1280, 1], [768, 1], [390, 1]]) {
       test(`${l.path} @ ${w}: ${cols} column(s), no text out of its card, the dashed box covers nothing, nothing scrolls sideways`, async ({ page }) => {
         await page.setViewportSize({ width: w, height: 800 });
         await page.goto(l.path);
@@ -235,12 +244,11 @@ test.describe('schema of the test phases', () => {
         expect(r.perRow).toBe(cols);
         expect(r.overflow).toBe(0);
         expect(r.measureBottom).toBeLessThanOrEqual(r.factsTop);
-        if (cols === 7) expect(Math.abs(r.measureLeft - r.taskLeft)).toBeLessThanOrEqual(1); // under steps 4 and 5
         expect(r.pageWidth).toBeLessThanOrEqual(w);
       });
     }
   }
-  test('inside the reader of the game: 7 columns, nothing scrolls sideways', async ({ page }) => {
+  test('inside the reader of the game: one column, nothing scrolls sideways', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/play/#nipotyno');
@@ -251,10 +259,19 @@ test.describe('schema of the test phases', () => {
       const lis = [...el.querySelectorAll('.phases ol > li')];
       return { wide: el.scrollWidth <= el.clientWidth, rows: new Set(lis.map((li) => Math.round(li.getBoundingClientRect().top))).size };
     });
-    expect(r).toEqual({ wide: true, rows: 1 });
+    expect(r).toEqual({ wide: true, rows: 7 });
   });
-  test('Levante and Sensor lab keep their layout (one grid, no wide part)', async ({ page }) => {
-    await page.goto('/levante/');
-    await expect(page.locator('.chapter-rest')).toHaveCount(0);
+  test('the schema stays in the text column, next to the sticky player card', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto('/nipotyno/');
+    await page.locator('.phases-facts').scrollIntoViewIfNeeded();
+    const body = await page.locator('.chapter-body').boundingBox();
+    for (const el of ['.phases ol', '.phases-facts']) {
+      const box = await page.locator(el).boundingBox();
+      expect(box.x).toBeGreaterThanOrEqual(body.x - 1);
+      expect(box.x + box.width).toBeLessThanOrEqual(body.x + body.width + 1);
+    }
+    await expect(page.locator('.scorecard')).toBeInViewport();
+    expect((await page.locator('.scorecard').boundingBox()).y).toBeLessThanOrEqual(17); // sticky, 1rem from the top
   });
 });

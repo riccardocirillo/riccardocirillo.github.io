@@ -7,7 +7,7 @@ description: "Investigación y diseño UX de un asistente de doble pantalla que 
 teaser: "Un asistente de doble pantalla que guía a las personas mayores para pedir citas médicas y pagar recibos públicos en línea."
 og_image: /assets/nipotyno/home_05.webp
 cover: /assets/nipotyno/home_05.webp
-tldr: "En Italia, las personas mayores tienen que usar servicios públicos en línea, y a muchas les genera estrés. En un equipo de 4 estudiamos cómo se las arreglan y probamos dos conceptos. El mejor se convirtió en un 'mentor digital' de doble pantalla. Las 6 personas mayores del test final completaron las dos tareas, una de ellas con ayuda del facilitador; SUS 78,75 (Bueno)."
+tldr: "En Italia, las personas mayores tienen que usar servicios públicos en línea, y a muchas les genera estrés. En un equipo de 4 estudiamos cómo se las arreglan y probamos dos conceptos. El mejor se convirtió en un 'mentor digital' de doble pantalla. Las 6 personas de la prueba final completaron las dos tareas, una de ellas con ayuda del facilitador; SUS 78,75 (Bueno)."
 stats: "13 entrevistas · 6 participantes · SUS 78,75"
 role: "Investigador y diseñador UX (equipo de 4)"
 team: "Riccardo Cirillo, Fabio Vito Papapicco, Andrea Ramaglia Bianchino, Ilaria Salami"
@@ -47,25 +47,9 @@ Lo que necesitaban era un segundo par de ojos que confirme cada paso.
 Construimos los dos como prototipos de baja fidelidad en Figma y los probamos con 6 personas mayores, que pensaban en voz alta mientras los usaban. Ganó el Mentor. Tuvo menos errores, más eficiencia y un SUS de 95,0, y lo prefirieron quienes más dificultades tenían. Los usuarios con más confianza preferían el Gym.
 
 ## Prototipo
-Convertimos el Mentor en un prototipo de alta fidelidad de doble pantalla. La pantalla izquierda es el asistente, que da instrucciones cortas y amables como "Toca los recuadros blancos para rellenarlos". La derecha es el servicio, donde se toca y se escribe.
+Convertimos el Mentor en un prototipo de alta fidelidad de doble pantalla, y los papeles cambiaron: el móvil de la izquierda pasó a ser el asistente, con instrucciones cortas y amables como "Toca los recuadros blancos para rellenarlos", y la pantalla más grande de la derecha pasó a ser el servicio, donde se toca y se escribe.
 
-![Bienvenida: el asistente se presenta y permite agrandar el texto](/assets/nipotyno/home_02.webp)
-
-![Reserva CUP: el asistente explica cómo rellenar el formulario antes de empezar](/assets/nipotyno/cup_03.webp)
-
-![Reserva CUP: guía paso a paso al introducir el código de la receta](/assets/nipotyno/cup_04.webp)
-
-![Pago con pagoPA: el asistente muestra dónde está el código QR en el recibo de papel](/assets/nipotyno/pa_02.webp)
-
-Un cambio salió directamente de los tests. Los participantes dudaban ante los botones de pago con solo texto, así que los sustituimos por iconos que pudieran reconocer (banco, tarjeta).
-
-<figure class="compare">
-<div class="compare-grid">
-<div><p class="compare-label">Baja fidelidad</p><img src="/assets/nipotyno/lofi-payment.webp" alt="Pantalla de pago de baja fidelidad: una lista de métodos de pago escritos solo como texto" width="407" height="1310" style="--w: 407; --h: 1310" loading="lazy" decoding="async"></div>
-<div><p class="compare-label">Alta fidelidad</p><img src="/assets/nipotyno/hifi-payment.webp" alt="Pantalla de pago de alta fidelidad: la misma lista de métodos, cada uno con un icono, junto a la pantalla del asistente" width="1400" height="1177" style="--w: 1400; --h: 1177" loading="lazy" decoding="async"></div>
-</div>
-<figcaption>El paso del pago antes y después de los tests. En la versión de baja fidelidad los métodos eran solo texto; en la de alta fidelidad cada método tiene su propio icono.</figcaption>
-</figure>
+Un cambio salió directamente de las pruebas. En las primeras sesiones de baja fidelidad, los participantes dudaban ante los botones de pago con solo texto, así que los sustituimos por iconos que pudieran reconocer (banco, tarjeta).
 
 ### Prueba el prototipo
 
@@ -84,8 +68,20 @@ Este es el prototipo de alta fidelidad que probamos. Está en italiano, como las
 </dl>
 </details>
 
+### Pantallas clave
+
+Dos momentos del prototipo, para quien prefiera no abrirlo.
+
+<div class="key-screens">
+
+![Reserva CUP: con el formulario relleno, el asistente de la izquierda indica qué botón pulsar a continuación](/assets/nipotyno/cup_04.webp)
+
+![Pago con pagoPA: el asistente de la izquierda muestra dónde está el código QR en el recibo de papel](/assets/nipotyno/pa_02.webp)
+
+</div>
+
 ## Test
-Probamos el prototipo de alta fidelidad con 6 personas mayores en su casa: en 4 sesiones el facilitador estaba en la sala y 2 fueron totalmente en línea. Cada sesión duró de 40 a 60 minutos. Uno de nosotros la dirigía mientras dos compañeros la seguían por videollamada y anotaban el tiempo, los toques y los errores. Esta vez los participantes no pensaron en voz alta, para poder comparar sus tiempos con los tiempos objetivo que habíamos fijado. Trabajaron con documentos de papel realistas con datos ficticios (una receta y un recibo pagoPA), así que nadie tuvo que inventarse nada.
+Probamos el prototipo de alta fidelidad con 6 personas en su casa. Cada sesión duró de 40 a 60 minutos. Uno de nosotros la dirigía mientras los demás anotaban el tiempo, los toques y los errores. Esta vez los participantes no pensaron en voz alta, para poder comparar sus tiempos con los tiempos objetivo que habíamos fijado. Trabajaron con documentos de papel realistas con datos ficticios (una receta y un recibo pagoPA), así que nadie tuvo que inventarse nada.
 
 <div class="phases">
 <h3>Una sesión, siete pasos</h3>
@@ -93,15 +89,15 @@ Probamos el prototipo de alta fidelidad con 6 personas mayores en su casa: en 4 
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">1</span><div><h4>Bienvenida</h4><p>"Estamos probando el diseño, no a ti."</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consenti&shy;miento</h4><p>Consentimiento informado leído juntos y firmado.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Perfil</h4><p>Edad, hábitos digitales, confianza con los servicios en línea.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Tarea 1 · CUP</h4><p>Pedir una visita al especialista a partir de una receta en papel.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Tarea 2 · pagoPA</h4><p>Pagar un recibo sanitario de 35&nbsp;€ escaneando su código QR.</p></div></div><p class="phases-measure"><strong>Medido por tarea:</strong> <span>tiempo · toques · errores · éxito</span></p></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Tarea 1&nbsp;· CUP</h4><p>Pedir una visita al especialista a partir de una receta en papel.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Tarea 2&nbsp;· pagoPA</h4><p>Pagar un recibo sanitario de 35&nbsp;€ escaneando su código QR.</p></div></div><p class="phases-measure"><strong>Medido por tarea:</strong> <span>tiempo · toques · errores · éxito</span></p></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Dos cuestionarios estándar, uno sobre la usabilidad y otro sobre la experiencia general.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Entrevista</h4><p>Preguntas abiertas sobre qué resultó difícil y qué dio seguridad.</p></div></div></li>
 </ol>
 <dl class="phases-facts">
-<div><dt>Quién</dt><dd>6 personas mayores, edad media 67</dd></div>
-<div><dt>Dónde</dt><dd>En casa, 4 con el facilitador presente y 2 totalmente en línea</dd></div>
-<div><dt>Cómo</dt><dd>1 facilitador y 2 observadores por videollamada, de 40 a 60 min</dd></div>
+<div><dt>Quién</dt><dd>6 adultos de 53 a 82 años, media de 67</dd></div>
+<div><dt>Dónde</dt><dd>En casa</dd></div>
+<div><dt>Cómo</dt><dd>Uno de nosotros dirigía la sesión y los demás anotaban el tiempo, los toques y los errores; de 40 a 60 min</dd></div>
 <div><dt>Montaje</dt><dd>Una tableta con las dos pantallas una al lado de la otra</dd></div>
 </dl>
 </div>
@@ -113,13 +109,13 @@ Probamos el prototipo de alta fidelidad con 6 personas mayores en su casa: en 4 
 | UEQ | Las 6 escalas en **Bueno o Excelente** |
 | Errores frente a baja fidelidad | **−10 %** reserva CUP · **−16 %** pago pagoPA |
 
-## Resultado
-El concepto funcionó en condiciones de test realistas. Una participante dijo que la experiencia la hacía sentirse independiente de su familia y de las oficinas públicas, que era el objetivo del proyecto.
+El SUS bajó de 95,0 a 78,75 porque aquí había que introducir datos realistas, como el código fiscal, y el grupo incluía a usuarios con menos confianza.
 
-![Pago con pagoPA: pantalla de resumen antes de pagar](/assets/nipotyno/pa_07.webp)
+## Resultado
+El concepto funcionó en condiciones de test realistas. Una de las personas participantes dijo que la experiencia le hacía sentirse independiente de la familia y de las oficinas públicas, que era el objetivo del proyecto.
 
 ## Qué cambiaría
-- Mostraría el formato antes de que aparezca el error. El campo del *codice fiscale* (código fiscal) causó 8 de los errores de los dos participantes de más edad.
+- Mostraría el formato antes de que aparezca el error. Los campos del formulario, sobre todo el *codice fiscale* (código fiscal), causaron 8 de los errores de los dos participantes de más edad.
 - Todo error debería tener arreglo. Un email equivocado bloqueó a un participante, y el moderador tuvo que intervenir.
 - Los métodos de pago tienen que distinguirse mejor: 2 de 6 participantes eligieron primero el equivocado.
-- La próxima vez probaría con más personas de más de 80 años, en persona. Reclutar a esta franja de edad en remoto fue la mayor limitación del estudio.
+- La próxima vez probaría con más personas de más de 70 años. Solo 2 de nuestros 6 participantes los tenían, y reclutar a esta franja de edad fue la mayor limitación del estudio.

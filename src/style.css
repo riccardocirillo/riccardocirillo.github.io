@@ -496,26 +496,20 @@ figure img, .case-video video { border: 1px solid var(--line); background: var(-
   .case figure img { width: min(100%, calc(70vh * var(--w) / var(--h)), calc(var(--w) * 1px)); height: auto; margin-inline: auto; }
 }
 
-/* Before and after: side by side at the same height (the columns follow the images' proportions, 407/1310 and 1400/1177); one under the other on phones. */
-.compare-grid { display: grid; gap: 1.25rem; }
-.compare-label { margin: 0 0 .5rem; font-family: var(--font-mono); font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
-.compare figcaption { margin-top: .75rem; font-size: .9375rem; color: var(--muted); }
-@media (min-width: 600px) {
-  .compare-grid { grid-template-columns: minmax(0, .3107fr) minmax(0, 1.1895fr); align-items: end; }
-  .case .compare img { width: 100%; }
-}
-/* Try the prototype: buttons over the preview, then above the iframe. The closed <dialog> is shown in the page on purpose (src/prototype.js). */
+figcaption { margin-top: .5rem; font-size: .9375rem; line-height: 1.4; color: var(--muted); }
+/* Nipotyno, Key screens: two side by side where they fit. */
+.key-screens { display: grid; gap: 1.25rem; margin: 1.5rem 0; }
+.key-screens figure { margin: 0; }
+@media (min-width: 600px) { .key-screens { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Try the prototype: the buttons in a bar under the preview (and under the iframe). The closed <dialog> is shown in the page on purpose (src/prototype.js). */
 .proto { display: grid; grid-template-columns: minmax(0, 1fr); margin: 1.5rem 0; }
-.proto-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.proto-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
 .proto .button { min-height: 44px; }
 .proto .button.ghost { background: var(--card); }
 .proto .button.ghost:hover { background: var(--ink); color: var(--bg); }
-.proto:not(.is-loaded) > * { grid-area: 1 / 1; }
-.proto:not(.is-loaded) > .proto-actions { z-index: 1; place-self: center; justify-content: center; padding: .5rem; }
-.proto.is-loaded > .proto-actions { margin-bottom: .75rem; }
 .proto-poster, .proto-stage { border: 3px solid var(--navy); background: var(--night); box-shadow: 5px 5px 0 var(--navy); }
 .proto-poster { position: relative; display: block; aspect-ratio: 16 / 10; overflow: hidden; }
-.proto-poster img { width: 100%; height: 100%; object-fit: cover; opacity: .6; }
+.proto-poster img { width: 100%; height: 100%; object-fit: contain; }
 .proto-newtab { position: absolute; inset: auto 0 0; padding: .6rem 1rem; background: var(--night); color: #f4f1e6; font-weight: 700; }
 .proto-stage { display: block; position: static; width: 100%; max-width: none; margin: 0; padding: 0; }
 .proto-bar { display: none; }
@@ -536,8 +530,8 @@ figure img, .case-video video { border: 1px solid var(--line); background: var(-
 .proto-data dt { font-family: var(--font-mono); font-size: .8125rem; letter-spacing: .04em; color: var(--muted); }
 .proto-data dd { margin: 0; overflow-wrap: anywhere; }
 .proto-data code { font-family: var(--font-mono); font-weight: 700; }
-/* One session, seven steps (Nipotyno, Test): a vertical list, 7 columns where the page is wide enough. */
-.phases { --phases-gap: .625rem; margin: 2rem 0; }
+/* One session, seven steps (Nipotyno, Test): a vertical numbered list in the text column. */
+.phases { margin: 2rem 0; }
 .phases h3 { margin: 0 0 1rem; font-family: var(--font-display); font-size: calc(var(--j) * 1.5); font-weight: 400; }
 .phases ol { display: grid; gap: .875rem; margin: 0; padding: 0; list-style: none; }
 .phases li { position: relative; display: grid; gap: .875rem; max-width: none; }
@@ -553,17 +547,6 @@ figure img, .case-video video { border: 1px solid var(--line); background: var(-
 .phases-facts div { display: block; padding-top: .5rem; border-top: 3px solid var(--navy); }
 .phases-facts dt { font-family: var(--font-mono); font-size: .8125rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
 .phases-facts dd { margin: .125rem 0 0; font-size: .9375rem; line-height: 1.4; }
-@media (min-width: 1000px) {
-  /* 23rem = the player card's column + the gap of .chapter-grid */
-  .chapter-rest { margin-left: 23rem; }
-  .chapter-rest > section:first-of-type h2 { margin-top: 2.5rem; }
-  .phases { margin-left: -23rem; }
-  .phases ol { grid-template-columns: repeat(7, minmax(0, 1fr)); gap: var(--phases-gap); padding-bottom: 6.25rem; }
-  .phases li { display: flex; }
-  .phases-card { flex: 1; flex-direction: column; gap: .625rem; padding: .75rem .625rem; min-width: 0; }
-  .phases-measure { position: absolute; top: calc(100% + .875rem); right: 0; width: calc(200% + var(--phases-gap)); margin: 0; font-size: .75rem; }
-  .phases-facts { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-top: 0; }
-}
 .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
 table { border-collapse: collapse; width: 100%; font-size: 1rem; background: var(--card); }
 th, td { padding: .5rem .75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
@@ -599,7 +582,6 @@ th { background: var(--ink); color: var(--bg); }
   figure img { max-height: 110mm; width: auto; margin: 0 auto; }
   .table-wrap { overflow: visible; }
   .proto-actions { display: none; }
-  .chapter-rest, .phases { margin-left: 0; }
   a { color: inherit; }
   .case a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8.5pt; color: var(--muted); }
 }

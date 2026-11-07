@@ -120,8 +120,8 @@ function sections(html, className = '') {
     .join('\n');
 }
 
-// Paragraphs that contain only an image become <figure> so they can be styled as screenshots.
-const figures = (html) => html.replace(/<p>(<img [^>]+>)<\/p>/g, '<figure>$1</figure>');
+// Paragraphs that contain only an image become <figure>, with the alt text as a visible caption (aria-hidden: read once, as the alt).
+const figures = (html) => html.replace(/<p>(<img [^>]*alt="([^"]*)"[^>]*>)<\/p>/g, '<figure>$1<figcaption aria-hidden="true">$2</figcaption></figure>');
 
 // --- Open Graph images ------------------------------------------------------
 
@@ -431,14 +431,14 @@ const warmUpTitle = (about) => about.body.match(/^## (.*?)\s*\{#hi-im-riccardo\}
 // "Try the prototype" of Nipotyno: <div data-prototype></div> in the case's text becomes this block (src/prototype.js).
 const PROTOTYPE_URL = 'https://hi-fiprotohci.vercel.app/';
 const prototypeEmbed = (t) => `<div class="proto">
+  <a class="proto-poster" href="${PROTOTYPE_URL}" target="_blank" rel="noopener">
+    <img src="/assets/nipotyno/cup_03.webp" alt="${escape(t.prototype.previewAlt)}" width="1400" height="1176" loading="lazy" decoding="async">
+    <span class="proto-newtab">${escape(t.prototype.open)} <span aria-hidden="true">↗</span></span>
+  </a>
   <div class="proto-actions" hidden>
     <button type="button" class="button proto-load">${escape(t.prototype.load)}</button>
     <button type="button" class="button ghost proto-full">${escape(t.prototype.full)}</button>
   </div>
-  <a class="proto-poster" href="${PROTOTYPE_URL}" target="_blank" rel="noopener">
-    <img src="/assets/nipotyno/home_02.webp" alt="${escape(t.prototype.previewAlt)}" width="1400" height="1176" loading="lazy" decoding="async">
-    <span class="proto-newtab">${escape(t.prototype.open)} <span aria-hidden="true">↗</span></span>
-  </a>
   <template>
     <dialog class="proto-stage" data-theme="night" role="group" aria-label="${escape(t.prototype.title)}">
       <div class="proto-bar"><button type="button" class="button proto-close">${escape(t.close)}</button></div>
@@ -456,8 +456,6 @@ async function casePage(L, c, i, all, about) {
   html = sections(html);
   html = html.replace('<section id="tl-dr">', '<section id="tl-dr" class="tldr">').replace('<div data-prototype></div>', prototypeEmbed(t));
   const n = i + 1;
-  // The 7 columns of the Test schema do not fit next to the player card: its section (and what follows) leaves the grid, so the sticky card stops before it.
-  const wideAt = html.includes('class="phases"') ? html.lastIndexOf('<section', html.indexOf('class="phases"')) : html.length;
 
   const main = `      <article class="case chapter wrap wide">
         <p class="print-head">Riccardo Cirillo · ${escape(t.headline.split(' · ')[0])} · ${EMAIL} · ${SITE.replace('https://', '')}${p}/${data.slug}/</p>
@@ -473,10 +471,9 @@ async function casePage(L, c, i, all, about) {
           </aside>
           <div class="chapter-body">
             ${scoreStrip(L, data)}
-            ${html.slice(0, wideAt)}
+            ${html}
           </div>
         </div>
-        ${wideAt < html.length ? `<div class="chapter-body chapter-rest">${html.slice(wideAt)}</div>` : ''}
         ${chapterNav(L, i ? chapterLink(L, all[i - 1]) : { href: modeHref(L, 'story'), name: warmUpTitle(about) }, all[i + 1] && chapterLink(L, all[i + 1]), n)}
       </article>`;
 

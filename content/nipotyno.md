@@ -6,7 +6,7 @@ description: "UX research and design for a dual-screen assistant that guides old
 teaser: "A dual-screen assistant that guides older adults through booking medical visits and paying public bills online."
 og_image: /assets/nipotyno/home_05.webp
 cover: /assets/nipotyno/home_05.webp
-tldr: "Older adults in Italy have to use public services online, and many find it stressful. In a team of 4 we studied how they cope and tested two concepts. The better one became a dual-screen 'digital mentor'. All 6 older adults in the final test completed both tasks, one with help from the facilitator; SUS 78.75 (Good)."
+tldr: "Older adults in Italy have to use public services online, and many find it stressful. In a team of 4 we studied how they cope and tested two concepts. The better one became a dual-screen 'digital mentor'. All 6 participants in the final test completed both tasks, one with help from the facilitator; SUS 78.75 (Good)."
 stats: "13 interviews · 6 testers · SUS 78.75"
 role: "UX researcher & designer (team of 4)"
 team: "Riccardo Cirillo, Fabio Vito Papapicco, Andrea Ramaglia Bianchino, Ilaria Salami"
@@ -48,25 +48,9 @@ What they needed was a second pair of eyes that confirms each step.
 We built both as low-fidelity Figma prototypes and tested them with 6 older adults, who thought aloud as they worked. The Mentor won. It led to fewer mistakes, better efficiency and a SUS of 95.0, and the participants who struggled most preferred it. The more confident users liked the Gym better.
 
 ## Prototype
-We turned the Mentor into a high-fidelity, dual-screen prototype. The left screen is the assistant, which gives short, friendly instructions like "Tap the white boxes to fill them in". The right screen is the service, where you tap and type.
+We turned the Mentor into a high-fidelity, dual-screen prototype, and the roles changed: the phone on the left became the assistant, with short, friendly instructions like "Tap the white boxes to fill them in", and the larger screen on the right became the service, where you tap and type.
 
-![Onboarding: the assistant introduces itself and lets the user enlarge the text](/assets/nipotyno/home_02.webp)
-
-![CUP booking: the assistant explains how to fill in the form before the user starts](/assets/nipotyno/cup_03.webp)
-
-![CUP booking: step-by-step guidance while entering the prescription code](/assets/nipotyno/cup_04.webp)
-
-![pagoPA payment: the assistant shows where the QR code is on the paper bill](/assets/nipotyno/pa_02.webp)
-
-One change came straight from testing. Participants hesitated on the text-only payment buttons, so we replaced them with icons they could recognise (bank, card).
-
-<figure class="compare">
-<div class="compare-grid">
-<div><p class="compare-label">Low fidelity</p><img src="/assets/nipotyno/lofi-payment.webp" alt="Low-fidelity payment screen: a list of payment methods written as plain text" width="407" height="1310" style="--w: 407; --h: 1310" loading="lazy" decoding="async"></div>
-<div><p class="compare-label">High fidelity</p><img src="/assets/nipotyno/hifi-payment.webp" alt="High-fidelity payment screen: the same list of methods, each with an icon, next to the assistant screen" width="1400" height="1177" style="--w: 1400; --h: 1177" loading="lazy" decoding="async"></div>
-</div>
-<figcaption>The payment step before and after testing. In the low-fidelity version the methods were plain text; in the high-fidelity one each method has its own icon.</figcaption>
-</figure>
+One change came straight from testing. In the first low-fidelity sessions, participants hesitated on text-only payment buttons, so we replaced them with icons they could recognise (bank, card).
 
 ### Try the prototype
 
@@ -85,8 +69,20 @@ This is the high-fidelity prototype we tested. It is in Italian, like the test s
 </dl>
 </details>
 
+### Key screens
+
+Two moments from the prototype, for anyone who'd rather not open it.
+
+<div class="key-screens">
+
+![CUP booking: with the form filled in, the assistant on the left says which button to press next](/assets/nipotyno/cup_04.webp)
+
+![pagoPA payment: the assistant on the left shows where the QR code is on the paper bill](/assets/nipotyno/pa_02.webp)
+
+</div>
+
 ## Test
-We tested the high-fidelity prototype with 6 older adults at home: in 4 sessions the facilitator was in the room, and 2 ran fully online. Each session took 40 to 60 minutes. One of us ran it while two teammates followed on a video call and logged time, taps and mistakes. This time participants did not think aloud, so their times could be compared with the target times we had set. They worked from realistic paper documents with fictional data (a prescription and a pagoPA bill), so nobody had to invent anything.
+We tested the high-fidelity prototype with 6 people at home. Each session took 40 to 60 minutes. One of us ran it while the others logged time, taps and mistakes. This time participants did not think aloud, so their times could be compared with the target times we had set. They worked from realistic paper documents with fictional data (a prescription and a pagoPA bill), so nobody had to invent anything.
 
 <div class="phases">
 <h3>One session, seven steps</h3>
@@ -94,15 +90,15 @@ We tested the high-fidelity prototype with 6 older adults at home: in 4 sessions
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">1</span><div><h4>Welcome</h4><p>"We are testing the design, not you."</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consent</h4><p>Informed consent read together and signed.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Background</h4><p>Age, digital habits, confidence with online services.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Task 1 · CUP</h4><p>Book a specialist visit from a paper prescription.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Task 2 · pagoPA</h4><p>Pay a €35 health bill by scanning its QR code.</p></div></div><p class="phases-measure"><strong>Measured per task:</strong> <span>time · taps · mistakes · success</span></p></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Task 1&nbsp;· CUP</h4><p>Book a specialist visit from a paper prescription.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Task 2&nbsp;· pagoPA</h4><p>Pay a €35 health bill by scanning its QR code.</p></div></div><p class="phases-measure"><strong>Measured per task:</strong> <span>time · taps · mistakes · success</span></p></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Two standard questionnaires, one on usability and one on the overall experience.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Interview</h4><p>Open questions on what felt hard and what felt safe.</p></div></div></li>
 </ol>
 <dl class="phases-facts">
-<div><dt>Who</dt><dd>6 older adults, average age 67</dd></div>
-<div><dt>Where</dt><dd>At home, 4 with the facilitator there and 2 fully online</dd></div>
-<div><dt>How</dt><dd>1 facilitator and 2 observers on a video call, 40 to 60 min</dd></div>
+<div><dt>Who</dt><dd>6 adults aged 53 to 82, average 67</dd></div>
+<div><dt>Where</dt><dd>At home</dd></div>
+<div><dt>How</dt><dd>One of us ran the session, the others logged time, taps and mistakes; 40 to 60 min</dd></div>
 <div><dt>Setup</dt><dd>A tablet with the two screens side by side</dd></div>
 </dl>
 </div>
@@ -114,13 +110,13 @@ We tested the high-fidelity prototype with 6 older adults at home: in 4 sessions
 | UEQ | All 6 scales **Good or Excellent** |
 | Mistakes vs low-fi | **−10%** CUP booking · **−16%** pagoPA payment |
 
-## Result
-The concept worked under realistic test conditions. One participant said the experience made her feel independent from her family and from public offices, which was the aim of the project.
+The SUS fell from 95.0 to 78.75 because here people had to enter realistic data, like the tax code, and the group included less confident users.
 
-![pagoPA payment: summary screen before paying](/assets/nipotyno/pa_07.webp)
+## Result
+The concept worked under realistic test conditions. One participant said the experience made them feel independent from family and public offices, which was the aim of the project.
 
 ## What I'd change
-- I'd show format hints before errors happen. The *codice fiscale* (tax code) field caused 8 of the mistakes of the two oldest participants.
+- I'd show format hints before errors happen. Form fields, above all the *codice fiscale* (tax code), caused 8 of the mistakes of the two oldest participants.
 - Every error should be recoverable. A wrong email blocked one participant, and the facilitator had to step in.
 - The payment methods need to look more different from each other: 2 of 6 participants chose the wrong one at first.
-- Next time I'd test with more people over 80, in person. Recruiting this age group remotely was the biggest limitation of the study.
+- Next time I'd test with more people over 70. Only 2 of our 6 participants were, and recruiting this age group was the biggest limitation of the study.

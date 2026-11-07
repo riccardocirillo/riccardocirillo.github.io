@@ -7,7 +7,7 @@ description: "Ricerca e design UX di un assistente a doppio schermo che guida le
 teaser: "Un assistente a doppio schermo che guida le persone anziane a prenotare visite mediche e pagare bollettini pubblici online."
 og_image: /assets/nipotyno/home_05.webp
 cover: /assets/nipotyno/home_05.webp
-tldr: "In Italia gli anziani devono usare i servizi pubblici online, e molti lo trovano stressante. In un team di 4 abbiamo studiato come se la cavano e testato due concept. Il migliore è diventato un 'mentore digitale' a doppio schermo. Tutti e 6 gli anziani del test finale hanno completato entrambi i compiti, uno con l'aiuto del facilitatore; SUS 78,75 (Buono)."
+tldr: "In Italia gli anziani devono usare i servizi pubblici online, e molti lo trovano stressante. In un team di 4 abbiamo studiato come se la cavano e testato due concept. Il migliore è diventato un 'mentore digitale' a doppio schermo. Tutti e 6 i partecipanti al test finale hanno completato entrambi i compiti, uno con l'aiuto del facilitatore; SUS 78,75 (Buono)."
 stats: "13 interviste · 6 partecipanti · SUS 78,75"
 role: "UX researcher e designer (team di 4)"
 team: "Riccardo Cirillo, Fabio Vito Papapicco, Andrea Ramaglia Bianchino, Ilaria Salami"
@@ -47,25 +47,9 @@ Serviva loro un secondo paio d'occhi che confermi ogni passaggio.
 Li abbiamo costruiti entrambi come prototipi a bassa fedeltà in Figma e testati con 6 anziani, che pensavano ad alta voce mentre li usavano. Ha vinto il Mentore. Ha portato a meno errori, più efficienza e un SUS di 95,0, ed era il preferito di chi aveva più difficoltà. Gli utenti più sicuri preferivano la Gym.
 
 ## Prototipo
-Abbiamo trasformato il Mentore in un prototipo ad alta fedeltà a doppio schermo. Lo schermo a sinistra è l'assistente, che dà istruzioni brevi e gentili come "Tocca i riquadri bianchi per compilarli". Quello a destra è il servizio, dove si tocca e si scrive.
+Abbiamo trasformato il Mentore in un prototipo ad alta fedeltà a doppio schermo, e i ruoli sono cambiati: il telefono a sinistra è diventato l'assistente, con istruzioni brevi e gentili come "Tocca i riquadri bianchi per compilarli", e lo schermo più grande a destra è diventato il servizio, dove si tocca e si scrive.
 
-![Benvenuto: l'assistente si presenta e permette di ingrandire il testo](/assets/nipotyno/home_02.webp)
-
-![Prenotazione CUP: l'assistente spiega come compilare il modulo prima di iniziare](/assets/nipotyno/cup_03.webp)
-
-![Prenotazione CUP: guida passo passo mentre si inserisce il codice della ricetta](/assets/nipotyno/cup_04.webp)
-
-![Pagamento pagoPA: l'assistente mostra dove si trova il codice QR sul bollettino cartaceo](/assets/nipotyno/pa_02.webp)
-
-Un cambiamento è nato direttamente dai test. I partecipanti esitavano davanti ai pulsanti di pagamento solo testuali, quindi li abbiamo sostituiti con icone riconoscibili (banca, carta).
-
-<figure class="compare">
-<div class="compare-grid">
-<div><p class="compare-label">Bassa fedeltà</p><img src="/assets/nipotyno/lofi-payment.webp" alt="Schermata di pagamento a bassa fedeltà: un elenco di metodi di pagamento scritti solo come testo" width="407" height="1310" style="--w: 407; --h: 1310" loading="lazy" decoding="async"></div>
-<div><p class="compare-label">Alta fedeltà</p><img src="/assets/nipotyno/hifi-payment.webp" alt="Schermata di pagamento ad alta fedeltà: lo stesso elenco di metodi, ognuno con un'icona, accanto allo schermo dell'assistente" width="1400" height="1177" style="--w: 1400; --h: 1177" loading="lazy" decoding="async"></div>
-</div>
-<figcaption>Il passaggio del pagamento prima e dopo i test. Nella versione a bassa fedeltà i metodi erano solo testo; in quella ad alta fedeltà ogni metodo ha la sua icona.</figcaption>
-</figure>
+Un cambiamento è nato direttamente dai test. Nelle prime sessioni a bassa fedeltà i partecipanti esitavano davanti ai pulsanti di pagamento solo testuali, quindi li abbiamo sostituiti con icone riconoscibili (banca, carta).
 
 ### Prova il prototipo
 
@@ -84,8 +68,20 @@ Questo è il prototipo ad alta fedeltà che abbiamo testato. È in italiano, com
 </dl>
 </details>
 
+### Schermate chiave
+
+Due momenti del prototipo, per chi preferisce non aprirlo.
+
+<div class="key-screens">
+
+![Prenotazione CUP: con il modulo compilato, l'assistente a sinistra dice quale pulsante premere](/assets/nipotyno/cup_04.webp)
+
+![Pagamento pagoPA: l'assistente a sinistra mostra dove si trova il codice QR sul bollettino cartaceo](/assets/nipotyno/pa_02.webp)
+
+</div>
+
 ## Test
-Abbiamo testato il prototipo ad alta fedeltà con 6 anziani a casa loro: in 4 sessioni il facilitatore era nella stanza, 2 si sono svolte interamente online. Ogni sessione è durata dai 40 ai 60 minuti. Uno di noi la conduceva mentre due compagni di squadra la seguivano in videochiamata e annotavano tempi, tocchi ed errori. Questa volta i partecipanti non hanno pensato ad alta voce, così i loro tempi si potevano confrontare con i tempi obiettivo che avevamo fissato. Hanno lavorato con documenti cartacei realistici con dati fittizi (una ricetta e un bollettino pagoPA), così nessuno ha dovuto inventarsi nulla.
+Abbiamo testato il prototipo ad alta fedeltà con 6 persone a casa loro. Ogni sessione è durata dai 40 ai 60 minuti. Uno di noi la conduceva mentre gli altri annotavano tempi, tocchi ed errori. Questa volta i partecipanti non hanno pensato ad alta voce, così i loro tempi si potevano confrontare con i tempi obiettivo che avevamo fissato. Hanno lavorato con documenti cartacei realistici con dati fittizi (una ricetta e un bollettino pagoPA), così nessuno ha dovuto inventarsi nulla.
 
 <div class="phases">
 <h3>Una sessione, sette passi</h3>
@@ -93,15 +89,15 @@ Abbiamo testato il prototipo ad alta fedeltà con 6 anziani a casa loro: in 4 se
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">1</span><div><h4>Benvenuto</h4><p>"Stiamo testando il design, non te."</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">2</span><div><h4>Consenso</h4><p>Consenso informato letto insieme e firmato.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">3</span><div><h4>Profilo</h4><p>Età, abitudini digitali, sicurezza con i servizi online.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Compito 1 · CUP</h4><p>Prenotare una visita specialistica da una ricetta cartacea.</p></div></div></li>
-<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Compito 2 · pagoPA</h4><p>Pagare un bollettino sanitario da 35&nbsp;€ scansionando il codice QR.</p></div></div><p class="phases-measure"><strong>Misurato per ogni compito:</strong> <span>tempo · tocchi · errori · successo</span></p></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">4</span><div><h4>Compito 1&nbsp;· CUP</h4><p>Prenotare una visita specialistica da una ricetta cartacea.</p></div></div></li>
+<li class="is-task"><div class="phases-card"><span class="phases-no" aria-hidden="true">5</span><div><h4>Compito 2&nbsp;· pagoPA</h4><p>Pagare un bollettino sanitario da 35&nbsp;€ scansionando il codice QR.</p></div></div><p class="phases-measure"><strong>Misurato per ogni compito:</strong> <span>tempo · tocchi · errori · successo</span></p></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">6</span><div><h4>SUS + UEQ</h4><p>Due questionari standard, uno sull'usabilità e uno sull'esperienza complessiva.</p></div></div></li>
 <li><div class="phases-card"><span class="phases-no" aria-hidden="true">7</span><div><h4>Intervista</h4><p>Domande aperte su cosa è stato difficile e cosa ha dato sicurezza.</p></div></div></li>
 </ol>
 <dl class="phases-facts">
-<div><dt>Chi</dt><dd>6 anziani, età media 67</dd></div>
-<div><dt>Dove</dt><dd>A casa, 4 con il facilitatore presente e 2 interamente online</dd></div>
-<div><dt>Come</dt><dd>1 facilitatore e 2 osservatori in videochiamata, da 40 a 60 min</dd></div>
+<div><dt>Chi</dt><dd>6 adulti tra i 53 e gli 82 anni, media 67</dd></div>
+<div><dt>Dove</dt><dd>A casa</dd></div>
+<div><dt>Come</dt><dd>Uno di noi conduceva la sessione, gli altri annotavano tempi, tocchi ed errori; da 40 a 60 min</dd></div>
 <div><dt>Setup</dt><dd>Un tablet con i due schermi affiancati</dd></div>
 </dl>
 </div>
@@ -113,13 +109,13 @@ Abbiamo testato il prototipo ad alta fedeltà con 6 anziani a casa loro: in 4 se
 | UEQ | Tutte e 6 le scale **Buono o Eccellente** |
 | Errori rispetto alla bassa fedeltà | **−10%** prenotazione CUP · **−16%** pagamento pagoPA |
 
-## Risultato
-Il concept ha funzionato in condizioni di test realistiche. Una partecipante ha detto che l'esperienza l'ha fatta sentire indipendente dalla famiglia e dagli uffici pubblici, ed era proprio lo scopo del progetto.
+Il SUS è sceso da 95,0 a 78,75 perché qui bisognava inserire dati realistici, come il codice fiscale, e il gruppo comprendeva utenti meno sicuri.
 
-![Pagamento pagoPA: schermata di riepilogo prima di pagare](/assets/nipotyno/pa_07.webp)
+## Risultato
+Il concept ha funzionato in condizioni di test realistiche. Una persona ha detto che l'esperienza l'ha fatta sentire indipendente dalla famiglia e dagli uffici pubblici, ed era proprio lo scopo del progetto.
 
 ## Cosa cambierei
-- Mostrerei il formato prima che arrivi l'errore. Il campo del codice fiscale ha causato 8 degli errori dei due partecipanti più anziani.
+- Mostrerei il formato prima che arrivi l'errore. I campi del modulo, soprattutto il codice fiscale, hanno causato 8 degli errori dei due partecipanti più anziani.
 - Ogni errore dovrebbe essere recuperabile. Un'email sbagliata ha bloccato un partecipante, e il facilitatore è dovuto intervenire.
 - I metodi di pagamento devono distinguersi di più: 2 partecipanti su 6 all'inizio hanno scelto quello sbagliato.
-- La prossima volta testerei con più persone over 80, in presenza. Reclutare questa fascia d'età da remoto è stato il limite più grande dello studio.
+- La prossima volta testerei con più persone over 70. Solo 2 dei nostri 6 partecipanti lo erano, e reclutare questa fascia d'età è stato il limite più grande dello studio.
