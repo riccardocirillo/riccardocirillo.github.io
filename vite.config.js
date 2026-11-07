@@ -26,7 +26,7 @@ const dropArchive = {
   async closeBundle() { await rm(new URL('./dist/_archive', import.meta.url), { recursive: true, force: true }); },
 };
 
-// User site (ricccardo15.github.io) is served from the domain root, so base = '/'.
+// User site (riccardocirillo.github.io) is served from the domain root, so base = '/'.
 export default defineConfig({
   base: '/',
   plugins: [contentWatcher, dropArchive],
